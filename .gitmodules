@@ -1,0 +1,9 @@
+[submodule "packages/urn-dev"]
+	path = packages/urn-dev
+	url = git@bitbucket.org:nbl7/urn-dev.git
+[submodule "packages/urn-lib"]
+	path = packages/urn-lib
+	url = git@bitbucket.org:nbl7/urn-lib.git
+[submodule "packages/urn-trx"]
+	path = packages/urn-trx
+	url = git@bitbucket.org:nbl7/urn-trx.git

@@ -1,0 +1,17 @@
+uranio-core
+urn-core
+
+uranio-trx
+urn-trx
+
+uranio-xp
+urn-xp
+
+uranio-lib
+urn-lib
+
+uranio-model
+urn-model
+
+uranio-dev
+urn-dev
