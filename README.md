@@ -1,5 +1,12 @@
 # URANIO
 
+## Uranio submodules
+
+```
+git submodule add <link> <folder>
+```
+
+
 ## Uranio docker general settings
 
 ### For each repository
