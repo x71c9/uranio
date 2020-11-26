@@ -13,3 +13,6 @@
 [submodule "urn-core"]
 	path = urn-core
 	url = git@bitbucket.org:nbl7/urn-core.git
+[submodule "urn-web"]
+	path = urn-web
+	url = git@bitbucket.org:nbl7/urn-web.git
