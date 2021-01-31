@@ -16,3 +16,6 @@
 [submodule "urn-web"]
 	path = urn-web
 	url = git@bitbucket.org:nbl7/urn-web.git
+[submodule "urn-cli"]
+	path = urn-cli
+	url = git@bitbucket.org:nbl7/urn-cli.git
