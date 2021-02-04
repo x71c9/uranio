@@ -10,12 +10,6 @@
 [submodule "urn-mdls"]
 	path = urn-mdls
 	url = git@bitbucket.org:nbl7/urn-mdls.git
-[submodule "urn-core"]
-	path = urn-core
-	url = git@bitbucket.org:nbl7/urn-core.git
-[submodule "urn-web"]
-	path = urn-web
-	url = git@bitbucket.org:nbl7/urn-web.git
 [submodule "urn-cli"]
 	path = urn-cli
 	url = git@bitbucket.org:nbl7/urn-cli.git
