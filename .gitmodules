@@ -4,9 +4,6 @@
 [submodule "urn-lib"]
 	path = urn-lib
 	url = git@bitbucket.org:nbl7/urn-lib.git
-[submodule "urn-trx"]
-	path = urn-trx
-	url = git@bitbucket.org:nbl7/urn-trx.git
 [submodule "urn-mdls"]
 	path = urn-mdls
 	url = git@bitbucket.org:nbl7/urn-mdls.git
