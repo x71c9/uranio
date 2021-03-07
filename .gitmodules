@@ -4,12 +4,6 @@
 [submodule "urn-lib"]
 	path = urn-lib
 	url = git@bitbucket.org:nbl7/urn-lib.git
-[submodule "urn-mdls"]
-	path = urn-mdls
-	url = git@bitbucket.org:nbl7/urn-mdls.git
-[submodule "urn-cli"]
-	path = urn-cli
-	url = git@bitbucket.org:nbl7/urn-cli.git
 [submodule "urn-dot"]
 	path = urn-dot
 	url = ssh://git@bitbucket.org/nbl7/urn-dot.git
