@@ -7,3 +7,6 @@
 [submodule "urn-dot"]
 	path = urn-dot
 	url = ssh://git@bitbucket.org/nbl7/urn-dot.git
+[submodule "urn-cli"]
+	path = urn-cli
+	url = ssh://git@bitbucket.org/nbl7/urn-cli.git
