@@ -1,6 +1,6 @@
 {
   "packages": [
-    "packages/*"
+    "urn-*"
   ],
   "version": "independent"
 }
