@@ -23,11 +23,9 @@ urn-web
 
 #### TODO
 
-When throw an Error?
-Different types of error
-Log error
-Which type of error stop the system?
-Error messages
-Error code?
+Develop urn-adm
 
+Develop serverless functions?
+
+ERROR
 TERROR
