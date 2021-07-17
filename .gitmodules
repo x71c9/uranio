@@ -28,11 +28,6 @@
 	url = ssh://git@bitbucket.org/nbl7/urn-core.git
 	branch = master
 	update = rebase
-[submodule "urn-web"]
-	path = urn-web
-	url = ssh://git@bitbucket.org/nbl7/urn-web.git
-	branch = master
-	update = rebase
 [submodule "urn-ntl"]
 	path = urn-ntl
 	url = ssh://git@bitbucket.org/nbl7/urn-ntl.git
