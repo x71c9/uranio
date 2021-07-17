@@ -12,7 +12,7 @@
 	path = urn-dot
 	url = ssh://git@bitbucket.org/nbl7/urn-dot.git
 	branch = master
-	update = merge
+	update = rebase
 [submodule "urn-cli"]
 	path = urn-cli
 	url = ssh://git@bitbucket.org/nbl7/urn-cli.git
