@@ -33,6 +33,12 @@ Check if bll return function return bll classes
 //   return new BLL<A>(atom_name, token_object) as CustomBLL<A>;
 // }
 
+--
+
+Cannot use route with default names: find, find_id, find_one, insert, update, delete
+
+--
+
 #### CONF VALIDATION
 
 Check that jwt private key is changed.

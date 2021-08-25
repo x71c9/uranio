@@ -1,27 +1,5 @@
 # URANIO
 
-## Uranio submodules
-
-```
-git submodule add <link> <folder>
-```
-
-## Uranio Bit
-
-Since uranio uses git submodules there are no .git folder.
-Bit use .git folder when init, with -T this is fixed.
-```
-bit init -T
-```
-```
-bit import nbl7.uranio/[comp_name] --path src/[comp_name] --ignore-package-json 
-
---skip-npm-install
---conf src/core/bit.json
-
-```
-
-
 ## Uranio docker general settings
 
 ### For each repository
