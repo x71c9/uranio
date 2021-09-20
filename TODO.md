@@ -39,6 +39,14 @@ Cannot use route with default names: find, find_id, find_one, insert, update, de
 
 --
 
+Do not override atom_hard_propeties
+
+--
+
+properties on_error shouldn't call any server function. ?
+
+--
+
 #### CONF VALIDATION
 
 Check that jwt private key is changed.
