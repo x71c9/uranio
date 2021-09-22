@@ -1,3 +1,14 @@
+#### URANIO ADMIN
+
+Build HTML CSS component
+
+Create repo urn-adm
+
+Implement urn-adm in urn-cli
+
+Rebuild urn-cli
+
+
 #### BOOK VALIDATION
 
 In order to make the access control layer works ->
