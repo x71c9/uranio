@@ -1,5 +1,6 @@
 {
   "name": "uranio",
+  "uranio": true,
   "private": true,
   "devDependencies": {
     "lerna": "^3.22.1"

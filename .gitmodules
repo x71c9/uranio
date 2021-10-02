@@ -37,3 +37,8 @@
 	url = git+ssh://git@bitbucket.org/nbl7/urn-trx.git
 	branch = master
 	update = rebase
+[submodule "urn-adm"]
+	path = urn-adm
+	url = git+ssh://git@bitbucket.org/nbl7/urn-adm.git
+	branch = master
+	update = rebase
