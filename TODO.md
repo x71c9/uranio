@@ -3,6 +3,16 @@
 Build HTML CSS component
 
 
+#### API BEHIND AUTH
+
+Develop calls behind authorization and authentication.
+
+
+#### DEFAULT CALL INJECTIONS
+
+Develop 'pre' and 'post' injection to default calls: `find`, `update`, `insert`, ...
+
+
 #### BOOK VALIDATION
 
 In order to make the access control layer works ->
@@ -58,4 +68,5 @@ Check that jwt private key is changed.
 
 --
 
+#### FASTER DEV EXPRIENCE?
 
