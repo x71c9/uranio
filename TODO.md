@@ -1,7 +1,52 @@
 #### URANIO ADMIN
 
-Build HTML CSS component
+Search methods
 
+Filters properties
+
+Bulk edit
+
+Buld delete
+
+Live request visualizer
+
+CSS transition
+
+Responsive
+
+##### Media
+
+Drop file and upload
+
+Multiple file upload
+
+Crop and resize
+
+Compress image before upload
+
+Effects on images
+
+Pixellate for privacy
+
+Annotate
+
+
+#### SERVER UPLOAD MEDIA
+
+Where to store media?
+
+How to upload media?
+
+#### MOVE TO GITHUB
+
+
+#### IMPORT EXPORT
+
+Import export with CSV files
+
+#### EDIT DB
+
+Excel in browser?
 
 #### API BEHIND AUTH
 
@@ -67,6 +112,7 @@ properties on_error shouldn't call any server function. ?
 Check that jwt private key is changed.
 
 --
+
 
 #### FASTER DEV EXPRIENCE?
 

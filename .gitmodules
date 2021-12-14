@@ -42,3 +42,8 @@
 	url = git+ssh://git@bitbucket.org/nbl7/urn-adm.git
 	branch = master
 	update = rebase
+[submodule "urn-dot-cli"]
+	path = urn-dot-cli
+	url = git+ssh://bitbucket.org/nbl7/urn-dot-cli.git
+	branch = master
+	update = rebase
