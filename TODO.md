@@ -9,9 +9,6 @@ Right now it is not possible to make a custom bll.
 It should delete file and folder if they are being deleted outside uranio dev
 
 
-#### MOVE TO GITHUB
-
-
 #### DOCKER
 
 How to make it work with Nuxt dev?
@@ -48,7 +45,7 @@ Responsive
 
 Multiple file upload
 
-Rresize
+Resize
 
 Compress image before upload
 
