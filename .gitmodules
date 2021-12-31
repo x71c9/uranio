@@ -1,0 +1,25 @@
+[submodule "urn-dev"]
+	path = urn-dev
+	url = git+ssh://git@github.com/nbl7/uranio-dev.git
+	branch = master
+	update = rebase
+[submodule "urn-lib"]
+	path = urn-lib
+	url = git+ssh://git@github.com/nbl7/uranio-lib.git
+	branch = master
+	update = rebase
+[submodule "urn-bld"]
+	path = urn-bld
+	url = git+ssh://git@github.com/nbl7/uranio-bld.git
+	branch = master
+	update = rebase
+[submodule "urn-cli"]
+	path = urn-cli
+	url = git+ssh://git@github.com/nbl7/uranio-cli.git
+	branch = master
+	update = rebase
+[submodule "urn-dot"]
+	path = urn-dot
+	url = git+ssh://git@github.com/nbl7/uranio-dot.git
+	branch = master
+	update = rebase
