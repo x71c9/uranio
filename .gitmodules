@@ -23,3 +23,8 @@
 	url = git+ssh://git@github.com/nbl7/uranio-dot.git
 	branch = master
 	update = rebase
+[submodule "urn-ass"]
+	path = urn-ass
+	url = git+ssh://git@github.com/nbl7/uranio-assets.git
+	branch = master
+	update = rebase
