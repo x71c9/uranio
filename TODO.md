@@ -1,3 +1,32 @@
+#### README and DOC
+
+Book documentation
+
+#### FULL URL MEDIA
+
+How to get the full url of a media.
+
+#### URANIO ADMIN
+
+Login
+
+Save token in browser
+
+Read only atoms
+
+Search methods
+
+Filters properties
+
+Bulk edit
+
+Buld delete
+
+Live request visualizer
+
+CSS transition
+
+Responsive
 
 
 #### MAKE URANIO VERSIONS
@@ -16,13 +45,6 @@ Right now it is not possible to make a custom bll.
 It should delete file and folder if they are being deleted outside uranio dev
 
 
-#### DOCKER
-
-How to make it work with Nuxt dev?
-It is not need it with Netlify.
-
-Maybe it should be inside `uranio dev`.
-
 #### PLUGINS
 
 How?
@@ -30,23 +52,6 @@ How?
 For TRX are just book libs.
 From ADM they must be something related with the admin interface.
 i.e. A plugin for showing logging in with device info.
-
-#### URANIO ADMIN
-
-Search methods
-
-Filters properties
-
-Bulk edit
-
-Buld delete
-
-Live request visualizer
-
-CSS transition
-
-Responsive
-
 
 #### MEDIA
 
