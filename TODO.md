@@ -19,6 +19,10 @@ Import export with CSV files
 
 Login
 
+Modal open
+
+Custom atom component
+
 In page NEW add encrypted filed that are hidden now
 
 Reset Password
