@@ -4,30 +4,24 @@ Book documentation
 
 Readme
 
-#### DEINIT
-
-Remove script even if they are not from uranio.
-
-Do not DEINIT if it is not initialized.
-
-#### NUXT
-
-When using Express log the localhost link for developing like Netlify and
-maybe open the browser automatically?
-
 #### HTTPS
 
 Implement https for Netlify and Express.
 
 Set-Cookie token HttpOnly Secure
 
+#### IMPORT EXPORT
+
+Import export with CSV files
+
+
 #### URANIO ADMIN
 
 Login
 
-Reset Password
+In page NEW add encrypted filed that are hidden now
 
-Save token in browser
+Reset Password
 
 Search methods
 
@@ -43,9 +37,21 @@ CSS transition
 
 Responsive
 
+#### URANIO DEV
+
+It should delete file and folder if they are being deleted outside uranio dev
+
 #### URANIO WS
 
 Develop all plugins for implementing a website
+
+#### PLUGINS
+
+How?
+
+For TRX are just book libs.
+From ADM they must be something related with the admin interface.
+i.e. A plugin for showing logging in with device info.
 
 #### URANIO E-COM
 
@@ -65,21 +71,9 @@ Implement cache for downloading and installing repos.
 Fix bll loop.
 Right now it is not possible to make a custom bll.
 
-#### URANIO DEV
-
-It should delete file and folder if they are being deleted outside uranio dev
-
 #### MEDIA
 
 Implement Storage for Google Cloud Platform and Localhost.
-
-#### PLUGINS
-
-How?
-
-For TRX are just book libs.
-From ADM they must be something related with the admin interface.
-i.e. A plugin for showing logging in with device info.
 
 #### MEDIA
 
@@ -94,12 +88,6 @@ Effects on images
 Pixellate for privacy
 
 Annotate
-
-
-#### IMPORT EXPORT
-
-Import export with CSV files
-
 
 #### EDIT DB
 
