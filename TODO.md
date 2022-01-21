@@ -10,6 +10,11 @@ Implement https for Netlify and Express.
 
 Set-Cookie token HttpOnly Secure
 
+#### UPLOAD MEDIA NETLIFY
+
+Cannot upload media to netlify with normal uploading.
+Need to use pre-signed URL.
+
 #### IMPORT EXPORT
 
 Import export with CSV files
