@@ -1,3 +1,5 @@
+#### REBUILD WITH MODULES
+
 #### README and DOC
 
 Book documentation
@@ -9,10 +11,6 @@ Readme
 Implement https for Netlify and Express.
 
 Set-Cookie token HttpOnly Secure
-
-#### MEDIA
-
-Pre-signed URL for AWS
 
 #### CHECK EXCEPTION STRING RETURN WITH NOT USER INPUT
 
@@ -42,7 +40,9 @@ Filters properties
 
 Bulk edit
 
-Buld delete
+Bulk edit all
+
+Delete all
 
 Live request visualizer
 
