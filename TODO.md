@@ -10,10 +10,11 @@ Implement https for Netlify and Express.
 
 Set-Cookie token HttpOnly Secure
 
-#### UPLOAD MEDIA NETLIFY
+#### MEDIA
 
-Cannot upload media to netlify with normal uploading.
-Need to use pre-signed URL.
+Pre-signed URL for AWS
+
+#### CHECK EXCEPTION STRING RETURN WITH NOT USER INPUT
 
 #### IMPORT EXPORT
 
@@ -86,6 +87,8 @@ Right now it is not possible to make a custom bll.
 #### MEDIA
 
 Implement Storage for Google Cloud Platform and Localhost.
+
+Pre-signed URL for Google Cloud Platform.
 
 #### MEDIA
 
