@@ -28,3 +28,28 @@
 	url = ssh+git://git@github.com/nbl7/uranio-assets.git
 	branch = master
 	update = rebase
+[submodule "urn-core"]
+	path = urn-core
+	url = git+ssh://git@github.com/nbl7/uranio-core.git
+	branch = master
+	update = rebase
+[submodule "urn-api"]
+	path = urn-api
+	url = git+ssh://git@github.com/nbl7/uranio-api.git
+	branch = master
+	update = rebase
+[submodule "urn-trx"]
+	path = urn-trx
+	url = git+ssh://git@github.com/nbl7/uranio-trx.git
+	branch = master
+	update = rebase
+[submodule "urn-adm"]
+	path = urn-adm
+	url = git+ssh://git@github.com/nbl7/uranio-adm.git
+	branch = master
+	update = rebase
+[submodule "urn-schema"]
+	path = urn-schema
+	url = git+ssh://git@github.com/nbl7/uranio-schema.git
+	branch = master
+	update = rebase
