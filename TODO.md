@@ -1,5 +1,3 @@
-#### REBUILD WITH MODULES
-
 #### README and DOC
 
 Book documentation
@@ -10,17 +8,11 @@ Readme
 
 Implement https for Netlify and Express.
 
-Set-Cookie token HttpOnly Secure
-
 #### CHECK EXCEPTION STRING RETURN WITH NOT USER INPUT
 
 #### IMPORT EXPORT
 
 Import export with CSV files
-
-#### TRY RECAST
-
-Implement recast instead of ts-morph
 
 #### URANIO ADMIN
 
@@ -81,8 +73,7 @@ Implement cache for downloading and installing repos.
 
 #### CORE
 
-Fix bll loop.
-Right now it is not possible to make a custom bll.
+Is Custom BLL working?
 
 #### MEDIA
 
@@ -120,7 +111,7 @@ https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Preven
 
 Rememeber to make:
 Force user interaction when doing imporant actions, preventing CSRF attacks.
-Re-auth when canging password, deleting, etc...
+Re-auth when changing password, deleting, etc...
 
 Should we use refresh_token?
 
@@ -129,8 +120,5 @@ What about CORS? Should the API respond only to one client?
 // "Access-Control-Expose-Headers": "Set-Cookie",
 // "Access-Control-Allow-Origin": "http://localhost:7777",
 // "Access-Control-Allow-Credentials": true
-
-
-#### FASTER DEV EXPRIENCE?
 
 
