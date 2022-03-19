@@ -16,6 +16,8 @@ Import export with CSV files
 
 #### URANIO ADMIN
 
+Migrate to Nuxt3 with Vite
+
 Login
 
 Modal open
