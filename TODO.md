@@ -1,6 +1,6 @@
 #### README and DOC
 
-Book documentation
+Documentation
 
 Readme
 
@@ -59,6 +59,9 @@ How?
 For TRX are just book libs.
 From ADM they must be something related with the admin interface.
 i.e. A plugin for showing logging in with device info.
+
+UPM
+URANIOHUB
 
 #### URANIO E-COM
 
