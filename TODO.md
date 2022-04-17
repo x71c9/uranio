@@ -4,6 +4,10 @@ Documentation
 
 Readme
 
+#### NETLIFY
+
+Implement and test a lambda function with the new refactored uranio.
+
 #### HTTPS
 
 Implement https for Netlify and Express.
@@ -14,35 +18,35 @@ Implement https for Netlify and Express.
 
 Import export with CSV files
 
+#### MEDIA
+
+Implement Storage for Google Cloud Platform and Localhost.
+
+Pre-signed URL for Google Cloud Platform.
+
 #### URANIO ADMIN
 
-Migrate to Nuxt3 with Vite
+Custom component view (Media)
 
-Login
-
-Modal open
+Confirmation modal
 
 Custom atom component
 
-In page NEW add encrypted filed that are hidden now
+In page NEW add encrypted field that are hidden now
 
-Reset Password
-
-Search methods
-
-Filters properties
-
-Bulk edit
-
-Bulk edit all
-
-Delete all
-
-Live request visualizer
+Reset ENCRYPTED
 
 CSS transition
 
 Responsive
+
+Improved search method with Mongo Atlas search indexes.
+
+Filters properties
+
+Live request visualizer
+
+Migrate to Nuxt3 with Vite
 
 #### URANIO DEV
 
@@ -79,12 +83,6 @@ Implement cache for downloading and installing repos.
 #### CORE
 
 Is Custom BLL working?
-
-#### MEDIA
-
-Implement Storage for Google Cloud Platform and Localhost.
-
-Pre-signed URL for Google Cloud Platform.
 
 #### MEDIA
 
