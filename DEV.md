@@ -26,13 +26,14 @@ Each of these scripts extends the previous one.
 All scripts generate the Uranio schema, meaning they update the `uranio-schema`
 dependency with **new types**.
 
-`uranio-schema` is the repository that stores all the `Atom`, `AtomShape`,
+`uranio-schema` is the repository that stores all the types: `Atom`, `AtomShape`,
 `AtomName`, `Molecule`, `RouteName`, etc.
 
 Since the user is defining new `Atom`s, these types must be updated.
 
-Running the scripts `uranio-generate-${repo}` will read the new atoms and edit
-the file inside `node_modules/uranio-schema/dist/typ/atom.d.ts`.
+Running the scripts `uranio-generate-${repo}` will read the new atoms from the
+user defined files and edit the file inside
+`node_modules/uranio-schema/dist/typ/atom.d.ts`.
 
 
 #### Update the client config toml
