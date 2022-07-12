@@ -7,7 +7,6 @@ This lead to an error when running `uranio dev` on `urn-bld`.
 The model for `setting` is not found. It seems the models are created before
 uranio is initialized, therefore the Atom `setting` is not yet in the book.
 
-
 #### README and DOC
 
 Documentation
@@ -23,6 +22,12 @@ Implement and test a lambda function with the new refactored uranio.
 Implement https for Netlify and Express.
 
 #### CHECK EXCEPTION STRING RETURN WITH NOT USER INPUT
+
+#### COLORS
+
+Adjust uranio CLI colors for macosx.
+Make everything more consistent.
+Check also when using docker.
 
 #### IMPORT EXPORT
 
