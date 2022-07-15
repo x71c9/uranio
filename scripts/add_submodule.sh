@@ -10,4 +10,3 @@ git submodule add -b master git+ssh://git@github.com/x71c9/$GH_REPO $DEST && \
 	git submodule foreach --recursive git checkout master && \
 	git add . && \
 	git commit -m "Added submodule $DEST"
-	

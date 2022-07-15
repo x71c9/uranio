@@ -3,3 +3,8 @@
 	url = git+ssh://git@github.com/x71c9/uranio-adm.git
 	branch = master
 	update = rebase
+[submodule "urn-api"]
+	path = urn-api
+	url = git+ssh://git@github.com/x71c9/uranio-api.git
+	branch = master
+	update = rebase
