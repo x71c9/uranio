@@ -28,3 +28,8 @@
 	url = git+ssh://git@github.com/x71c9/uranio-core.git
 	branch = master
 	update = rebase
+[submodule "urn-dep/urn-adm-dep-dev"]
+	path = urn-dep/urn-adm-dep-dev
+	url = git+ssh://git@github.com/x71c9/uranio-adm-dep-dev.git
+	branch = master
+	update = rebase
