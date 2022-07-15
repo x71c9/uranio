@@ -48,3 +48,8 @@
 	url = git+ssh://git@github.com/x71c9/uranio-schema.git
 	branch = master
 	update = rebase
+[submodule "urn-trx"]
+	path = urn-trx
+	url = git+ssh://git@github.com/x71c9/uranio-trx.git
+	branch = master
+	update = rebase
