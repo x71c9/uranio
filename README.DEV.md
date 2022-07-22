@@ -2,7 +2,65 @@
 
 How Uranio and Uranio CLI work under the hood.
 
-### Intro
+`uranio` cli expose the following methods:
+- init
+- build
+- start
+- dev
+- transpose
+- generate
+
+### Init
+```
+uranio init
+```
+This method initialized the repository. It downloads all the dependecies and
+create the files and directories needed to work.
+
+### Build
+```
+uranio build
+```
+This method call `uranio transpose` and `uranio generate`.
+
+### Start
+```
+uranio start
+```
+This method will start the service built by `uranio build`. This is the command
+used in production.
+
+### Dev
+```
+uranio dev
+```
+This will create a development environment. Every time a file change, it runs
+`uranio transpose`, `uranio generate` and then start the service again.
+
+### Transpose
+```
+uranio transpose
+```
+This method copy and compile the user created files inside `./src` directory
+into `./node_modules/uranio/`.
+
+Depending from which folder is copying it will do different things.
+
+1) SRC Atom Folder
+It copies and process all file from `src/atoms` to:
+-- `node_modules/uranio/src/atoms/server`
+-- `node_modules/uranio/src/atoms/client`
+
+2) SRC Server Folder
+It copies and process all file from `src/server` to:
+// TODO
+
+2) SRC Admin Folder
+It copies and process all file from `src/panel` to:
+// TODO
+
+
+### Generate
 
 Each Uranio repo export a binary script that points to `./dist/server/generate.js`.
 
