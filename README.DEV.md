@@ -56,7 +56,7 @@ It copies and process all file from `src/server` to:
 // TODO
 
 2) SRC Admin Folder
-It copies and process all file from `src/panel` to:
+It copies and process all file from `src/admin` to:
 // TODO
 
 
