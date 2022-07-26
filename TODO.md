@@ -1,12 +1,3 @@
-#### URANIO CORE
-
-Review method `get_model`.
-
-I don't understand why it is creating all models at once.
-This lead to an error when running `uranio dev` on `urn-bld`.
-The model for `setting` is not found. It seems the models are created before
-uranio is initialized, therefore the Atom `setting` is not yet in the book.
-
 #### README and DOC
 
 Documentation
@@ -28,6 +19,9 @@ Implement https for Netlify and Express.
 Adjust uranio CLI colors for macosx.
 Make everything more consistent.
 Check also when using docker.
+
+Check if NO_COLOR env var is set. (Default behaviour)
+Make color for dark and light background, expecially in the browser.
 
 #### IMPORT EXPORT
 
