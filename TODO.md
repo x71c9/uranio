@@ -8,10 +8,6 @@ Readme
 
 Implement and test a lambda function with the new refactored uranio.
 
-#### HTTPS
-
-Implement https for Netlify and Express.
-
 #### CHECK EXCEPTION STRING RETURN WITH NOT USER INPUT
 
 #### COLORS
