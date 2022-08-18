@@ -1,95 +1,169 @@
-## Uranio monorepo
+# Uranio monorepo
 
 This repo contains as submodules all the Uranio repos.
 
 ## How Uranio and Uranio CLI work under the hood.
 
-### Basic concepts
+### Core concepts
 
-In order to create a new Atom - a relation in a table and an API to query it -
-only one file is needed: `./src/atoms/[atom_name]/index.ts`.
+Uranio is a framework for developing CRUD API. It generates the CRUD
+[Create, Read, Update, Delete] methods for querying a database.
+A database relation in Uranio is called **Atom**.
 
-Uranio take care of compiling and importing this file.
-In order to do that, it first copy the file in
-`./node_modules/uranio/src/atoms/server|client/[atom_name]/index.ts` then
-comiling it to
-`./node_modules/uranio/dist/atoms/server|client/[atom_name]/index.js`.
+Uranio two main features are:
 
-Then it edits the file: `./node_modules/uranio/src/server|client/register.ts`
-exporting the new file with the following line:
-`export * from ../atoms/server|client/[atom_name]/index.ts`.
-It compile the `register.ts` file to
-`./node_modules/uranio/dist/server|client/register.js`
+1. Uranio makes possible to define new Atoms and to use them in the current
+project, so that each projects have its own Atoms.
 
-The `register.ts` file is already imported in
-`./node_modules/uranio/src/service/ws.ts` so the new Atom will be imported when
-starting the service.
-It is also imported in `./node_modules/uranio/src/server/generate.ts` since it
-is also needed by the `generate.ts` script.
-And finally it is imported in the client in the file
-`./node_modules/uranio/src/nuxt/plugins/uranio.ts`.
+2. Uranio makes also possible to have code completition and intelisense with the
+new defined Atoms.
 
-> TODO: User can write its own servie. `register.ts` must be imported also there.
+In order to make these features work it must extend itself with the new defined
+Atoms and their types.
+
+**Therefore Uranio copies the new files inside the `node_modules/uranio` dependency
+and re-transpile it.**
+
+---
+
+### The process
+
+A new Atom can be defined with the following file:
+```
+__root/src/atoms/[atom_name]/index.ts
+```
+> `__root` is the root of the project.
+
+Before a new Atom can be used, it must be **registred** (more below).
+
+Uranio take care of importing and transpiling the file, by doing the following:
+
+- It first copies the file in
+	
+	`./node_modules/uranio/src/atoms/server|client/[atom_name]/index.ts`
+	
+	and it transpiles it to
+	
+	`./node_modules/uranio/dist/atoms/server|client/[atom_name]/index.js`.
+	
+	---
+	
+
+- It edits the file:
+	
+	`./node_modules/uranio/src/server|client/register.ts`
+	
+	adding the following line:
+	
+	```typescript
+	// node_modules/uranio/src/server|client/register.ts
+	// ...
+	export * from `../atoms/server|client/${atom_name}/index.ts`.
+	```
+	
+	and it transpiles the edited `register.ts` file to
+	
+	`./node_modules/uranio/dist/server|client/register.js`
+	
+	---
+	
+
+- The `register.ts` file is imported inside the main executable file (the one
+	that launch the server):
+	
+	`./node_modules/uranio/src/service/ws.ts`
+	
+	---
+	
 
 
-### CLI
+- The `register.ts` file is also imported inside the executable file:
+	
+	`./node_modules/uranio/src/server/generate.ts`
+	
+	The `generate.ts` executable file is a script that generate the new Atom types
+	and importing in the library. So it also need to register the new Atoms.
+	Before the server starts it calls the **generate** script.
+	
+	---
+	
+
+- The `register.ts` file is then imported in the client inside the file:
+	
+	`./node_modules/uranio/src/nuxt/plugins/uranio.ts`.
+	
+	This is done only when using `uranio-adm`.
+	
+
+---
+
+### Uranio CLI
 
 `uranio` cli expose the following methods:
 - init
-- build
 - start
 - dev
-- transpose
-- generate
+
+---
 
 #### Init
-```
+```bash
 uranio init
 ```
 This method initialized the repository. It downloads all the dependecies and
 create the files and directories needed to work.
 
-#### Build
-```
-uranio build
-```
-This method call `uranio transpose` and `uranio generate`.
+---
+
 
 #### Start
-```
+```bash
 uranio start
 ```
-This method will start the service built by `uranio build`. This is the command
-used in production.
+This method builds and starts the service.
+
+---
+
 
 #### Dev
-```
+```bash
 uranio dev
 ```
-This will create a development environment. Every time a file change, it runs
-`uranio transpose`, `uranio generate` and then start the service again.
+This creates a development environment. Every time a file change, it re-builds
+re-starts the service.
+
+---
+
+> All the above commands can be run with the flag `--prod` when in production.
+
+---
+
+##### The following are used only internally:
 
 #### Transpose
-```
-uranio transpose
-```
-This method copy and compile the user created files inside `./src` directory
+
+This method copies and transpile the files created inside the `./src` directory
 into `./node_modules/uranio/`.
 
 Depending from which folder is copying it will do different things.
 
-1) SRC Atom Folder
-It copies and process all file from `src/atoms` to:
--- `node_modules/uranio/src/atoms/server`
--- `node_modules/uranio/src/atoms/client`
+1) _SRC Atom Folder_
 
-2) SRC Server Folder
-It copies and process all file from `src/server` to:
-// TODO
+	It copies and process all file from `src/atoms` to:
+	
+	-`node_modules/uranio/src/atoms/server|client`
 
-2) SRC Admin Folder
-It copies and process all file from `src/admin` to:
-// TODO
+2) _SRC Server Folder_
+
+	It copies and process all file from `src/server` to:
+	
+	-`node_modules/uranio/src/server/delta/`
+
+3) _SRC Admin Folder_
+
+	It copies and process all file from `src/admin` to:
+	
+	// TODO
 
 
 #### Generate
@@ -134,7 +208,7 @@ They read the `uranio.toml` file and generate a module in `src/client/toml.ts`.
 So they update:
 - `node_modules/uranio/src/client/toml.ts`
 
-And then compile it into:
+And then transpile it into:
 - `node_modules/uranio/dist/client/toml.js`
 
 
