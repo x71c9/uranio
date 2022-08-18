@@ -56,9 +56,14 @@ Uranio take care of importing and transpiling the file, by doing the following:
 	adding the following line:
 	
 	```typescript
-	// node_modules/uranio/src/server|client/register.ts
+	// node_modules/uranio/src/server/register.ts
 	// ...
-	export * from `../atoms/server|client/${atom_name}/index.ts`.
+	export * from `../atoms/server/${atom_name}/index.ts`.
+	```
+	```typescript
+	// node_modules/uranio/src/client/register.ts
+	// ...
+	export * from `../atoms/client/${atom_name}/index.ts`.
 	```
 	
 	and it transpiles the edited `register.ts` file to
@@ -68,32 +73,31 @@ Uranio take care of importing and transpiling the file, by doing the following:
 	---
 	
 
-- The `register.ts` file is imported inside the main executable file (the one
-	that launch the server):
-	
-	`./node_modules/uranio/src/service/ws.ts`
-	
-	---
+The `register.ts` file is imported inside the main executable file (the one
+that launch the server):
+
+`./node_modules/uranio/src/service/ws.ts`
+
+---
 	
 
+The `register.ts` file is also imported inside the executable file:
 
-- The `register.ts` file is also imported inside the executable file:
-	
-	`./node_modules/uranio/src/server/generate.ts`
-	
-	The `generate.ts` executable file is a script that generate the new Atom types
-	and importing in the library. So it also need to register the new Atoms.
-	Before the server starts it calls the **generate** script.
-	
-	---
-	
+`./node_modules/uranio/src/server/generate.ts`
+
+The `generate.ts` executable file is a script that generate the new Atom types
+and importing in the library. So it also need to register the new Atoms.
+Before the server starts it calls the **generate** script.
+
+---
+
 
 - The `register.ts` file is then imported in the client inside the file:
-	
-	`./node_modules/uranio/src/nuxt/plugins/uranio.ts`.
-	
-	This is done only when using `uranio-adm`.
-	
+
+`./node_modules/uranio/src/nuxt/plugins/uranio.ts`.
+
+This is done only when using `uranio-adm`.
+
 
 ---
 
@@ -103,6 +107,7 @@ Uranio take care of importing and transpiling the file, by doing the following:
 - init
 - start
 - dev
+- info
 
 ---
 
@@ -135,6 +140,14 @@ re-starts the service.
 ---
 
 > All the above commands can be run with the flag `--prod` when in production.
+
+---
+
+#### Info
+```bash
+uranio info
+```
+It prints the info about the current project.
 
 ---
 
