@@ -12,11 +12,6 @@ Implement and test a lambda function with the new refactored uranio.
 
 #### COLORS
 
-Adjust uranio CLI colors for macosx.
-Make everything more consistent.
-Check also when using docker.
-
-Check if NO_COLOR env var is set. (Default behaviour)
 Make color for dark and light background, expecially in the browser.
 
 #### IMPORT EXPORT
