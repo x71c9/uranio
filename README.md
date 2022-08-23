@@ -1,6 +1,6 @@
 # Uranio monorepo
 
-This repo contains as submodules all the Uranio repos.
+This repo contains all the Uranio repos as submodules.
 
 ## How Uranio and Uranio CLI work under the hood.
 
@@ -87,7 +87,7 @@ The `register.ts` file is also imported inside the executable file:
 
 The `generate.ts` executable file is a script that generate the new Atom types
 and importing in the library. So it also need to register the new Atoms.
-Before the server starts it calls the **generate** script.
+Before the server starts Uranio calls the **generate** script.
 
 ---
 
@@ -96,7 +96,7 @@ Before the server starts it calls the **generate** script.
 
 `./node_modules/uranio/src/nuxt/plugins/uranio.ts`.
 
-This is done only when using `uranio-adm`.
+This is valid only for `uranio-adm`.
 
 
 ---
@@ -104,10 +104,10 @@ This is done only when using `uranio-adm`.
 ### Uranio CLI
 
 `uranio` cli expose the following methods:
-- init
-- start
-- dev
-- info
+- `uranio init`
+- `uranio start`
+- `uranio dev`
+- `uranio info`
 
 ---
 
@@ -116,7 +116,7 @@ This is done only when using `uranio-adm`.
 uranio init
 ```
 This method initialized the repository. It downloads all the dependecies and
-create the files and directories needed to work.
+create the files and directories needed for start working.
 
 ---
 
@@ -126,6 +126,10 @@ create the files and directories needed to work.
 uranio start
 ```
 This method builds and starts the service.
+
+---
+
+> This command can be run with the flag `--prod` for production mode.
 
 ---
 
@@ -139,7 +143,9 @@ re-starts the service.
 
 ---
 
-> All the above commands can be run with the flag `--prod` when in production.
+> This command can be run with the flag `--prod` for production mode.
+>
+> Usefull for testing the productino environment.
 
 ---
 
