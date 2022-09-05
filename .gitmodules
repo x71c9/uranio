@@ -63,3 +63,8 @@
 	url = git+ssh://git@github.com/x71c9/uranio-docker
 	branch = master
 	update = rebase
+[submodule "urn-utils"]
+	path = urn-utils
+	url = git+ssh://git@github.com/x71c9/uranio-utils
+	branch = master
+	update = rebase
