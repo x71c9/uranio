@@ -26,7 +26,7 @@ commit_and_push
 cd ../urn-schema
 commit_and_push
 
-cd ../urn-lib
+cd ../urn-utils
 commit_and_push
 
 cd ../urn-dev
