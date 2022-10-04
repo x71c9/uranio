@@ -4,6 +4,11 @@ Documentation
 
 Readme
 
+#### gRPC / GraphQL
+
+Implement gRPC?
+Implement GraphQL
+
 #### NETLIFY
 
 Implement and test a lambda function with the new refactored uranio.
