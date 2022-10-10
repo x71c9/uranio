@@ -6,7 +6,7 @@ Readme
 
 #### gRPC / GraphQL
 
-Implement gRPC?
+Implement gRPC? https://www.youtube.com/watch?v=hVrwuMnCtok
 Implement GraphQL
 
 #### NETLIFY
