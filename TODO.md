@@ -1,3 +1,9 @@
+#### TYPES
+
+Change `connection` type to ENUM.
+
+Check if errors are thrown for not waited promises.
+
 #### README and DOC
 
 Documentation

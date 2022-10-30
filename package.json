@@ -1,9 +1,6 @@
 {
 	"name": "uranio-monorepo",
 	"license": "UNLICENSED",
-	"bin": {
-		"uranio-sync": "dist/scripts/sync.js"
-	},
 	"uranio": true,
 	"private": true,
 	"author": "Andrea Reni <108585118+x71c9@users.noreply.github.com>",
