@@ -3,7 +3,7 @@
 	"license": "UNLICENSED",
 	"uranio": true,
 	"private": true,
-	"author": "Andrea Reni <108585118+x71c9@users.noreply.github.com>",
+	"author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
 	"scripts": {
 		"build": "yarn tsc -b",
 		"dev:sync": "yarn tsc-watch --onSuccess \"node -r source-map-support ./dist/scripts/sync.js ~/repos/uranio/urn-bld ~/repos/cloned_uranio\""
