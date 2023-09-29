@@ -33,11 +33,6 @@
 	url = git+ssh://git@github.com/x71c9/uranio-sync
 	branch = master
 	update = rebase
-[submodule "urn-cicd"]
-	path = urn-cicd
-	url = git+ssh://git@github.com/x71c9/uranio-cicd
-	branch = master
-	update = rebase
 [submodule "urn-docker"]
 	path = urn-docker
 	url = git+ssh://git@github.com/x71c9/uranio-docker
