@@ -1,5 +1,0 @@
-[submodule "urn-dep/urn-core-dep-dev"]
-	path = urn-dep/urn-core-dep-dev
-	url = git+ssh://git@github.com/x71c9/uranio-core-dep-dev
-	branch = master
-	update = rebase
