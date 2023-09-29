@@ -8,11 +8,6 @@
 	url = git+ssh://git@github.com/x71c9/uranio-trx.git
 	branch = master
 	update = rebase
-[submodule "urn-sync"]
-	path = urn-sync
-	url = git+ssh://git@github.com/x71c9/uranio-sync
-	branch = master
-	update = rebase
 [submodule "urn-utils"]
 	path = urn-utils
 	url = git+ssh://git@github.com/x71c9/uranio-utils
