@@ -1,8 +1,3 @@
-[submodule "urn-api"]
-	path = urn-api
-	url = git+ssh://git@github.com/x71c9/uranio-api.git
-	branch = master
-	update = rebase
 [submodule "urn-ass"]
 	path = urn-ass
 	url = git+ssh://git@github.com/x71c9/uranio-assets.git
