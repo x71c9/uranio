@@ -1,0 +1,9 @@
+{
+  "name": "uranio-client",
+  "version": "0.0.1",
+  "description": "Uranio client is a auto-generated, type-safe ODM client for MongoDB",
+  "main": "dist/index.js",
+  "repository": "git+ssh://git@github.com/x71c9/uranio.git",
+  "author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
+  "license": "UNLICENSED"
+}
