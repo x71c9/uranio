@@ -29,9 +29,9 @@ For example if in your code you have:
 import uranio from 'uranio';
 
 interface Product extends uranio.atom {
-  title: string
-  description: string
-  price: number
+  title: string;
+  description: string;
+  price: number;
 }
 ```
 
@@ -51,3 +51,14 @@ await urn.products.insert({
 });
 ```
 
+### Uranio types
+
+You can use uranio types to better define the schema of your collections.\
+For example:
+
+```typescript
+interface Customer extends uranio.atom {
+  _id: uranio.primary<string>;
+  email: uranio.unique<string>;
+}
+```
