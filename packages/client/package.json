@@ -1,9 +1,30 @@
 {
   "name": "uranio-client",
-  "version": "0.0.1",
-  "description": "Uranio client is a auto-generated, type-safe ODM client for MongoDB",
+  "version": "0.1.0",
+  "description": "Uranio client is an auto-generated, type-safe ODM client for MongoDB",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "git+ssh://git@github.com/x71c9/uranio.git",
   "author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "peerDependencies": {
+    "uranio": "*"
+  },
+  "peerDependenciesMeta": {
+    "uranio": {
+      "optional": true
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build": "yarn tsc -b",
+    "dev": "yarn tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "mongodb": "^6.2.0"
+  }
 }
