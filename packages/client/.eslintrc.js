@@ -1,0 +1,78 @@
+export default {
+  root: true,
+  env: {
+    node: true,
+    browser: true,
+    es6: true,
+  },
+  extends: ['eslint:recommended', 'plugin:json/recommended', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+  },
+  rules: {
+    'camelcase': ['off'],
+    'keyword-spacing': ['off'],
+    'object-curly-spacing': ['off', 'always'],
+    'no-multiple-empty-lines': ['warn', {max: 3}],
+    'no-tabs': ['warn'],
+    'no-trailing-spaces': ['error', {skipBlankLines: true}],
+    'no-unused-vars': [
+      'warn',
+      {argsIgnorePattern: '^_', varsIgnorePattern: '^_'},
+    ],
+    'padded-blocks': ['off', 'always'],
+    'prettier/prettier': 'error',
+    'semi': ['error', 'always'],
+    'space-before-blocks': ['off', 'always'],
+    'space-before-function-paren': ['off', 'always'],
+  },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      env: {
+        node: true,
+        browser: true,
+        es6: true,
+      },
+      plugins: ['@typescript-eslint'],
+      parser: '@typescript-eslint/parser',
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'prettier',
+      ],
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        project: './tsconfig.json',
+      },
+      rules: {
+        '@typescript-eslint/no-explicit-any': ['off'],
+        '@typescript-eslint/no-empty-interface': ['off'],
+        '@typescript-eslint/no-namespace': ['off'],
+        '@typescript-eslint/no-non-null-assertion': ['off'],
+        '@typescript-eslint/no-unused-vars': [
+          'warn',
+          {argsIgnorePattern: '^_', varsIgnorePattern: '^_'},
+        ],
+        'camelcase': ['off'],
+        'keyword-spacing': ['off'],
+        'object-curly-spacing': ['off', 'always'],
+        'no-multiple-empty-lines': ['warn', {max: 3}],
+        'no-tabs': ['warn'],
+        'no-trailing-spaces': ['error', {skipBlankLines: true}],
+        'no-unused-vars': [
+          'warn',
+          {argsIgnorePattern: '^_', varsIgnorePattern: '^_'},
+        ],
+        'padded-blocks': ['off', 'always'],
+        'prettier/prettier': 'error',
+        'semi': ['error', 'always'],
+        'space-before-blocks': ['off', 'always'],
+        'space-before-function-paren': ['off', 'always'],
+      },
+    },
+  ],
+};

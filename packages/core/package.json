@@ -1,0 +1,24 @@
+{
+  "name": "uranio",
+  "version": "0.1.0",
+  "description": "Uranio is a type-safe ODM for MongoDB",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/x71c9/uranio.git",
+    "directory": "packages/cli"
+  },
+  "author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
+  "license": "UNLICENSED",
+  "bin": {
+    "uranio": "dist/bin.js"
+  },
+  "scripts": {
+    "build": "yarn tsc -b",
+    "dev": "yarn tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "typescript": "^5.2.2"
+  }
+}
