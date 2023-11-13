@@ -9,5 +9,4 @@ yarn-error.log
 .serverless
 reports/
 coverage/
-refactor/
-main/
+/**/node_modules
