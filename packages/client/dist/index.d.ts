@@ -1,9 +1,3 @@
-import urn from '.uranio/client';
-export default urn;
-/**
- *
- * Uranio client
- *
- * @packageDocumentation
- *
- */
+import uranio_client, { types } from '.uranio/client';
+export default uranio_client;
+export { types };
