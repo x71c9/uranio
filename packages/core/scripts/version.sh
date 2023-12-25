@@ -1,12 +1,5 @@
 #!/bin/bash
 
-if [[ `git status --porcelain` ]]; then
-  echo
-  echo "Error: Git working directory is not clean. Please commit your changes or stash them."
-  echo
-  exit 1
-fi;
-
 SEMANTIC_NAME=$1
 
 if [ "$SEMANTIC_NAME" == "" ]; then
@@ -19,7 +12,7 @@ fi
 
 case "$SEMANTIC_NAME" in
   patch)
-    npm version patch
+    yarn version --patch --no-git-tag-version
     break;
     ;;
   minor)
@@ -31,7 +24,7 @@ case "$SEMANTIC_NAME" in
         * ) echo "Please answer [y]es or [n]o.";;
       esac
     done
-    npm version minor
+    yarn version --minor --no-git-tag-version
     break;
     ;;
   major)
@@ -43,7 +36,7 @@ case "$SEMANTIC_NAME" in
         * ) echo "Please answer [y]es or [n]o.";;
       esac
     done
-    npm version major
+    yarn version --major --no-git-tag-version
     break;
     ;;
   *)
@@ -55,7 +48,5 @@ case "$SEMANTIC_NAME" in
     ;;
 esac
 
-git push origin
 VERSION=$(node -p "require('./package.json').version")
-git push origin v$VERSION
-yarn publish --new-version $VERSION
+yarn publish --new-version $VERSION --no-git-tag-version
