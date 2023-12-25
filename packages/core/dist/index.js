@@ -1,8 +1,9 @@
+"use strict";
 /**
  *
  * Index module
  *
  * @packageDocumentation
  */
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });
 //# sourceMappingURL=index.js.map
