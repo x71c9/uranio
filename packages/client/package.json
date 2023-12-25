@@ -18,7 +18,10 @@
   "sideEffects": false,
   "scripts": {
     "build": "yarn tsc -b",
-    "dev": "yarn tsc -w"
+    "dev": "yarn tsc -w",
+    "push:patch": "sh ./scripts/version.sh patch",
+    "push:minor": "sh ./scripts/version.sh minor",
+    "push:major": "sh ./scripts/version.sh major"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
