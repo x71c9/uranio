@@ -1037,11 +1037,6 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
-husky@^8.0.3:
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.3.tgz#4936d7212e46d1dea28fef29bb3a108872cd9184"
-  integrity sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==
-
 i0n@^0.6.0:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/i0n/-/i0n-0.6.1.tgz#4d348f249cf5da4781561d04aa517fb38cd0dcc3"
