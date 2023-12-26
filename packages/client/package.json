@@ -19,6 +19,7 @@
   "scripts": {
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
+    "link:.uranio": "ln -s ~/repos/uranio/.uranio ~/repos/uranio/uranio/packages/client/node_modules/.uranio",
     "push:patch": "sh ./scripts/version.sh patch",
     "push:minor": "sh ./scripts/version.sh minor",
     "push:major": "sh ./scripts/version.sh major"
@@ -28,6 +29,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "i0n": "^0.7.3",
     "mongodb": "^6.2.0"
   }
 }
