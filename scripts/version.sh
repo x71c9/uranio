@@ -60,17 +60,41 @@ else
   esac
 fi
 
+# Get the current version from package.json
+current_version=$(jq -r '.version' package.json)
+
+# Extract major, minor, and patch parts of the version
+major=$(echo $current_version | cut -d. -f1)
+minor=$(echo $current_version | cut -d. -f2)
+patch=$(echo $current_version | cut -d. -f3)
+
+increment_version() {
+  if [ "$1" == "patch" ]; then
+    patch=$((patch + 1))
+  elif [ "$1" == "minor" ]; then
+    minor=$((minor + 1))
+    patch=0
+  elif [ "$1" == "major" ]; then
+    major=$((major + 1))
+    minor=0
+    patch=0
+  fi
+}
+
 case "$response" in
   [Yy]* )
     case "$SEMANTIC_NAME" in
       patch)
-        npm version patch
+        # npm version patch
+        increment_version patch
         ;;
       minor)
-        npm version minor
+        # npm version minor
+        increment_version minor
         ;;
       major)
-        npm version major
+        # npm version major
+        increment_version major
         ;;
     esac
     ;;
@@ -84,7 +108,23 @@ case "$response" in
     ;;
 esac
 
-git push origin
+new_version="$major.$minor.$patch"
+
+DOT_URANIO_PACKAGE_JSON_PATH=.uranio/package.json
 VERSION=$(node -p "require('./package.json').version")
-git push origin v$VERSION
-yarn publish --new-version $VERSION
+
+jq --arg uranio_version "$new_version" \
+   '.dependencies |= . + { "uranio": "$uranio_version" }' \
+   "$DOT_URANIO_PACKAGE_JSON_PATH" > tmpfile && mv tmpfile "$DOT_URANIO_PACKAGE_JSON_PATH"
+
+jq --arg uranio_version "$new_version" '.version = $uranio_version' \
+  package.json > tmp_package.json && mv tmp_package.json package.json
+
+echo "git add ."
+echo "git commit -m \"auto-updated .uranio dependency uranio\""
+echo "git tag -a v$new_version -m \"v$new_version\""
+
+# git push origin
+# git push origin v$new_version
+# yarn publish --new-version $new_version
+
