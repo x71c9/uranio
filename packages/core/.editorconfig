@@ -1,4 +1,0 @@
-# Space indentation (no size specified)
-[*]
-indent_style = space
-insert_final_newline = true
