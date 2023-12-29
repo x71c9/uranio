@@ -6,9 +6,9 @@
 
 import mongodb from 'mongodb';
 
-import {Atom, Query, Shape} from './types';
+import {atom, Query, Shape} from './types';
 
-export class AtomClient<S extends Atom> {
+export class AtomClient<S extends atom> {
 
   public collection: mongodb.Collection<S>;
 
@@ -114,12 +114,12 @@ function _string_id<T extends unknown>(item: T): StringId<T> {
   return item as StringId<T>;
 }
 
-function _remove_id<A extends Atom>(atom: Partial<A>): Shape<A> {
+function _remove_id<A extends atom>(atom: Partial<A>): Shape<A> {
   delete (atom as any)._id;
   return atom as Shape<A>;
 }
 
-function _instance_object_id<A extends Atom>(query: Query<A>): Query<A> {
+function _instance_object_id<A extends atom>(query: Query<A>): Query<A> {
   for (let [key, value] of Object.entries(query)) {
     if (key === '_id' && typeof value === 'string') {
       query['_id'] = new mongodb.ObjectId(value) as any;
