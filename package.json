@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "i0n": "^0.7.3",
-    "plutonio": "^0.2.2"
+    "plutonio": "^0.4.1"
   }
 }

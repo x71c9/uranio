@@ -1558,10 +1558,10 @@ picomatch@^2.3.1:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
-plutonio@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.2.2.tgz#71027163049127254b1a271cb93aef5c503cc6a6"
-  integrity sha512-zz4oc0D6cY3iGmTxtRO+tGfPqb3yqlJoj8hQcuCSq7/qXV96MLYemrRXqZbRXkY1vy8HE4dg7XQ7hNhSlMO8CQ==
+plutonio@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.4.1.tgz#e9e965bc9927a20097ad52ee3bd18d22cc0ac365"
+  integrity sha512-TMFLa/vabDJ6f0/uy260fyHKusMJ86Cmf9zIH+QhWx4gPZweNETrL6C79VEAg6telbkVcFCY99aQUCRmccRNEA==
   dependencies:
     i0n "^0.6.0"
     typescript "^5.3.3"
