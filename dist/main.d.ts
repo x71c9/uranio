@@ -4,8 +4,7 @@
  *
  * @packageDocumentation
  */
-import { Client } from '.uranio';
-export { Client };
+export * from '.uranio';
 export interface atom {
 }
 export type primary<T> = T;
