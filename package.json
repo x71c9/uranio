@@ -14,14 +14,17 @@
     "uranio": "dist/bin.js"
   },
   "scripts": {
+    ".uranio:build": "yarn tsc --project ./.uranio",
+    ".uranio:copy": "bash ./scripts/copy_dot_uranio.sh",
+    ".uranio:dev:.uranio": "yarn .uranio:build && yarn .uranio:copy",
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
     "dev:bin": "node ./dist/bin.js",
     "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:bin\"",
-    "push:patch": "sh ./scripts/version.sh patch",
-    "push:minor": "sh ./scripts/version.sh minor",
-    "push:major": "sh ./scripts/version.sh major"
+    "push:patch": "bash ./scripts/version.sh patch",
+    "push:minor": "bash ./scripts/version.sh minor",
+    "push:major": "bash ./scripts/version.sh major"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",

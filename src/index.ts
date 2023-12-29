@@ -5,6 +5,5 @@
  * @packageDocumentation
  */
 
-export interface atom {
-  _id: string
-}
+import * as uranio from './main';
+export default uranio;
