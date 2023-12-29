@@ -25,7 +25,5 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "i0n": "^0.7.3",
-    "mongodb": "^6.2.0"
   }
 }
