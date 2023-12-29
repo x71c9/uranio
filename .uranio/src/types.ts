@@ -6,11 +6,18 @@
  *
  */
 
-import {Query} from './query';
-export {Query};
+export * from './query';
 
-export interface Atom {
-  _id: string;
+export interface atom {
+  _id: primary<string>
 }
 
-export type Shape<A extends Atom> = Omit<A, '_id'>;
+export type primary<T> = T & {__uranio: 'primary'};
+
+export type unique<T> = T & {__uranio: 'unique'};
+
+type PrimaryAttribute<A extends atom> = {
+  [K in keyof A]: A[K] extends {__uranio: 'primary'} ? K : never;
+}[keyof A];
+
+export type Shape<A extends atom> = Omit<A, PrimaryAttribute<A>>;

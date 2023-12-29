@@ -6,6 +6,8 @@
  *
  */
 
+export * from './types';
+
 import {UranioClient as Client} from './uranio-client';
 export {Client};
 

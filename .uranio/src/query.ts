@@ -4,9 +4,9 @@
  *
  */
 
-import {Atom} from './types';
+import {atom} from './types';
 
-export type Query<A extends Atom> = {
+export type Query<A extends atom> = {
   [P in keyof A]?: Condition<A[P]>;
 } & RootFilterOperators<A>;
 
@@ -40,7 +40,7 @@ interface FilterOperators<T> {
   $rand?: Record<string, never>;
 }
 
-interface RootFilterOperators<A extends Atom> {
+interface RootFilterOperators<A extends atom> {
   $and?: Query<A>[];
   $nor?: Query<A>[];
   $or?: Query<A>[];

@@ -38,5 +38,3 @@ export class Client{
     log.trace('Disconnected.');
   }
 }
-
-
