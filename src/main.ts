@@ -5,8 +5,7 @@
  * @packageDocumentation
  */
 
-import {Client} from '.uranio';
-export {Client}
+export * from '.uranio';
 
 export interface atom {}
 
