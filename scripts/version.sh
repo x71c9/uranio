@@ -120,9 +120,9 @@ jq --arg uranio_version "$new_version" \
 jq --arg uranio_version "$new_version" '.version = $uranio_version' \
   package.json > tmp_package.json && mv tmp_package.json package.json
 
-echo "git add ."
-echo "git commit -m \"auto-updated .uranio dependency uranio\""
-echo "git tag -a v$new_version -m \"v$new_version\""
+git add .
+git commit -m "auto-updated .uranio dependency uranio"
+git tag -a v$new_version -m "v$new_version"
 
 git push origin
 git push origin v$new_version
