@@ -7,9 +7,9 @@ the types in a repository.
 ## Install
 
 ```
-npm install -g uranio
-yarn global add uranio
-pnpm add -g uranio
+npm install uranio
+yarn add uranio
+pnpm add uranio
 ```
 
 ## How it works
@@ -39,7 +39,12 @@ interface Product extends uranio.atom {
 then Uranio generates a method for querying a collection named `products`:
 
 ```typescript
-import urn from 'uranio-client';
+import uranio from 'uranio';
+
+const uri = process.env.MONGO_DATABASE_URI || '';
+const db_name = process.env.MONGO_DATABASE_NAME || '';
+
+const urn = uranio.Client({uri, db_name});
 
 // Get all products
 const products = await urn.products.find({});

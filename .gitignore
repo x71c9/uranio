@@ -10,3 +10,6 @@ yarn-error.log
 reports/
 coverage/
 /**/node_modules
+.uranio/dist
+.uranio/yarn*
+
