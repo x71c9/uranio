@@ -45,10 +45,10 @@ else
       read -p "Are you sure you want to increase the patch version? [y/n] " response
       ;;
     minor)
-      read -p "Are you sure you want to increase the minor version? [y/n] " respnose
+      read -p "Are you sure you want to increase the minor version? [y/n] " response
       ;;
     major)
-      read -p "Are you sure you want to increase the major version? [y/n] " respnose
+      read -p "Are you sure you want to increase the major version? [y/n] " response
       ;;
     *)
       echo
@@ -114,7 +114,7 @@ DOT_URANIO_PACKAGE_JSON_PATH=.uranio/package.json
 VERSION=$(node -p "require('./package.json').version")
 
 jq --arg uranio_version "$new_version" \
-   '.dependencies |= . + { "uranio": "$uranio_version" }' \
+   '.dependencies |= . + { "uranio": $uranio_version }' \
    "$DOT_URANIO_PACKAGE_JSON_PATH" > tmpfile && mv tmpfile "$DOT_URANIO_PACKAGE_JSON_PATH"
 
 jq --arg uranio_version "$new_version" '.version = $uranio_version' \
@@ -124,7 +124,7 @@ echo "git add ."
 echo "git commit -m \"auto-updated .uranio dependency uranio\""
 echo "git tag -a v$new_version -m \"v$new_version\""
 
-# git push origin
-# git push origin v$new_version
-# yarn publish --new-version $new_version
+git push origin
+git push origin v$new_version
+yarn publish --new-version $new_version
 
