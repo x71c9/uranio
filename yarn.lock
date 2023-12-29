@@ -1068,7 +1068,7 @@ i0n@^0.6.0:
   dependencies:
     ora "^7.0.1"
 
-i0n@^0.7.3:
+i0n@^0.7.1, i0n@^0.7.3:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/i0n/-/i0n-0.7.3.tgz#6fd92ed0b9ada26a695e6b2126028237adef2606"
   integrity sha512-FsOR3w9dQg4TFtnIAZO3Y05HdIhpmYO3xwJKihJPvxcmYpTPa4js4J4wy6sz9NfWae9ZmtQZ+YfOmwgWTnrkyA==
@@ -1634,6 +1634,14 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+r4y@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/r4y/-/r4y-0.5.1.tgz#fcfd5d669d178f6541bfd49227a06539a4ae6ae1"
+  integrity sha512-RA7Nr1WqrRj8y7fU8eUlJx7lSu3tdsubWcbIVT9WDxGtqk+zje63p/Xz74f8RoiPDBisyWYrqVmuP2cclhDgJQ==
+  dependencies:
+    i0n "^0.7.1"
+    w3i "^0.3.0"
+
 readable-stream@^3.4.0:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.2.tgz#56a9b36ea965c00c5a93ef31eb111a0f11056967"
@@ -2078,6 +2086,11 @@ w3i@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/w3i/-/w3i-0.2.0.tgz#7ddad95c1b0ddb6f22570baa8b8e9e71abb142bf"
   integrity sha512-p2cwM97fdLTe2LPsCGZFGHkXTUFIGWOmIIZHNtWYt8P+VyLDaW+qtTxgVtnhuPSrtK5b+KynqUN6sha/3a9oJg==
+
+w3i@^0.3.0:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/w3i/-/w3i-0.3.2.tgz#c147fb8cf8cd3ed40391ef4c1ed53ebfed5b93e0"
+  integrity sha512-xRUVaqa3D8BFN9TpG+4fivj2dkIYGUfO1v+ygpZPQbq1BtVRNgswW4aBObR3VfAg+WiyETq61n5PmfepRQGYwQ==
 
 wcwidth@^1.0.1:
   version "1.0.1"

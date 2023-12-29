@@ -43,6 +43,7 @@
   "dependencies": {
     "i0n": "^0.7.3",
     "mongodb": "^6.3.0",
-    "plutonio": "^0.4.1"
+    "plutonio": "^0.4.1",
+    "r4y": "^0.5.1"
   }
 }
