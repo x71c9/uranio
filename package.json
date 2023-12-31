@@ -5,13 +5,17 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/x71c9/uranio.git",
-    "directory": "packages/cli"
+    "url": "git+ssh://git@github.com/x71c9/uranio.git"
   },
   "author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
   "license": "UNLICENSED",
   "bin": {
     "uranio": "dist/bin.js"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,json}": [
+      "yarn prettier --write"
+    ]
   },
   "scripts": {
     ".uranio:build": "yarn tsc --project ./.uranio",
@@ -20,8 +24,12 @@
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
-    "dev:bin": "NODE_ENV=dev node ./dist/bin.js",
+    "dev:bin": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
+    "dev:bin:verbose": "node ./dist/bin.js generate -v --root ~/repos/uranio/builder",
+    "dev:bin:version": "node ./dist/bin.js --root ~/repos/uranio/builder",
     "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:bin\"",
+    "dev:run:verbose": "yarn tsc-watch --onSuccess \"yarn dev:bin:verbose\"",
+    "dev:run:version": "yarn tsc-watch --onSuccess \"yarn dev:bin:version\"",
     "push:patch": "bash ./scripts/version.sh patch",
     "push:minor": "bash ./scripts/version.sh minor",
     "push:major": "bash ./scripts/version.sh major",
@@ -38,10 +46,14 @@
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
+    "prettier": "2.8.7",
     "tsc-watch": "^6.0.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "app-root-path": "^3.1.0",
     "i0n": "^0.8.1",
     "mongodb": "^6.3.0",
     "plutonio": "^0.5.1",
