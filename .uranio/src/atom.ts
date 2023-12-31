@@ -4,7 +4,7 @@
  *
  */
 
-import mongodb from 'mongodb';
+import mongodb, {ObjectId} from 'mongodb';
 
 import {atom, Query, Shape} from './types';
 
@@ -122,7 +122,7 @@ function _remove_id<A extends atom>(atom: Partial<A>): Shape<A> {
 function _instance_object_id<A extends atom>(query: Query<A>): Query<A> {
   for (let [key, value] of Object.entries(query)) {
     if (key === '_id' && typeof value === 'string') {
-      query['_id'] = new mongodb.ObjectId(value) as any;
+      query['_id'] = new ObjectId(value) as any;
     }
     if (value && typeof value === 'object') {
       value = _instance_object_id(value);
