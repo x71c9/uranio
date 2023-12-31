@@ -47,7 +47,7 @@ const db_name = process.env.MONGO_DATABASE_NAME || '';
 const urn = uranio.Client({uri, db_name});
 
 // Get all products
-const products = await urn.products.find({});
+const products = await urn.products.get_items({});
 
 // Create a product
 await urn.products.put_item({
