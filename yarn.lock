@@ -1068,10 +1068,10 @@ i0n@^0.6.0:
   dependencies:
     ora "^7.0.1"
 
-i0n@^0.7.1, i0n@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/i0n/-/i0n-0.7.3.tgz#6fd92ed0b9ada26a695e6b2126028237adef2606"
-  integrity sha512-FsOR3w9dQg4TFtnIAZO3Y05HdIhpmYO3xwJKihJPvxcmYpTPa4js4J4wy6sz9NfWae9ZmtQZ+YfOmwgWTnrkyA==
+i0n@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/i0n/-/i0n-0.8.1.tgz#fbf00f27a8df4ca6e64dae9e0439d65fd965d796"
+  integrity sha512-nyG/DRlr39tEjdEj0FOwLZnWNl6b/anlUa18WAmF4wiqa4MX6n8kJoPIkER4VbfagWJ+MPZ5962tJLx54yd+TA==
   dependencies:
     ora-classic "^5.4.2"
     w3i "^0.2.0"
@@ -1604,10 +1604,10 @@ picomatch@^2.3.1:
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.1.tgz#3ba3833733646d9d3e4995946c1365a67fb07a42"
   integrity sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==
 
-plutonio@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.4.1.tgz#e9e965bc9927a20097ad52ee3bd18d22cc0ac365"
-  integrity sha512-TMFLa/vabDJ6f0/uy260fyHKusMJ86Cmf9zIH+QhWx4gPZweNETrL6C79VEAg6telbkVcFCY99aQUCRmccRNEA==
+plutonio@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.5.1.tgz#2b29f89a2d06ddff420dcaa38bb97447f9b6afb2"
+  integrity sha512-ae6/lIPVFMwrl8zNMjoegTu6M3Cm0wRATLuIxxqVVM5NJLdVeFU3kI7zSYj/6BdBzd+2XvnAGqJ7hFyAKPkeFg==
   dependencies:
     i0n "^0.6.0"
     typescript "^5.3.3"
@@ -1634,12 +1634,12 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-r4y@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/r4y/-/r4y-0.5.1.tgz#fcfd5d669d178f6541bfd49227a06539a4ae6ae1"
-  integrity sha512-RA7Nr1WqrRj8y7fU8eUlJx7lSu3tdsubWcbIVT9WDxGtqk+zje63p/Xz74f8RoiPDBisyWYrqVmuP2cclhDgJQ==
+r4y@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/r4y/-/r4y-0.6.0.tgz#b5399178becc122bbc6de458faed4596bd07a6cc"
+  integrity sha512-mJQf+A/g1qfifRKq0XIHPejnDO6yG0qIAFmKgIYUcbC9XisVmwCgU/GCH1/jsEGCpk3UGSa0v9xDRuEF6mY/Mw==
   dependencies:
-    i0n "^0.7.1"
+    i0n "^0.8.1"
     w3i "^0.3.0"
 
 readable-stream@^3.4.0:

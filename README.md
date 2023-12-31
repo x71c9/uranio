@@ -64,7 +64,31 @@ For example:
 
 ```typescript
 interface Customer extends uranio.atom {
-  _id: uranio.primary<string>;
   email: uranio.unique<string>;
 }
 ```
+
+### Primary index `_id`
+
+When extending an interface with `uranio.atom` this add a primary index
+attribute `_id` to the interface, so there is no need to add it manually.
+
+```typescript
+import uranio from 'uranio';
+
+interface Product extends uranio.atom {
+  title: string;
+  description: string;
+  price: number;
+}
+// It resolves in:
+// {
+//  _id: string;
+//  title: string;
+//  description: string;
+//  price: number;
+// }
+```
+
+
+

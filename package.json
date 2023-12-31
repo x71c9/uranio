@@ -20,11 +20,12 @@
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
-    "dev:bin": "node ./dist/bin.js",
+    "dev:bin": "NODE_ENV=dev node ./dist/bin.js",
     "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:bin\"",
     "push:patch": "bash ./scripts/version.sh patch",
     "push:minor": "bash ./scripts/version.sh minor",
-    "push:major": "bash ./scripts/version.sh major"
+    "push:major": "bash ./scripts/version.sh major",
+    "upgrade:plutonio": "yarn remove plutonio && yarn add plutonio"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
@@ -41,9 +42,9 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "i0n": "^0.7.3",
+    "i0n": "^0.8.1",
     "mongodb": "^6.3.0",
-    "plutonio": "^0.4.1",
-    "r4y": "^0.5.1"
+    "plutonio": "^0.5.1",
+    "r4y": "^0.6.0"
   }
 }
