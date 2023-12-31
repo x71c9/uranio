@@ -1,5 +1,7 @@
 # Uranio
 
+![uranio logo](./img/LOGO_BANNER_01.png)
+
 Uranio is a Typescript Object Document Mapper (ODM) for MongoDB.\
 It creates a client for querying collections in a database by just parsing
 the types in a repository.
@@ -7,9 +9,7 @@ the types in a repository.
 ## Install
 
 ```
-npm install uranio
 yarn add uranio
-pnpm add uranio
 ```
 
 ## How it works
@@ -50,7 +50,7 @@ const urn = uranio.Client({uri, db_name});
 const products = await urn.products.find({});
 
 // Create a product
-await urn.products.insert({
+await urn.products.put_item({
   title: 'Uranio mug',
   description: 'A radioactive mug for your coding breakfast',
   price: 4.99
