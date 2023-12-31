@@ -5,4 +5,5 @@
  * @packageDocumentation
  *
  */
-export declare const log: import("i0n/dist/class").Ion;
+import ion from 'i0n';
+export declare const log: ReturnType<typeof ion.create>;

@@ -2,6 +2,7 @@
  *
  * Generate index module
  *
+ * @packageDocumentation
  */
 type GenerateParams = {
     root: string;
