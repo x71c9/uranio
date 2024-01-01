@@ -1,6 +1,6 @@
 # Uranio
 
-![uranio logo](./img/LOGO_BANNER_01.png)
+![uranio logo](./img/uranio_logo_1440x220.png)
 
 Uranio is a Typescript Object Document Mapper (ODM) for MongoDB.\
 It creates a client for querying collections in a database by just parsing
