@@ -90,5 +90,7 @@ interface Product extends uranio.atom {
 // }
 ```
 
+### Credits
 
+Logo credits [https://www.jacopotripodi.com/](https://www.jacopotripodi.com/)
 
