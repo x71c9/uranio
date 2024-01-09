@@ -3,12 +3,15 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "yarn tsc -b",
-    "dev": "yarn tsc -w"
+    "dev": "yarn tsc -w",
+    "dev:base": "node -r source-map-support/register -r dotenv/config ./dist/run.js",
+    "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:base\""
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
+    "dotenv": "^16.3.1",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
@@ -16,6 +19,8 @@
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^3.1.1",
+    "source-map-support": "^0.5.21",
     "tsc-watch": "^6.0.0",
     "typescript": "^5.2.2"
   },

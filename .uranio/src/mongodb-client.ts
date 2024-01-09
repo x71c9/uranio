@@ -1,6 +1,6 @@
 /**
  *
- * Client module
+ * MongoDB Client module
  *
  * @packageDocumentation
  *
@@ -9,15 +9,15 @@
 import mongodb, {MongoClient, ServerApiVersion} from 'mongodb';
 import {log} from './log/index';
 
-export type ClientParams = {
+export type MongoDBClientParams = {
   uri: string;
   db_name: string;
 };
 
-export class Client{
+export class MongoDBClient{
   protected client: mongodb.MongoClient;
   protected db: mongodb.Db;
-  constructor(params: ClientParams) {
+  constructor(params: MongoDBClientParams) {
     this.client = new MongoClient(params.uri, {
       serverApi: {
         version: ServerApiVersion.v1,

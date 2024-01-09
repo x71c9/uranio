@@ -8,5 +8,8 @@
 
 export * from './types';
 
-import {UranioClient as Client} from './uranio-client';
-export {Client};
+import {UranioMongoDBClient as MongoDBClient} from './uranio-client';
+export {MongoDBClient};
+
+import {UranioMySQLClient as MySQLClient} from './uranio-client';
+export {MySQLClient};
