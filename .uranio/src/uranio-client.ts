@@ -6,20 +6,19 @@
  *
  */
 
-import {Client, ClientParams} from './client';
-// import {AtomClient} from './atom';
-// import {atom} from './types';
+import {MongoDBClient, MongoDBClientParams} from './mongodb-client';
 
-// interface Product extends atom {
-//   title: string;
-//   price: number;
-// }
+import {MySQLClient, MySQLClientParams} from './mysql-client';
 
-export class UranioClient extends Client{
-  // public product: AtomClient<Product>;
-  constructor(params: ClientParams) {
+export class UranioMongoDBClient extends MongoDBClient{
+  constructor(params: MongoDBClientParams) {
     super(params);
-    // this.product = new AtomClient<Product>(this.db, 'product');
+  }
+}
+
+export class UranioMySQLClient extends MySQLClient{
+  constructor(params: MySQLClientParams) {
+    super(params);
   }
 }
 
