@@ -6,48 +6,68 @@
  *
  */
 
-// import mysql from 'mysql2';
 import mysql from 'mysql2/promise';
-// import {log} from './log/index';
+import {log} from './log/index';
 
 export type MySQLClientParams = {
   uri: string;
+  use_pool?: boolean;
 };
 
 export class MySQLClient {
-  public pool: mysql.Pool;
+  public pool?: mysql.Pool;
   public mysql: typeof mysql;
   protected uri: string;
   protected main_connection: mysql.Connection | undefined;
   constructor(params: MySQLClientParams) {
     this.uri = params.uri;
-    this.pool = mysql.createPool({
-      uri: params.uri,
-      namedPlaceholders: true,
-    });
     this.mysql = mysql;
+    if (params.use_pool === true) {
+      this.pool = mysql.createPool({
+        uri: params.uri,
+        namedPlaceholders: true,
+      });
+    }
   }
-  // public async exe(...args:Parameters<mysql.Connection['execute']>){
-  public async exe(sql: string, values: any) {
+  public async exe(sql: string, values?: any) {
+    const with_values =
+      typeof values !== 'undefined'
+        ? ` with values [${Object.entries(values)}]`
+        : '';
+    log.trace(`Excuting query '${sql}'${with_values}...`);
+    if (this.pool) {
+      return await this._execute_from_pool_connection(sql, values);
+    }
     if (!this.main_connection) {
       await this.connect();
     }
-    return await this.main_connection!.execute(sql, values);
+    const [rows, fields] = await this.main_connection!.execute(sql, values);
+    return [rows, fields];
   }
   public async connect() {
+    log.trace(`Connecting to MySQL database...`);
     this.main_connection = await this.mysql.createConnection({
       uri: this.uri,
-      namedPlaceholders: true
+      namedPlaceholders: true,
     });
+    log.debug(`Connected to MySQL database`);
   }
   public async disconnect() {
+    log.trace(`Disconnecting from MySQL database...`);
     await this.main_connection?.end();
+    log.debug(`Disconnected from MySQL database`);
   }
-  public async get_pool_connection() {
+  private async _execute_from_pool_connection(sql: string, values?: any) {
+    if (!this.pool) {
+      throw new Error(`Pool was not initialized`);
+    }
+    log.trace(`Retrieving pool connection...`);
     const pool_connection = await this.pool.getConnection();
-    return pool_connection;
-  }
-  public release_pool_connection(pool_connection: mysql.PoolConnection) {
+    log.trace(`[${pool_connection.threadId}] Retrieved pool connection`);
+    const [rows, fields] = await pool_connection.execute(sql, values);
+    log.trace(`Releasing pool connection...`);
     pool_connection.release();
+    log.trace(`[${pool_connection.threadId}] Released pool connection`);
+    return [rows, fields];
   }
 }

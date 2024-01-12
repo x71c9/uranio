@@ -27,7 +27,7 @@ console.log(mysql_uri);
 
 const mysql_urn = new MySQLClient({
   uri: mysql_uri,
-  // db_name: mysql_name
+  use_pool: true
 });
 
 // mysql_urn.get_pool_connection().then((connection) => {
@@ -35,9 +35,12 @@ const mysql_urn = new MySQLClient({
 // });
 
 async function main(){
-  await mysql_urn.connect();
-  const respnose = await mysql_urn.exe('SELECT * FROM api_error', {});
-  console.log(respnose);
+  const sql = 'SELECT * FROM pippo';
+  // await mysql_urn.connect();
+  const [rows_00] = await mysql_urn.exe(sql, {k: 0, b: 'a'});
+  console.log(rows_00);
+  // await mysql_urn.disconnect();
+
 }
 
 main();
