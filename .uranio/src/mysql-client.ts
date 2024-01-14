@@ -16,12 +16,10 @@ export type MySQLClientParams = {
 
 export class MySQLClient {
   public pool?: mysql.Pool;
-  public mysql: typeof mysql;
+  public main_connection: mysql.Connection | undefined;
   protected uri: string;
-  protected main_connection: mysql.Connection | undefined;
   constructor(params: MySQLClientParams) {
     this.uri = params.uri;
-    this.mysql = mysql;
     if (params.use_pool === true) {
       this.pool = mysql.createPool({
         uri: params.uri,
@@ -46,7 +44,7 @@ export class MySQLClient {
   }
   public async connect() {
     log.trace(`Connecting to MySQL database...`);
-    this.main_connection = await this.mysql.createConnection({
+    this.main_connection = await mysql.createConnection({
       uri: this.uri,
       namedPlaceholders: true,
     });
