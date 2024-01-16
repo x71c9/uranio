@@ -6,11 +6,11 @@
  *
  */
 
-import {MongoDBClient, MongoDBClientParams} from './mongodb-client';
-import {MySQLClient, MySQLClientParams} from './mysql-client';
+import {MongoDBClient, MongoDBClientParams} from './client/mongodb';
+import {MySQLClient, MySQLClientParams} from './client/mysql';
 
-import {MongoDBAtomClient} from './mongodb-atom';
-// import {MySQLAtomClient} from './mysql-atom';
+import {MongoDBAtomClient} from './atom/mongodb';
+// import {MySQLAtomClient} from './atom/mysql';
 
 type Pippo = {
   _id: string

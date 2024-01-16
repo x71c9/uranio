@@ -6,10 +6,10 @@
  *
  */
 
-export * from './types';
+export * from './types/index';
 
-import {UranioMongoDBClient as MongoDBClient} from './uranio-client';
+import {UranioMongoDBClient as MongoDBClient} from './client';
 export {MongoDBClient};
 
-import {UranioMySQLClient as MySQLClient} from './uranio-client';
+import {UranioMySQLClient as MySQLClient} from './client';
 export {MySQLClient};

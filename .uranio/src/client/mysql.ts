@@ -7,7 +7,7 @@
  */
 
 import mysql from 'mysql2/promise';
-import {log} from './log/index';
+import {log} from '../log/index';
 
 export type MySQLClientParams = {
   uri: string;
