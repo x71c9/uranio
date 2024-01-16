@@ -4,10 +4,10 @@
   "scripts": {
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
-    "dev:base": "node -r source-map-support/register -r dotenv/config ./dist/run.js",
-    "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:base\"",
-    "dev:test": "node --loader tsx --test --test-reporter spec --watch ./tests/*.test.ts",
-    "test": "node --no-warnings --loader tsx --test --test-reporter spec tests/**/*test.ts"
+    "dev:base": "infisical run --env=dev -- node -r source-map-support/register -r dotenv/config ./dist/run.js",
+    "dev:run": "infisical run --env=dev -- yarn tsc-watch --onSuccess \"yarn dev:base\"",
+    "dev:test": "infisical run --env=dev -- node --import tsx --test --test-reporter spec --watch ./tests/*.test.ts",
+    "test": "infisical run --env=dev -- node --no-warnings --import tsx --test --test-reporter spec tests/**/*test.ts"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
