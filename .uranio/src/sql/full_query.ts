@@ -24,7 +24,9 @@ export function compose_select<S extends t.atom>({
   let query_string = 'SELECT';
   query_string += _resolve_projection(projection);
   query_string += ` FROM \`${table}\``;
-  query_string += ` WHERE ` + _resolve_where<S>(where);
+  if(where && typeof where === 'object' && Object.entries(where).length > 0){
+    query_string += ` WHERE ` + _resolve_where<S>(where);
+  }
   query_string += _resolve_order(order);
   query_string += _resolve_limit(limit);
   return query_string;

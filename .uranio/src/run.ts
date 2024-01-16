@@ -10,7 +10,7 @@
 
 import {UranioMySQLClient as MySQLClient} from './client';
 
-// import * as sql from './sql/index';
+import * as sql from './sql/index';
 
 // const mongodb_uri = process.env.MONGODB_URI || '';
 // const mongodb_name = process.env.MONGODB_NAME || '';
@@ -36,10 +36,14 @@ const mysql_urn = new MySQLClient({
 //   console.log(connection);
 // });
 
+type Pippo = {
+  _id: string
+}
+
 async function main(){
-  const sql = 'SELECT * FROM pippo';
+  const query = sql.full.compose_select<Pippo>({table: 'pippo'});
   // await mysql_urn.connect();
-  const [rows_00] = await mysql_urn.exe(sql);
+  const [rows_00] = await mysql_urn.exe(query);
   console.log(rows_00);
   // await mysql_urn.disconnect();
 
