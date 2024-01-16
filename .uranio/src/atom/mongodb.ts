@@ -6,9 +6,7 @@
 
 import mongodb, {ObjectId} from 'mongodb';
 
-import {AtomClient} from './atom';
-
-import {atom, Query, Shape} from './types';
+import {atom, Where, Shape, AtomClient} from '../types';
 
 export class MongoDBAtomClient<S extends atom> implements AtomClient<S> {
   public collection: mongodb.Collection<S>;
@@ -20,9 +18,9 @@ export class MongoDBAtomClient<S extends atom> implements AtomClient<S> {
     this.collection = this.db.collection<S>(name);
   }
 
-  public async get_item(query: Query<S>): Promise<S | null> {
-    query = _instance_object_id(query);
-    let item = await this.collection.findOne<S>(query as mongodb.Filter<S>);
+  public async get_item(where: Where<S>): Promise<S | null> {
+    where = _instance_object_id(where);
+    let item = await this.collection.findOne<S>(where as mongodb.Filter<S>);
     if (!item) {
       return null;
     }
@@ -30,10 +28,10 @@ export class MongoDBAtomClient<S extends atom> implements AtomClient<S> {
     return item;
   }
 
-  public async get_items(query: Query<S>): Promise<S[]> {
-    query = _instance_object_id(query);
+  public async get_items(where: Where<S>): Promise<S[]> {
+    where = _instance_object_id(where);
     let items = await this.collection
-      .find<S>(query as mongodb.Filter<S>)
+      .find<S>(where as mongodb.Filter<S>)
       .toArray();
     for (let item of items) {
       item = _string_id(item) as S;
@@ -62,43 +60,43 @@ export class MongoDBAtomClient<S extends atom> implements AtomClient<S> {
   }
 
   public async update_item(
-    query: Query<S>,
+    where: Where<S>,
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
-    query = _instance_object_id(query);
+    where = _instance_object_id(where);
     atom = _remove_id(atom) as Partial<S>;
     const response_update = await this.collection.updateOne(
-      query as mongodb.Filter<S>,
+      where as mongodb.Filter<S>,
       {$set: atom}
     );
     return response_update;
   }
 
   public async update_items(
-    query: Query<S>,
+    where: Where<S>,
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
-    query = _instance_object_id(query);
+    where = _instance_object_id(where);
     atom = _remove_id(atom) as Partial<S>;
     const response_update = await this.collection.updateMany(
-      query as mongodb.Filter<S>,
+      where as mongodb.Filter<S>,
       {$set: atom}
     );
     return response_update;
   }
 
-  public async delete_item(query: Query<S>): Promise<mongodb.DeleteResult> {
-    query = _instance_object_id(query);
+  public async delete_item(where: Where<S>): Promise<mongodb.DeleteResult> {
+    where = _instance_object_id(where);
     const response_delete = await this.collection.deleteOne(
-      query as mongodb.Filter<S>
+      where as mongodb.Filter<S>
     );
     return response_delete;
   }
 
-  public async delete_items(query: Query<S>): Promise<mongodb.DeleteResult> {
-    query = _instance_object_id(query);
+  public async delete_items(where: Where<S>): Promise<mongodb.DeleteResult> {
+    where = _instance_object_id(where);
     const response_delete = await this.collection.deleteMany(
-      query as mongodb.Filter<S>
+      where as mongodb.Filter<S>
     );
     return response_delete;
   }
@@ -123,14 +121,14 @@ function _remove_id<A extends atom>(atom: Partial<A>): Shape<A> {
   return atom as Shape<A>;
 }
 
-function _instance_object_id<A extends atom>(query: Query<A>): Query<A> {
-  for (let [key, value] of Object.entries(query)) {
+function _instance_object_id<A extends atom>(where: Where<A>): Where<A> {
+  for (let [key, value] of Object.entries(where)) {
     if (key === '_id' && typeof value === 'string') {
-      query['_id'] = new ObjectId(value) as any;
+      where['_id'] = new ObjectId(value) as any;
     }
     if (value && typeof value === 'object') {
       value = _instance_object_id(value);
     }
   }
-  return query;
+  return where;
 }

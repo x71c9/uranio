@@ -7,7 +7,7 @@
  */
 
 import mongodb, {MongoClient, ServerApiVersion} from 'mongodb';
-import {log} from './log/index';
+import {log} from '../log/index';
 
 export type MongoDBClientParams = {
   uri: string;

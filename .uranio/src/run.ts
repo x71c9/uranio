@@ -8,9 +8,9 @@
 
 // import {UranioMongoDBClient as MongoDBClient} from './uranio-client';
 
-import {UranioMySQLClient as MySQLClient} from './uranio-client';
+import {UranioMySQLClient as MySQLClient} from './client';
 
-import {generate_sql} from './converter';
+// import * as sql from './sql/index';
 
 // const mongodb_uri = process.env.MONGODB_URI || '';
 // const mongodb_name = process.env.MONGODB_NAME || '';
@@ -39,68 +39,10 @@ const mysql_urn = new MySQLClient({
 async function main(){
   const sql = 'SELECT * FROM pippo';
   // await mysql_urn.connect();
-  const [rows_00] = await mysql_urn.exe(sql, {k: 0, b: 'a'});
+  const [rows_00] = await mysql_urn.exe(sql);
   console.log(rows_00);
   // await mysql_urn.disconnect();
 
 }
 
 main();
-
-
-type Foo = {
-  _id: string
-  foo: number
-  boo: string
-}
-
-const query = generate_sql<Foo>({
-  type: 'select',
-  projection: ['*'],
-  table: 'uranio-table',
-  query: {foo: {$gt: 2, $lte: 100}, boo: '123'},
-  order: {creation_date: 'desc'},
-  limit: 10
-});
-console.log(query);
-console.log('............................................................');
-const query_b = generate_sql<Foo>({
-  type: 'select',
-  projection: ['*'],
-  table: 'uranio-table',
-  query: {$and: [{foo: {$gt: 2}}, {foo: {$lte: 100}}, {boo: '123'}]},
-  order: {creation_date: 'desc'},
-  limit: 10
-});
-console.log(query_b);
-console.log('............................................................');
-const query_c = generate_sql<Foo>({
-  type: 'select',
-  projection: ['*'],
-  table: 'uranio-table',
-  query: {$or: [{boo: 'a'}, {boo: {$in: ['1','2','3']}}]},
-  order: {creation_date: 'desc'},
-  limit: 10
-});
-console.log(query_c);
-console.log('............................................................');
-const query_d = generate_sql<Foo>({
-  type: 'select',
-  projection: ['*'],
-  table: 'uranio-table',
-  query: {
-    $or: [
-      {boo: 'a'},
-      {boo: {$in: ['1','2','3']}},
-      {
-        $and: [
-          {foo: 2},{foo: 1}
-        ]
-      },
-    ]
-  },
-  order: {creation_date: 'desc'},
-  limit: 10
-});
-console.log(query_d);
-console.log('............................................................');

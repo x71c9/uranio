@@ -8,7 +8,7 @@
 
 // import {log} from './log/index';
 
-import {MySQLClient} from './mysql-client';
+import {MySQLClient} from '../client/mysql';
 
 // import {AtomClient} from './atom';
 

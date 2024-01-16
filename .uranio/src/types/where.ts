@@ -1,12 +1,12 @@
 /**
  *
- * Query type module
+ * Where type module
  *
  */
 
-import {atom} from './types';
+import {atom} from './index';
 
-export type Query<A extends atom> = {
+export type Where<A extends atom> = {
   [P in keyof A]?: Condition<A[P]>;
 } & RootFilterOperators<A>;
 
@@ -41,9 +41,9 @@ interface FilterOperators<T> {
 }
 
 interface RootFilterOperators<A extends atom> {
-  $and?: Query<A>[];
-  $nor?: Query<A>[];
-  $or?: Query<A>[];
+  $and?: Where<A>[];
+  $nor?: Where<A>[];
+  $or?: Where<A>[];
   $text?: {
     $search: string;
     $language?: string;
