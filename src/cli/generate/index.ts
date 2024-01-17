@@ -268,7 +268,7 @@ function _generate_mongodb_uranio_client_module_text(
   text += `\n`;
   text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';\n`;
   text += `import {MongoDBAtomClient} from './atom/mongodb';\n`;
-  text += `import * as t from './types/index';\n`;
+  text += `import {mongodb_atom} from './types/atom';\n`;
   text += `\n`;
   text += _generate_mongodb_interface_definitions(interfaces);
   text += _generate_mongodb_client(interfaces);
@@ -290,7 +290,7 @@ function _generate_mysql_uranio_client_module_text(
   text += `\n`;
   text += `import {MySQLClient, MySQLClientParams} from './client/mysql';\n`;
   text += `import {MySQLAtomClient} from './atom/mysql';\n`;
-  text += `import * as t from './types/index';\n`;
+  text += `import {mysql_atom} './types/atom';\n`;
   text += `\n`;
   text += _generate_mysql_interface_definitions(interfaces);
   text += _generate_mysql_client(interfaces);
@@ -327,7 +327,7 @@ function _generate_mongodb_interface_definitions(
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
-    text += `interface ${name} extends t.mongodb_atom {\n`;
+    text += `interface ${name} extends mongodb_atom {\n`;
     if (!inter.properties) {
       text += `}\n`;
       text += `\n`;
@@ -347,7 +347,7 @@ function _generate_mysql_interface_definitions(
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
-    text += `interface ${name} extends t.mysql_atom {\n`;
+    text += `interface ${name} extends mysql_atom {\n`;
     if (!inter.properties) {
       text += `}\n`;
       text += `\n`;
