@@ -6,7 +6,7 @@
  *
  */
 
-import crypto from 'crypto';
+// import crypto from 'crypto';
 
 import * as t from '../types/index';
 
@@ -35,7 +35,8 @@ export function compose_select<S extends t.atom>({
   });
   const value_map = _generate_value_map_from_query(where);
   const param_query = _replace_value_with_param(full_query, value_map);
-  return {query: param_query, map: value_map};
+  const map = _transform_map_to_object(value_map);
+  return {query: param_query, map};
 }
 
 export function compose_update<S extends t.atom>({
@@ -58,7 +59,8 @@ export function compose_update<S extends t.atom>({
     query_value_map.set(k, v);
   }
   const param_query = _replace_value_with_param(full_query, query_value_map);
-  return {query: param_query, map: query_value_map};
+  const map = _transform_map_to_object(query_value_map);
+  return {query: param_query, map};
 }
 
 export function compose_delete<S extends t.atom>({
@@ -74,7 +76,8 @@ export function compose_delete<S extends t.atom>({
   });
   const query_value_map = _generate_value_map_from_query(where);
   const param_query = _replace_value_with_param(full_query, query_value_map);
-  return {query: param_query, map: query_value_map};
+  const map = _transform_map_to_object(query_value_map);
+  return {query: param_query, map};
 }
 
 export function compose_insert<S extends t.atom>({
@@ -104,13 +107,13 @@ function _generate_unique_consecutive_id():string{
   return id;
 }
 
-function _generate_unique_id(): string {
-  const now = Date.now();
-  const hash = crypto.createHash('sha256');
-  hash.update(now.toString());
-  const digested = hash.digest('hex');
-  return 'x' + digested.substring(0, 3) + _generate_random_string(4);
-}
+// function _generate_unique_id(): string {
+//   const now = Date.now();
+//   const hash = crypto.createHash('sha256');
+//   hash.update(now.toString());
+//   const digested = hash.digest('hex');
+//   return 'x' + digested.substring(0, 3) + _generate_random_string(4);
+// }
 
 function _generate_value_map_from_update<S extends t.atom>(
   update: Partial<S>
@@ -146,6 +149,12 @@ function _generate_value_map_from_query<S extends t.atom>(
           value_map.set(id, v);
         }
       }
+      continue;
+    }
+    // value is a RegExp
+    if(value instanceof RegExp){
+      const id = _generate_unique_consecutive_id();
+      value_map.set(id, value);
       continue;
     }
     // value is an object therefor is a filter: {$gt: 2, $lt: 20}
@@ -189,8 +198,15 @@ function _replace_value_with_param(
   let final_query = full_query;
   for (const [k, v] of value_map) {
     if (Array.isArray(v)) {
-      final_query = final_query.replaceAll(`[${v}]`, `:${k}`);
+      for(const array_value of v){
+        const map = new Map();
+        map.set('a', array_value);
+        final_query = _replace_value_with_param(final_query, map);
+      }
       continue;
+    }
+    if(v instanceof RegExp){
+      final_query = final_query.replaceAll(` ${v.source}`, ` :${k}`);
     }
     switch (typeof v) {
       case 'string': {
@@ -205,15 +221,25 @@ function _replace_value_with_param(
   return final_query;
 }
 
-function _generate_random_string(length = 7): string {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters.charAt(randomIndex);
+function _transform_map_to_object(map: Map<string, any>): Record<string, any>{
+  const object_map = Object.fromEntries(map);
+  for(const [k,v] of Object.entries(object_map)){
+    if(v instanceof RegExp){
+      object_map[k] = v.source;
+    }
   }
-
-  return result;
+  return object_map;
 }
+
+// function _generate_random_string(length = 7): string {
+//   const characters =
+//     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//   let result = '';
+
+//   for (let i = 0; i < length; i++) {
+//     const randomIndex = Math.floor(Math.random() * characters.length);
+//     result += characters.charAt(randomIndex);
+//   }
+
+//   return result;
+// }
