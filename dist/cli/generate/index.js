@@ -3,6 +3,16 @@
  *
  * Generate index module
  *
+ * `generate` command do the following:
+ *
+ * - copy the directory `.uranio` from its root directory into the
+ *   `node_modules` of the project where the command is run.
+ *
+ * - After parsing the types with `plutonio` it updates the copied typescript
+ *   files.
+ *
+ * - It then build the updated `.uranio` files as a typescript project.
+ *
  * @packageDocumentation
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -82,7 +92,7 @@ async function _update_dot_uranio(params) {
     index_1.log.spinner.text(`Updating dot uranio files...`);
     const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
     const text = _generate_uranio_client_module_text(uranio_extended_interfaces);
-    const uranio_client_path = `${params.root}/node_modules/.uranio/src/uranio-client.ts`;
+    const uranio_client_path = `${params.root}/node_modules/.uranio/src/client.ts`;
     fs_1.default.writeFileSync(uranio_client_path, text);
     index_1.log.debug(`Updated dot uranio files`);
 }
@@ -128,6 +138,7 @@ function _get_uranio_extended_interfaces(params) {
         }
     }
     // log.trace(uranio_extended_interfaces);
+    _debug_interfaces(uranio_extended_interfaces);
     return uranio_extended_interfaces;
 }
 function _generate_uranio_client_module_text(interfaces) {
@@ -140,16 +151,38 @@ function _generate_uranio_client_module_text(interfaces) {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `import {Client, ClientParams} from './client';\n`;
-    text += `import {AtomClient} from './atom';\n`;
-    text += `import {atom} from './types';\n`;
+    text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';`;
+    text += `import {MySQLClient, MySQLClientParams} from './client/mysql';`;
+    text += `\n`;
+    text += `import {MongoDBAtomClient} from './atom/mongodb';`;
+    text += `import {MySQLAtomClient} from './atom/mysql';`;
+    text += `\n`;
+    text += `import * as t from './types/index';`;
     text += `\n`;
     text += _generate_interface_definitions(interfaces);
-    text += `export class UranioClient extends Client{\n`;
-    text += _generate_client_class_attributes(interfaces);
-    text += `  constructor(params: ClientParams) {\n`;
+    text += _generate_mongodb_client(interfaces);
+    text += _generate_mysql_client(interfaces);
+    text += `\n`;
+    return text;
+}
+function _generate_mongodb_client(interfaces) {
+    let text = '';
+    text += `export class UranioMongoDBClient extends MongoDBClient{\n`;
+    text += _generate_mongodb_client_attributes(interfaces);
+    text += `  constructor(params: MongoDBClientParams) {\n`;
     text += `    super(params);\n`;
-    text += _generate_client_initialization(interfaces);
+    text += _generate_mongodb_client_initialization(interfaces);
+    text += `  }\n`;
+    text += `}\n`;
+    return text;
+}
+function _generate_mysql_client(interfaces) {
+    let text = '';
+    text += `export class UranioMySQLClient extends MySQLClient{\n`;
+    text += _generate_mysql_client_attributes(interfaces);
+    text += `  constructor(params: MySQLClientParams) {\n`;
+    text += `    super(params);\n`;
+    text += _generate_mysql_client_initialization(interfaces);
     text += `  }\n`;
     text += `}\n`;
     return text;
@@ -171,19 +204,35 @@ function _generate_interface_definitions(interfaces) {
     }
     return text;
 }
-function _generate_client_class_attributes(interfaces) {
+function _generate_mongodb_client_attributes(interfaces) {
     let text = '';
     for (const [name, _inter] of Object.entries(interfaces)) {
         let lc = _first_letter_lowercase(name);
-        text += `  public ${lc}: AtomClient<${name}>;\n`;
+        text += `  public ${lc}: MongoDBAtomClient<${name}>;\n`;
     }
     return text;
 }
-function _generate_client_initialization(interfaces) {
+function _generate_mongodb_client_initialization(interfaces) {
     let text = '';
     for (const [name, _inter] of Object.entries(interfaces)) {
         let lc = _first_letter_lowercase(name);
-        text += `    this.${lc} = new AtomClient<${name}>(this.db, '${lc}');\n`;
+        text += `    this.${lc} = new MongoDBAtomClient<${name}>(this.db, '${lc}');\n`;
+    }
+    return text;
+}
+function _generate_mysql_client_attributes(interfaces) {
+    let text = '';
+    for (const [name, _inter] of Object.entries(interfaces)) {
+        let lc = _first_letter_lowercase(name);
+        text += `  public ${lc}: MySQLAtomClient<${name}>;\n`;
+    }
+    return text;
+}
+function _generate_mysql_client_initialization(interfaces) {
+    let text = '';
+    for (const [name, _inter] of Object.entries(interfaces)) {
+        let lc = _first_letter_lowercase(name);
+        text += `    this.${lc} = new MySQLAtomClient<${name}>(this.db, '${lc}');\n`;
     }
     return text;
 }
@@ -192,5 +241,10 @@ function _first_letter_lowercase(str) {
         return str;
     }
     return str.charAt(0).toLowerCase() + str.slice(1);
+}
+function _debug_interfaces(uranio_extended_interfaces) {
+    for (let [key, _value] of Object.entries(uranio_extended_interfaces)) {
+        index_1.log.info(`Processing Interface: ${key}`);
+    }
 }
 //# sourceMappingURL=index.js.map
