@@ -108,11 +108,20 @@ async function _copy_dot_uranio(params) {
 async function _update_dot_uranio(params) {
     index_1.log.spinner.text(`Updating dot uranio files...`);
     const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
-    const text = params.database === t.DATABASE.MYSQL
+    index_1.log.trace(`Generating client...`);
+    const client_text = params.database === t.DATABASE.MYSQL
         ? _generate_mysql_uranio_client_module_text(uranio_extended_interfaces)
         : _generate_mongodb_uranio_client_module_text(uranio_extended_interfaces);
     const uranio_client_path = `${params.root}/node_modules/.uranio/src/client.ts`;
-    fs_1.default.writeFileSync(uranio_client_path, text);
+    fs_1.default.writeFileSync(uranio_client_path, client_text);
+    index_1.log.debug(`Generated client`);
+    index_1.log.trace(`Generating index...`);
+    const index_text = params.database === t.DATABASE.MYSQL
+        ? _generate_mysql_uranio_index_module_text()
+        : _generate_mongodb_uranio_index_module_text();
+    const uranio_index_path = `${params.root}/node_modules/.uranio/src/index.ts`;
+    fs_1.default.writeFileSync(uranio_index_path, index_text);
+    index_1.log.debug(`Generated index`);
     index_1.log.debug(`Updated dot uranio files`);
 }
 async function _build_dot_uranio(params) {
@@ -160,6 +169,40 @@ function _get_uranio_extended_interfaces(params) {
     _debug_interfaces(uranio_extended_interfaces);
     return uranio_extended_interfaces;
 }
+function _generate_mongodb_uranio_index_module_text() {
+    let text = '';
+    text += `/**\n`;
+    text += ` *\n`;
+    text += ` * [Auto-generated module by "uranio generate" command]\n`;
+    text += ` *\n`;
+    text += ` * Index module\n`;
+    text += ` *\n`;
+    text += ` */\n`;
+    text += `\n`;
+    text += `export * from './types/index';\n`;
+    text += `\n`;
+    text += `import {UranioMongoDBClient as MongoDBClient} from './client';\n`;
+    text += `export {MongoDBClient};`;
+    text += `\n`;
+    return text;
+}
+function _generate_mysql_uranio_index_module_text() {
+    let text = '';
+    text += `/**\n`;
+    text += ` *\n`;
+    text += ` * [Auto-generated module by "uranio generate" command]\n`;
+    text += ` *\n`;
+    text += ` * Index module\n`;
+    text += ` *\n`;
+    text += ` */\n`;
+    text += `\n`;
+    text += `export * from './types/index';\n`;
+    text += `\n`;
+    text += `import {UranioMySQLClient as MySQLClient} from './client';\n`;
+    text += `export {MySQLClient};`;
+    text += `\n`;
+    return text;
+}
 function _generate_mongodb_uranio_client_module_text(interfaces) {
     let text = '';
     text += `/**\n`;
@@ -170,9 +213,9 @@ function _generate_mongodb_uranio_client_module_text(interfaces) {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';`;
-    text += `import {MongoDBAtomClient} from './atom/mongodb';`;
-    text += `import * as t from './types/index';`;
+    text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';\n`;
+    text += `import {MongoDBAtomClient} from './atom/mongodb';\n`;
+    text += `import * as t from './types/index';\n`;
     text += `\n`;
     text += _generate_mongodb_interface_definitions(interfaces);
     text += _generate_mongodb_client(interfaces);
@@ -189,13 +232,9 @@ function _generate_mysql_uranio_client_module_text(interfaces) {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';`;
-    text += `import {MySQLClient, MySQLClientParams} from './client/mysql';`;
-    text += `\n`;
-    text += `import {MongoDBAtomClient} from './atom/mongodb';`;
-    text += `import {MySQLAtomClient} from './atom/mysql';`;
-    text += `\n`;
-    text += `import * as t from './types/index';`;
+    text += `import {MySQLClient, MySQLClientParams} from './client/mysql';\n`;
+    text += `import {MySQLAtomClient} from './atom/mysql';\n`;
+    text += `import * as t from './types/index';\n`;
     text += `\n`;
     text += _generate_mysql_interface_definitions(interfaces);
     text += _generate_mysql_client(interfaces);
