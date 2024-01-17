@@ -26,6 +26,7 @@ type FlagTypes = {
 };
 
 const flag_types: FlagTypes = {
+  'database': 'string',
   'root': 'string',
   'tsconfig-path': 'string',
   'verbose': 'boolean',

@@ -7,6 +7,13 @@
 
 type ObjectValue<T> = T[keyof T];
 
+export const DATABASE = {
+  MONGODB: 'mongodb',
+  MYSQL: 'mysql',
+} as const;
+
+export type Database = ObjectValue<typeof DATABASE>;
+
 export const COMMAND = {
   GENERATE: 'generate',
   VERSION: 'version',
@@ -15,6 +22,7 @@ export const COMMAND = {
 export type Command = ObjectValue<typeof COMMAND>;
 
 export const FLAG = {
+  DATABASE: 'database',
   ROOT: 'root',
   TSCONFIG_PATH: 'tsconfig-path',
   VERBOSE: 'verbose',
