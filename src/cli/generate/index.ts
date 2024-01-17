@@ -95,6 +95,7 @@ async function _copy_dot_uranio(params: GenerateParams) {
 
 async function _update_dot_uranio(params: GenerateParams) {
   log.spinner.text(`Updating dot uranio files...`);
+  const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`; 
   const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
 
   log.trace(`Generating client...`);
@@ -103,7 +104,7 @@ async function _update_dot_uranio(params: GenerateParams) {
       ? _generate_mysql_uranio_client_module_text(uranio_extended_interfaces)
       : _generate_mongodb_uranio_client_module_text(uranio_extended_interfaces);
 
-  const uranio_client_path = `${params.root}/node_modules/.uranio/src/client.ts`;
+  const uranio_client_path = `${dot_uranio_src_path}/client.ts`
   fs.writeFileSync(uranio_client_path, client_text);
   log.debug(`Generated client`);
 
@@ -113,9 +114,19 @@ async function _update_dot_uranio(params: GenerateParams) {
       ? _generate_mysql_uranio_index_module_text()
       : _generate_mongodb_uranio_index_module_text();
 
-  const uranio_index_path = `${params.root}/node_modules/.uranio/src/index.ts`;
+  const uranio_index_path = `${dot_uranio_src_path}/index.ts`;
   fs.writeFileSync(uranio_index_path, index_text);
   log.debug(`Generated index`);
+
+  log.trace(`Generating types...`);
+  const types_text =
+    params.database === t.DATABASE.MYSQL
+      ? _generate_mysql_uranio_types_module_text()
+      : _generate_mongodb_uranio_types_module_text();
+
+  const uranio_types_path = `${dot_uranio_src_path}/types/index.ts`;
+  fs.writeFileSync(uranio_types_path, types_text);
+  log.debug(`Generated types`);
 
   log.debug(`Updated dot uranio files`);
 }
@@ -168,6 +179,43 @@ function _get_uranio_extended_interfaces(params: GenerateParams) {
   // log.trace(uranio_extended_interfaces);
   _debug_interfaces(uranio_extended_interfaces);
   return uranio_extended_interfaces;
+}
+
+function _generate_mongodb_uranio_types_module_text(){
+  let text = '';
+  text += `/**\n`;
+  text += ` *\n`;
+  text += ` * [Auto-generated module by "uranio generate" command]\n`;
+  text += ` *\n`;
+  text += ` * Types index module\n`;
+  text += ` *\n`;
+  text += ` */\n`;
+  text += `\n`;
+  text += `export * from './types/index';\n`;
+  text += `\n`;
+  text += `import {mongodb as atom} from './atom';\n`;
+  text += `import {primary} from './atom';\n`;
+  text += `export {atom, primary};\n`;
+  text += `\n`;
+  return text;
+  
+}
+
+function _generate_mysql_uranio_types_module_text(){
+  let text = '';
+  text += `/**\n`;
+  text += ` *\n`;
+  text += ` * [Auto-generated module by "uranio generate" command]\n`;
+  text += ` *\n`;
+  text += ` * Types index module\n`;
+  text += ` *\n`;
+  text += ` */\n`;
+  text += `\n`;
+  text += `import {mysql_atom as atom} from './atom';\n`;
+  text += `import {primary} from './atom';\n`;
+  text += `export {atom, primary};\n`;
+  text += `\n`;
+  return text;
 }
 
 function _generate_mongodb_uranio_index_module_text(){

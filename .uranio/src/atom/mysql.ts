@@ -4,25 +4,22 @@
  *
  */
 
-// import mysql from 'mysql2/promise';
-
-// import {log} from './log/index';
 
 import {MySQLClient} from '../client/mysql';
-
 import * as sql from '../sql/index';
-import * as t from '../types/index';
 
-// export class MySQLAtomClient<S extends t.atom> implements t.AtomClient<S> {
+import * as atom_types from '../types/atom';
+import * as where_types from '../types/where';
+import * as sql_types from '../types/sql';
 
-export class MySQLAtomClient<S extends t.mysql_atom> {
+export class MySQLAtomClient<S extends atom_types.mysql_atom> {
 
   constructor(
     public client: MySQLClient,
     public name: string
   ) {}
 
-  public async get_atom(where: t.Where<S>): Promise<S | null> {
+  public async get_atom(where: where_types.Where<S>): Promise<S | null> {
     const {query, map} = sql.param.compose_select({
       table: this.name,
       where,
@@ -40,8 +37,8 @@ export class MySQLAtomClient<S extends t.mysql_atom> {
     order,
     limit,
   }: {
-    where?: t.Where<S>;
-    order?: t.OrderBy;
+    where?: where_types.Where<S>;
+    order?: sql_types.OrderBy;
     limit?: string;
   }): Promise<S[]> {
     const {query, map} = sql.param.compose_select({
@@ -90,7 +87,7 @@ export class MySQLAtomClient<S extends t.mysql_atom> {
 
   public async update_atoms(
     atom: Partial<S>,
-    where?: t.Where<S>,
+    where?: where_types.Where<S>,
   ): Promise<any> {
     const {query, map} = sql.param.compose_update({
       table: this.name,
@@ -101,7 +98,7 @@ export class MySQLAtomClient<S extends t.mysql_atom> {
     return response;
   }
 
-  public async delete_atoms(where: t.Where<S>): Promise<any> {
+  public async delete_atoms(where: where_types.Where<S>): Promise<any> {
     const {query, map} = sql.param.compose_delete({
       table: this.name,
       where,

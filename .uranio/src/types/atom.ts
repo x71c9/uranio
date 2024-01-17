@@ -6,6 +6,26 @@
  *
  */
 
+export interface atom {}
+
+export type unique<T> = T & {__uranio: 'unique'};
+
+export type primary<T> = T & {__uranio: 'primary'};
+
+export interface mysql_atom extends atom {}
+
+export interface mongodb_atom extends atom {
+  _id: primary<string>;
+}
+
+type PrimaryAttribute<A extends atom> = {
+  [K in keyof A]: A[K] extends {__uranio: 'primary'} ? K : never;
+}[keyof A];
+
+export type Shape<A extends atom> = Omit<A, PrimaryAttribute<A>>;
+
+// export type Shape<A extends atom> = Omit<A, '_id'>;
+
 // import {atom, Where, Shape, OrderBy} from './index';
 
 // export interface AtomClient<S extends atom> {

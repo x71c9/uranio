@@ -6,11 +6,10 @@
 
 import mongodb, {ObjectId} from 'mongodb';
 
-import * as t from '../types/index';
+import * as atom_types from '../types/atom';
+import * as where_types from '../types/where';
 
-// export class MongoDBAtomClient<S extends atom> implements AtomClient<S> {
-export class MongoDBAtomClient<S extends t.mongodb_atom> {
-
+export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
   public collection: mongodb.Collection<S>;
 
   constructor(
@@ -20,7 +19,7 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     this.collection = this.db.collection<S>(name);
   }
 
-  public async get_atom(where: t.Where<S>): Promise<S | null> {
+  public async get_atom(where: where_types.Where<S>): Promise<S | null> {
     where = _instance_object_id(where);
     let item = await this.collection.findOne<S>(where as mongodb.Filter<S>);
     if (!item) {
@@ -30,7 +29,7 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     return item;
   }
 
-  public async get_atoms(where: t.Where<S>): Promise<S[]> {
+  public async get_atoms(where: where_types.Where<S>): Promise<S[]> {
     where = _instance_object_id(where);
     let items = await this.collection
       .find<S>(where as mongodb.Filter<S>)
@@ -41,7 +40,9 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     return items;
   }
 
-  public async put_atom(shape: t.Shape<S>): Promise<mongodb.InsertOneResult> {
+  public async put_atom(
+    shape: atom_types.Shape<S>
+  ): Promise<mongodb.InsertOneResult> {
     shape = _remove_id(shape as Partial<S>);
     const respone_insert = await this.collection.insertOne(
       shape as mongodb.OptionalUnlessRequiredId<S>
@@ -49,7 +50,9 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     return respone_insert;
   }
 
-  public async put_atoms(atoms: t.Shape<S>[]): Promise<mongodb.InsertManyResult> {
+  public async put_atoms(
+    atoms: atom_types.Shape<S>[]
+  ): Promise<mongodb.InsertManyResult> {
     const atoms_no_ids: mongodb.OptionalUnlessRequiredId<S>[] = [];
     for (const atom of atoms) {
       const atom_no_id = _remove_id(
@@ -62,7 +65,7 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
   }
 
   public async update_atom(
-    where: t.Where<S>,
+    where: where_types.Where<S>,
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
@@ -75,7 +78,7 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
   }
 
   public async update_atoms(
-    where: t.Where<S>,
+    where: where_types.Where<S>,
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
@@ -87,7 +90,9 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     return response_update;
   }
 
-  public async delete_atom(where: t.Where<S>): Promise<mongodb.DeleteResult> {
+  public async delete_atom(
+    where: where_types.Where<S>
+  ): Promise<mongodb.DeleteResult> {
     where = _instance_object_id(where);
     const response_delete = await this.collection.deleteOne(
       where as mongodb.Filter<S>
@@ -95,7 +100,9 @@ export class MongoDBAtomClient<S extends t.mongodb_atom> {
     return response_delete;
   }
 
-  public async delete_atoms(where: t.Where<S>): Promise<mongodb.DeleteResult> {
+  public async delete_atoms(
+    where: where_types.Where<S>
+  ): Promise<mongodb.DeleteResult> {
     where = _instance_object_id(where);
     const response_delete = await this.collection.deleteMany(
       where as mongodb.Filter<S>
@@ -118,12 +125,16 @@ function _string_id<T extends unknown>(item: T): StringId<T> {
   return item as StringId<T>;
 }
 
-function _remove_id<A extends t.mongodb_atom>(atom: Partial<A>): t.Shape<A> {
+function _remove_id<A extends atom_types.mongodb_atom>(
+  atom: Partial<A>
+): atom_types.Shape<A> {
   delete (atom as any)._id;
-  return atom as t.Shape<A>;
+  return atom as atom_types.Shape<A>;
 }
 
-function _instance_object_id<A extends t.mongodb_atom>(where: t.Where<A>): t.Where<A> {
+function _instance_object_id<A extends atom_types.mongodb_atom>(
+  where: where_types.Where<A>
+): where_types.Where<A> {
   for (let [key, value] of Object.entries(where)) {
     if (key === '_id' && typeof value === 'string') {
       where['_id'] = new ObjectId(value) as any;
