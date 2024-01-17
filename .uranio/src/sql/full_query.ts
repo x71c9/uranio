@@ -128,6 +128,12 @@ function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
     //     `Invalid key. Key cannot be equal to an operator. Using '${key}'`
     //   );
     // }
+    if(value instanceof RegExp){
+      let query_string = `\`${key}\``;
+      query_string += ` REGEXP ` + _format_value(value);
+      where_parts.push(query_string);
+      continue;
+    }
     if (value && typeof value === 'object') {
       // console.log(`Type of value is object --> using filter operator...`);
       if (Object.entries(value).length === 0) {
@@ -270,7 +276,10 @@ function _resolve_filter(column: string, operator: t.Operator) {
 function _format_value(value: unknown): string {
   let query_string = '';
   if (Array.isArray(value)) {
-    return `[${value.toString()}]`;
+    return `(${value.toString()})`;
+  }
+  if(value instanceof RegExp){
+    return value.source;
   }
   switch (typeof value) {
     case 'string': {

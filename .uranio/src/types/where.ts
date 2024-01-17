@@ -4,7 +4,7 @@
  *
  */
 
-import {atom} from './index';
+import {atom, primary} from './index';
 
 export type Where<A extends atom> = {
   [P in keyof A]?: Condition<A[P]>;
@@ -12,7 +12,10 @@ export type Where<A extends atom> = {
 
 type Condition<T> = AlternativeType<T> | FilterOperators<AlternativeType<T>>;
 
-type AlternativeType<T> = T extends ReadonlyArray<infer U>
+type AlternativeType<T> =
+  T extends primary<infer P> ?
+  P | RegExpOrString<P> :
+  T extends ReadonlyArray<infer U>
   ? T | RegExpOrString<U>
   : RegExpOrString<T>;
 

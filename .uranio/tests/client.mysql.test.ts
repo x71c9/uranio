@@ -13,7 +13,7 @@ type Pippo = {
   _id: string
 }
 
-describe('MySQL Client', () => {
+describe('MySQL Client Mocked', () => {
 
   before(() => {});
 
@@ -74,6 +74,56 @@ describe('MySQL Client', () => {
      assert.fail(`Unexpected error: ${err.message}`); 
     }finally{
       mysql.createConnection = original_create_connection;
+    }
+  });
+
+});
+
+describe('MySQL Client Integration Real DB', () => {
+
+  before(() => {});
+
+  it('should return the rows MYSQL POOL', async () => {
+    const mysql_urn = new MySQLClient({
+      uri: mysql_uri,
+      use_pool: true
+    });
+    const expected_row = {
+      age: 28,
+      email: 'john.doe@example.com',
+      id: 1,
+      name: 'John Doe',
+    };
+    const query = sql.full.compose_select<Pippo>({table: 'pippo'});
+    try{
+      const [rows_00] = await mysql_urn.exe(query);
+      assert.deepEqual(rows_00[0], expected_row);
+    }catch(e){
+      const err = e as Error;
+     assert.fail(`Unexpected error: ${err.message}`); 
+    }finally{
+    }
+  });
+
+  it('should return the rows MYSQL MAIN', async () => {
+    const mysql_urn = new MySQLClient({
+      uri: mysql_uri
+    });
+    const expected_row = {
+      age: 28,
+      email: 'john.doe@example.com',
+      id: 1,
+      name: 'John Doe',
+    };
+    const query = sql.full.compose_select<Pippo>({table: 'pippo'});
+    try{
+      const [rows_00] = await mysql_urn.exe(query);
+      assert.deepEqual(rows_00[0], expected_row);
+    }catch(e){
+      const err = e as Error;
+     assert.fail(`Unexpected error: ${err.message}`); 
+    }finally{
+      mysql_urn.disconnect();
     }
   });
 
