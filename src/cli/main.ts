@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-export * from './args';
+export * from './args/index';
 
 export * from './generate/index';
 

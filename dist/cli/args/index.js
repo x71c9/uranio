@@ -34,6 +34,7 @@ const exception = __importStar(require("../exception/index"));
 const utils = __importStar(require("../utils/index"));
 const t = __importStar(require("../types"));
 const flag_shorts = {
+    d: 'database',
     r: 'root',
     p: 'tsconfig-path',
     v: 'verbose',
@@ -120,7 +121,8 @@ function _resolve_extended_flag_name(flag) {
     if (Object.values(t.FLAG).includes(trimmed_flag)) {
         return trimmed_flag;
     }
-    throw new exception.UranioCLIException(`Invaid flag. Flag must be one of ${Object.values(t.FLAG)}`);
+    throw new exception.UranioCLIException(`Invaid flag. Flag must be one of ${Object.values(t.FLAG)}`
+        + ` Evaluating '${flag}'`);
 }
 function _resolve_flag_type(flag) {
     return flag_types[flag];

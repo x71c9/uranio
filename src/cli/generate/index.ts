@@ -20,6 +20,7 @@ import ray from 'r4y';
 import plutonio from 'plutonio';
 import {log} from '../log/index';
 import * as utils from '../utils/index';
+import * as exception from '../exception/index';
 import * as common from '../common/index';
 import * as t from '../types';
 
@@ -73,9 +74,10 @@ function _resolve_param_database(args: t.Arguments): t.Database {
 }
 
 function _assert_database(db: unknown): asserts db is t.Database {
-  if (!Object.keys(t.DATABASE).includes(db as string)) {
-    throw new Error(
-      `Invalid database flag value. Possible value are [${t.DATABASE}]`
+  if (!Object.values(t.DATABASE).includes(db as any)) {
+    throw new exception.UranioCLIException(
+      `Invalid database flag value. Possible value are`
+      + ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`
     );
   }
 }

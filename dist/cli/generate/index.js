@@ -48,6 +48,7 @@ const r4y_1 = __importDefault(require("r4y"));
 const plutonio_1 = __importDefault(require("plutonio"));
 const index_1 = require("../log/index");
 const utils = __importStar(require("../utils/index"));
+const exception = __importStar(require("../exception/index"));
 const common = __importStar(require("../common/index"));
 const t = __importStar(require("../types"));
 async function generate(args) {
@@ -91,8 +92,9 @@ function _resolve_param_database(args) {
     return t.DATABASE.MONGODB;
 }
 function _assert_database(db) {
-    if (!Object.keys(t.DATABASE).includes(db)) {
-        throw new Error(`Invalid database flag value. Possible value are [${t.DATABASE}]`);
+    if (!Object.values(t.DATABASE).includes(db)) {
+        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are`
+            + ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
     }
 }
 async function _copy_dot_uranio(params) {
