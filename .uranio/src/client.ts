@@ -38,6 +38,6 @@ export class UranioMySQLClient extends MySQLClient {
   public pippo: MySQLAtomClient<MySQLPippo>;
   constructor(params: MySQLClientParams) {
     super(params);
-    this.pippo = new MySQLAtomClient(this, 'pippo');
+    this.pippo = new MySQLAtomClient<MySQLPippo>(this, 'pippo');
   }
 }
