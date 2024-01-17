@@ -7,4 +7,4 @@
  */
 
 import ion from 'i0n';
-export const log = ion.create();
+export const log:ReturnType<typeof ion.create> = ion.create();
