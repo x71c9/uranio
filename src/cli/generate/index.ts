@@ -290,7 +290,7 @@ function _generate_mysql_uranio_client_module_text(
   text += `\n`;
   text += `import {MySQLClient, MySQLClientParams} from './client/mysql';\n`;
   text += `import {MySQLAtomClient} from './atom/mysql';\n`;
-  text += `import {mysql_atom} './types/atom';\n`;
+  text += `import {mysql_atom} from './types/atom';\n`;
   text += `\n`;
   text += _generate_mysql_interface_definitions(interfaces);
   text += _generate_mysql_client(interfaces);
