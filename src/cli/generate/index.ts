@@ -329,6 +329,7 @@ function _generate_mongodb_client_initialization(
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
     let lc = _first_letter_lowercase(name);
+    // Different from MySQL since it pass `this.db` instead of `this`
     text += `    this.${lc} = new MongoDBAtomClient<${name}>(this.db, '${lc}');\n`;
   }
   return text;
@@ -349,7 +350,8 @@ function _generate_mysql_client_initialization(
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
     let lc = _first_letter_lowercase(name);
-    text += `    this.${lc} = new MySQLAtomClient<${name}>(this.db, '${lc}');\n`;
+    // Different from Mongo since it pass `this` instead of `this.db`
+    text += `    this.${lc} = new MySQLAtomClient<${name}>(this, '${lc}');\n`;
   }
   return text;
 }
