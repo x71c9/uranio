@@ -39,6 +39,7 @@ const flag_shorts = {
     v: 'verbose',
 };
 const flag_types = {
+    'database': 'string',
     'root': 'string',
     'tsconfig-path': 'string',
     'verbose': 'boolean',
