@@ -1,14 +1,16 @@
 /**
  *
- * JS Object to SQL expanded query converter module
+ * JS Object to sql_types expanded query converter module
  *
  * @packageDocumentation
  *
  */
 
-import * as t from '../types/index';
+import * as atom_types from '../types/atom';
+import * as where_types from '../types/where';
+import * as sql_types from '../types/sql';
 
-export function compose_select<S extends t.atom>({
+export function compose_select<S extends atom_types.atom>({
   projection = ['*'],
   table,
   where,
@@ -17,8 +19,8 @@ export function compose_select<S extends t.atom>({
 }: {
   projection?: string[];
   table: string;
-  where?: t.Where<S>;
-  order?: t.OrderBy;
+  where?: where_types.Where<S>;
+  order?: sql_types.OrderBy;
   limit?: string;
 }) {
   let query_string = 'SELECT';
@@ -32,14 +34,14 @@ export function compose_select<S extends t.atom>({
   return query_string;
 }
 
-export function compose_update<S extends t.atom>({
+export function compose_update<S extends atom_types.atom>({
   table,
   update,
   where,
 }: {
   table: string;
   update: Partial<S>;
-  where?: t.Where<S>;
+  where?: where_types.Where<S>;
 }) {
   let query_string = 'UPDATE';
   query_string += ` \`${table}\``;
@@ -49,12 +51,12 @@ export function compose_update<S extends t.atom>({
   return query_string;
 }
 
-export function compose_delete<S extends t.atom>({
+export function compose_delete<S extends atom_types.atom>({
   table,
   where,
 }: {
   table: string;
-  where?: t.Where<S>;
+  where?: where_types.Where<S>;
 }) {
   let query_string = 'DELETE';
   query_string += ` FROM \`${table}\``;
@@ -62,7 +64,7 @@ export function compose_delete<S extends t.atom>({
   return query_string;
 }
 
-export function compose_insert<S extends t.atom>({
+export function compose_insert<S extends atom_types.atom>({
   table,
   columns,
   records,
@@ -78,7 +80,7 @@ export function compose_insert<S extends t.atom>({
   return query_string;
 }
 
-function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
+function _resolve_where<S extends atom_types.atom>(where?: where_types.Where<S>): string {
   if (
     !where ||
     typeof where !== 'object' ||
@@ -87,14 +89,14 @@ function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
     return '';
   }
   const where_parts: string[] = [];
-  // console.log(`t.Where param: ${JSON.stringify(where)}`);
+  // console.log(`where_types.Where param: ${JSON.stringify(where)}`);
   for (const [key, value] of Object.entries(where)) {
     // console.log(`Key: ${key}, Value: ${JSON.stringify(value)}`);
-    if (t.root_operators.includes(key as t.RootOperator)) {
+    if (sql_types.root_operators.includes(key as sql_types.RootOperator)) {
       // console.log(`Key is in root operators`);
       if (!Array.isArray(value)) {
         throw new Error(
-          `Invalid t.Where. Root operator '${key}' must have an Array as value`
+          `Invalid Where. Root operator '${key}' must have an Array as value`
         );
       }
       const queries = value.map((el) => _resolve_where(el));
@@ -119,7 +121,7 @@ function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
           throw new Error(`Invalid root operator`);
         }
       }
-      // console.log(`t.Where parts: ${where_parts}`);
+      // console.log(`where_types.Where parts: ${where_parts}`);
       const final_where = where_parts.join(` AND `);
       return final_where;
     }
@@ -140,7 +142,7 @@ function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
         throw new Error(`Cannot compare to empty object value`);
       }
       let query_string = '';
-      query_string += '' + _resolve_filter(key, value as t.Operator);
+      query_string += '' + _resolve_filter(key, value as sql_types.Operator);
       where_parts.push(query_string);
       continue;
     }
@@ -152,11 +154,11 @@ function _resolve_where<S extends t.atom>(where?: t.Where<S>): string {
   return final_where;
 }
 
-function _resolve_columns<S extends t.atom>(columns: (keyof S)[]): string {
+function _resolve_columns<S extends atom_types.atom>(columns: (keyof S)[]): string {
   return ' (' + columns.map((el) => '`' + String(el) + '`').join(', ') + ')';
 }
 
-function _resolve_records<S extends t.atom>(
+function _resolve_records<S extends atom_types.atom>(
   columns: (keyof S)[],
   records: Partial<S>[]
 ): string {
@@ -173,7 +175,7 @@ function _resolve_records<S extends t.atom>(
   return ` VALUES ${full_records}`;
 }
 
-function _resolve_update<S extends t.atom>(update: Partial<S>): string {
+function _resolve_update<S extends atom_types.atom>(update: Partial<S>): string {
   const update_parts: string[] = [];
   for (const [key, value] of Object.entries(update)) {
     update_parts.push(`${key} = ${_format_value(value)}`);
@@ -181,7 +183,7 @@ function _resolve_update<S extends t.atom>(update: Partial<S>): string {
   return ' ' + update_parts.join(', ');
 }
 
-function _resolve_order(order?: t.OrderBy): string {
+function _resolve_order(order?: sql_types.OrderBy): string {
   if (
     !order ||
     typeof order !== 'object' ||
@@ -213,7 +215,7 @@ function _resolve_limit(limit?: string): string {
   return ` LIMIT ${limit}`;
 }
 
-function _resolve_filter(column: string, operator: t.Operator) {
+function _resolve_filter(column: string, operator: sql_types.Operator) {
   let filter_strings: string[] = [];
   for (let [key, value] of Object.entries(operator)) {
     switch (key) {
@@ -324,5 +326,5 @@ function _format_value(value: unknown): string {
 //   if (sql_type.includes(type as SQLType)) {
 //     return;
 //   }
-//   throw new Error(`Invalid SQL type`);
+//   throw new Error(`Invalid sql_types type`);
 // }

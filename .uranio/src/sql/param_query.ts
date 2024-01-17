@@ -8,11 +8,13 @@
 
 // import crypto from 'crypto';
 
-import * as t from '../types/index';
-
 import * as full from './full_query';
 
-export function compose_select<S extends t.atom>({
+import * as atom_types from '../types/atom';
+import * as where_types from '../types/where';
+import * as sql_types from '../types/sql';
+
+export function compose_select<S extends atom_types.atom>({
   projection = ['*'],
   table,
   where,
@@ -21,8 +23,8 @@ export function compose_select<S extends t.atom>({
 }: {
   projection?: string[];
   table: string;
-  where?: t.Where<S>;
-  order?: t.OrderBy;
+  where?: where_types.Where<S>;
+  order?: sql_types.OrderBy;
   limit?: string;
 }) {
   // console.log(projection, table, JSON.stringify(where), order, limit);
@@ -39,14 +41,14 @@ export function compose_select<S extends t.atom>({
   return {query: param_query, map};
 }
 
-export function compose_update<S extends t.atom>({
+export function compose_update<S extends atom_types.atom>({
   table,
   update,
   where,
 }: {
   table: string;
   update: Partial<S>;
-  where?: t.Where<S>;
+  where?: where_types.Where<S>;
 }) {
   const full_query = full.compose_update({
     table,
@@ -63,12 +65,12 @@ export function compose_update<S extends t.atom>({
   return {query: param_query, map};
 }
 
-export function compose_delete<S extends t.atom>({
+export function compose_delete<S extends atom_types.atom>({
   table,
   where,
 }: {
   table: string;
-  where?: t.Where<S>;
+  where?: where_types.Where<S>;
 }) {
   const full_query = full.compose_delete({
     table,
@@ -80,7 +82,7 @@ export function compose_delete<S extends t.atom>({
   return {query: param_query, map};
 }
 
-export function compose_insert<S extends t.atom>({
+export function compose_insert<S extends atom_types.atom>({
   table,
   columns,
   records,
@@ -115,7 +117,7 @@ function _generate_unique_consecutive_id():string{
 //   return 'x' + digested.substring(0, 3) + _generate_random_string(4);
 // }
 
-function _generate_value_map_from_update<S extends t.atom>(
+function _generate_value_map_from_update<S extends atom_types.atom>(
   update: Partial<S>
 ): Map<string, any> {
   const value_map = new Map<string, any>();
@@ -126,8 +128,8 @@ function _generate_value_map_from_update<S extends t.atom>(
   return value_map;
 }
 
-function _generate_value_map_from_query<S extends t.atom>(
-  where?: t.Where<S>
+function _generate_value_map_from_query<S extends atom_types.atom>(
+  where?: where_types.Where<S>
 ): Map<string, any> {
   const value_map = new Map<string, any>();
   if (!where) {
@@ -135,7 +137,7 @@ function _generate_value_map_from_query<S extends t.atom>(
   }
   for (const [key, value] of Object.entries(where)) {
     // key is a root operator: $and, $or, ...
-    if (t.root_operators.includes(key as t.RootOperator)) {
+    if (sql_types.root_operators.includes(key as sql_types.RootOperator)) {
       // console.log(`Key is in Root Operator: [${key}]`);
       if (!Array.isArray(value)) {
         throw new Error(
@@ -164,7 +166,7 @@ function _generate_value_map_from_query<S extends t.atom>(
       }
       const filter_map = _generate_map_from_filter(
         // key,
-        value as Record<t.FilterOperator, string>
+        value as Record<sql_types.FilterOperator, string>
       );
       for (const [_k, v] of filter_map) {
         const id = _generate_unique_consecutive_id();
@@ -181,7 +183,7 @@ function _generate_value_map_from_query<S extends t.atom>(
 
 function _generate_map_from_filter(
   // key: string,
-  filter: Record<t.FilterOperator, string>
+  filter: Record<sql_types.FilterOperator, string>
 ): Map<string, any> {
   const filter_map = new Map<string, any>();
   for (const [_operator, v] of Object.entries(filter)) {
