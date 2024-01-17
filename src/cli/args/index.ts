@@ -14,6 +14,7 @@ type FlagShorts = {
 };
 
 const flag_shorts: FlagShorts = {
+  d: 'database',
   r: 'root',
   p: 'tsconfig-path',
   v: 'verbose',
@@ -49,7 +50,9 @@ function _assert_command(command?: unknown): asserts command is t.Command {
   }
   if (!Object.values(t.COMMAND).includes(command as any)) {
     throw new exception.UranioCLIException(
-      `Invalid command. Possibile commands are [${Object.values(t.COMMAND).join(', ')}]`
+      `Invalid command. Possibile commands are [${Object.values(t.COMMAND).join(
+        ', '
+      )}]`
     );
   }
 }
@@ -115,7 +118,10 @@ function _resolve_extended_flag_name(flag?: string): t.Flag {
   if (Object.values(t.FLAG).includes(trimmed_flag as any)) {
     return trimmed_flag as t.Flag;
   }
-  throw new exception.UranioCLIException(`Invaid flag. Flag must be one of ${Object.values(t.FLAG)}`);
+  throw new exception.UranioCLIException(
+    `Invaid flag. Flag must be one of ${Object.values(t.FLAG)}`
+    + ` Evaluating '${flag}'`
+  );
 }
 
 function _resolve_flag_type(flag: t.Flag): FlagType {
