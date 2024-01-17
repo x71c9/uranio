@@ -126,6 +126,7 @@ function _get_uranio_extended_interfaces(params: GenerateParams) {
     }
   }
   // log.trace(uranio_extended_interfaces);
+  _debug_interfaces(uranio_extended_interfaces);
   return uranio_extended_interfaces;
 }
 
@@ -237,4 +238,10 @@ function _first_letter_lowercase(str: string): string {
     return str;
   }
   return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+function _debug_interfaces(uranio_extended_interfaces: plutonio.Interfaces){
+  for(let [key, _value] of Object.entries(uranio_extended_interfaces)){
+    log.info(`Processing Interface: ${key}`);
+  }
 }
