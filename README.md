@@ -2,9 +2,13 @@
 
 ![uranio logo](./img/uranio_logo_1440x220.png)
 
-Uranio is a Typescript Object Document Mapper (ODM) for MongoDB.\
-It creates a client for querying collections in a database by just parsing
+Uranio is the lighest Typescript Object Document Mapper (ODM) for MongoDB and
+Object Relational Mapping (ORM) for MySQL.\
+It creates a client for querying collections/tabls in a database by just parsing
 the types in a repository.
+
+It is the simplest and fastest way to query a database without the need to build
+a Data Access Layer (DAL) from the defined types.
 
 ## Install
 
@@ -15,8 +19,10 @@ yarn add uranio
 ## How it works
 
 Run:
-```
-uranio generate
+```bash
+uranio generate -d mondodb
+// or
+uranio generate -d mysql
 ```
 
 The above command search for all interfaces in your repository that extends
@@ -57,21 +63,10 @@ await urn.products.put_item({
 });
 ```
 
-### Uranio types
+### Primary index `_id` for MongoDB
 
-You can use uranio types to better define the schema of your collections.\
-For example:
-
-```typescript
-interface Customer extends uranio.atom {
-  email: uranio.unique<string>;
-}
-```
-
-### Primary index `_id`
-
-When extending an interface with `uranio.atom` this add a primary index
-attribute `_id` to the interface, so there is no need to add it manually.
+When extending an interface with `uranio.atom` (MongoDB) this add a primary
+index attribute `_id` to the interface, so there is no need to add it manually.
 
 ```typescript
 import uranio from 'uranio';
