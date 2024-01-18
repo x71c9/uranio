@@ -21,4 +21,10 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require(".uranio"), exports);
+/**
+ * Type used to define an Atom, if they are defined in .uranio libs istead of
+ * directly in uranio, plutonio cannot infer them correctly. Therefor they are
+ * re-defined here
+ */
+// export type primary<T> = T & {__uranio: 'primary'};
 //# sourceMappingURL=main.js.map

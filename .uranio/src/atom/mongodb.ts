@@ -25,7 +25,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     if (!item) {
       return null;
     }
-    item = _string_id(item) as S;
+    // item = _string_id(item) as S;
     return item;
   }
 
@@ -40,23 +40,25 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return items;
   }
 
-  public async put_atom(
-    shape: atom_types.Shape<S>
-  ): Promise<mongodb.InsertOneResult> {
-    shape = _remove_id(shape as Partial<S>);
+  public async put_atom(atom: Partial<S>): Promise<mongodb.InsertOneResult> {
+    // shape = _remove_id(shape as Partial<S>);
+    atom = _replace_string_id_to_object_id(atom);
     const respone_insert = await this.collection.insertOne(
-      shape as mongodb.OptionalUnlessRequiredId<S>
+      atom as mongodb.OptionalUnlessRequiredId<S>
     );
     return respone_insert;
   }
 
   public async put_atoms(
-    atoms: atom_types.Shape<S>[]
+    atoms: Partial<S>[]
   ): Promise<mongodb.InsertManyResult> {
     const atoms_no_ids: mongodb.OptionalUnlessRequiredId<S>[] = [];
     for (const atom of atoms) {
-      const atom_no_id = _remove_id(
-        atom as Partial<S>
+      // const atom_no_id = _remove_id(
+      //   atom as Partial<S>
+      // ) as mongodb.OptionalUnlessRequiredId<S>;
+      const atom_no_id = _replace_string_id_to_object_id(
+        atom
       ) as mongodb.OptionalUnlessRequiredId<S>;
       atoms_no_ids.push(atom_no_id);
     }
@@ -69,7 +71,8 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
-    atom = _remove_id(atom) as Partial<S>;
+    // atom = _remove_id(atom) as Partial<S>;
+    atom = _replace_string_id_to_object_id(atom) as Partial<S>;
     const response_update = await this.collection.updateOne(
       where as mongodb.Filter<S>,
       {$set: atom}
@@ -82,7 +85,8 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     atom: Partial<S>
   ): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
-    atom = _remove_id(atom) as Partial<S>;
+    // atom = _remove_id(atom) as Partial<S>;
+    atom = _replace_string_id_to_object_id(atom) as Partial<S>;
     const response_update = await this.collection.updateMany(
       where as mongodb.Filter<S>,
       {$set: atom}
@@ -125,11 +129,20 @@ function _string_id<T extends unknown>(item: T): StringId<T> {
   return item as StringId<T>;
 }
 
-function _remove_id<A extends atom_types.mongodb_atom>(
+// function _remove_id<A extends atom_types.mongodb_atom>(
+//   atom: Partial<A>
+// ): atom_types.Shape<A> {
+//   delete (atom as any)._id;
+//   return atom as atom_types.Shape<A>;
+// }
+
+function _replace_string_id_to_object_id<A extends atom_types.mongodb_atom>(
   atom: Partial<A>
-): atom_types.Shape<A> {
-  delete (atom as any)._id;
-  return atom as atom_types.Shape<A>;
+): Partial<A> {
+  if (atom._id && typeof atom._id === 'string') {
+    atom._id = new mongodb.ObjectId(atom._id) as any;
+  }
+  return atom;
 }
 
 function _instance_object_id<A extends atom_types.mongodb_atom>(
