@@ -25,7 +25,7 @@
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
     "dev:bin": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
-    "dev:bin:verbose": "node ./dist/bin.js generate -v --root ~/repos/uranio/builder",
+    "dev:bin:verbose": "node ./dist/bin.js generate -v -d mysql --root ~/repos/uranio/builder",
     "dev:bin:version": "node ./dist/bin.js --root ~/repos/uranio/builder",
     "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:bin\"",
     "dev:run:verbose": "yarn tsc-watch --onSuccess \"yarn dev:bin:verbose\"",
@@ -50,7 +50,7 @@
     "lint-staged": "^13.2.1",
     "prettier": "2.8.7",
     "tsc-watch": "^6.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",

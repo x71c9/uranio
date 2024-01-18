@@ -93,8 +93,8 @@ function _resolve_param_database(args) {
 }
 function _assert_database(db) {
     if (!Object.values(t.DATABASE).includes(db)) {
-        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are`
-            + ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
+        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
+            ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
     }
 }
 async function _copy_dot_uranio(params) {
@@ -334,6 +334,20 @@ function _generate_mysql_interface_definitions(interfaces) {
             continue;
         }
         for (const [prop_name, prop] of Object.entries(inter.properties)) {
+            // if (prop.primitive === 'object' && prop.properties?.['___uranio']) {
+            //   if (prop.properties['___uranio'].original === "__uranio: 'primary';") {
+            //     const original = prop.original;
+            //     const match = original.match(/<([^>]+)>/);
+            //     if (match && match[1]) {
+            //       text += `  ${prop_name}: ${match[1]};\n`;
+            //       continue;
+            //     }
+            //     throw new exception.UranioCLIException(
+            //       `Cannot resolve uranio.primary for attribute ${prop_name}`
+            //     );
+            //   }
+            //   continue;
+            // }
             text += `  ${prop_name}: ${prop.primitive};\n`;
         }
         text += `}\n`;

@@ -76,8 +76,8 @@ function _resolve_param_database(args: t.Arguments): t.Database {
 function _assert_database(db: unknown): asserts db is t.Database {
   if (!Object.values(t.DATABASE).includes(db as any)) {
     throw new exception.UranioCLIException(
-      `Invalid database flag value. Possible value are`
-      + ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`
+      `Invalid database flag value. Possible value are` +
+        ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`
     );
   }
 }
@@ -95,7 +95,7 @@ async function _copy_dot_uranio(params: GenerateParams) {
 
 async function _update_dot_uranio(params: GenerateParams) {
   log.spinner.text(`Updating dot uranio files...`);
-  const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`; 
+  const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`;
   const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
 
   log.trace(`Generating client...`);
@@ -104,7 +104,7 @@ async function _update_dot_uranio(params: GenerateParams) {
       ? _generate_mysql_uranio_client_module_text(uranio_extended_interfaces)
       : _generate_mongodb_uranio_client_module_text(uranio_extended_interfaces);
 
-  const uranio_client_path = `${dot_uranio_src_path}/client.ts`
+  const uranio_client_path = `${dot_uranio_src_path}/client.ts`;
   fs.writeFileSync(uranio_client_path, client_text);
   log.debug(`Generated client`);
 
@@ -181,7 +181,7 @@ function _get_uranio_extended_interfaces(params: GenerateParams) {
   return uranio_extended_interfaces;
 }
 
-function _generate_mongodb_uranio_types_module_text(){
+function _generate_mongodb_uranio_types_module_text() {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -198,10 +198,9 @@ function _generate_mongodb_uranio_types_module_text(){
   text += `export {atom, primary};\n`;
   text += `\n`;
   return text;
-  
 }
 
-function _generate_mysql_uranio_types_module_text(){
+function _generate_mysql_uranio_types_module_text() {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -218,7 +217,7 @@ function _generate_mysql_uranio_types_module_text(){
   return text;
 }
 
-function _generate_mongodb_uranio_index_module_text(){
+function _generate_mongodb_uranio_index_module_text() {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -236,7 +235,7 @@ function _generate_mongodb_uranio_index_module_text(){
   return text;
 }
 
-function _generate_mysql_uranio_index_module_text(){
+function _generate_mysql_uranio_index_module_text() {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -354,6 +353,20 @@ function _generate_mysql_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
+      // if (prop.primitive === 'object' && prop.properties?.['___uranio']) {
+      //   if (prop.properties['___uranio'].original === "__uranio: 'primary';") {
+      //     const original = prop.original;
+      //     const match = original.match(/<([^>]+)>/);
+      //     if (match && match[1]) {
+      //       text += `  ${prop_name}: ${match[1]};\n`;
+      //       continue;
+      //     }
+      //     throw new exception.UranioCLIException(
+      //       `Cannot resolve uranio.primary for attribute ${prop_name}`
+      //     );
+      //   }
+      //   continue;
+      // }
       text += `  ${prop_name}: ${prop.primitive};\n`;
     }
     text += `}\n`;
