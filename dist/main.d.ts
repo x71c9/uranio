@@ -10,3 +10,4 @@ export * from '.uranio';
  * directly in uranio, plutonio cannot infer them correctly. Therefor they are
  * re-defined here
  */
+export type primary<T> = T;
