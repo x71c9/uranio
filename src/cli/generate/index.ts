@@ -134,7 +134,8 @@ async function _update_dot_uranio(params: GenerateParams) {
 async function _build_dot_uranio(params: GenerateParams) {
   log.spinner.text(`Transpiling dot uranio files...`);
   const copied_dot_uranio_tsconfig_path = `${params.root}/node_modules/.uranio/tsconfig.json`;
-  await ray.spawn(`yarn tsc --project ${copied_dot_uranio_tsconfig_path}`);
+  // await ray.spawn(`yarn tsc --project ${copied_dot_uranio_tsconfig_path}`);
+  await ray.spawn(`npx tsc --project ${copied_dot_uranio_tsconfig_path}`);
   log.debug(`Transpiled dot uranio files`);
 }
 
