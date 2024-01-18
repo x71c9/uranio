@@ -43,8 +43,9 @@ function _handle_exception_wrapper(fn: (...args: any) => any, ...args: any) {
         err.family === 'UranioCLIException'
       ) {
         log.error(err.message);
+        process.exit(1);
       }
-      process.exit(1);
+      throw err
     }
   };
 }

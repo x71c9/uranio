@@ -65,8 +65,9 @@ function _handle_exception_wrapper(fn, ...args) {
             if (err instanceof exception.UranioCLIException &&
                 err.family === 'UranioCLIException') {
                 index_1.log.error(err.message);
+                process.exit(1);
             }
-            process.exit(1);
+            throw err;
         }
     };
 }
