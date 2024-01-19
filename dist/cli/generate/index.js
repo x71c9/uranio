@@ -194,8 +194,6 @@ function _generate_mongodb_uranio_types_module_text() {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `export * from './types/index';\n`;
-    text += `\n`;
     text += `import {mongodb_atom as atom} from './atom';\n`;
     text += `import {primary} from './atom';\n`;
     text += `export {atom, primary};\n`;

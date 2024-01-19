@@ -4,8 +4,7 @@
  *
  */
 
-// import {atom, primary} from './index';
-import {atom} from './index';
+import {atom} from './atom';
 
 export type Where<A extends atom> = {
   [P in keyof A]?: Condition<A[P]>;
