@@ -98,6 +98,11 @@ async function _update_dot_uranio(params: GenerateParams) {
   const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`;
   const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
 
+  if(Object.entries(uranio_extended_interfaces).length < 1){
+    log.info(`No interface was found`);
+    return;
+  }
+
   log.trace(`Generating client...`);
   const client_text =
     params.database === t.DATABASE.MYSQL
@@ -194,7 +199,7 @@ function _generate_mongodb_uranio_types_module_text() {
   text += `\n`;
   text += `export * from './types/index';\n`;
   text += `\n`;
-  text += `import {mongodb as atom} from './atom';\n`;
+  text += `import {mongodb_atom as atom} from './atom';\n`;
   text += `import {primary} from './atom';\n`;
   text += `export {atom, primary};\n`;
   text += `\n`;
