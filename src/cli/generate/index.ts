@@ -20,19 +20,11 @@ import ray from 'r4y';
 import plutonio from 'plutonio';
 import {log} from '../log/index';
 import * as utils from '../utils/index';
-import * as exception from '../exception/index';
 import * as common from '../common/index';
 import * as t from '../types';
 
-type GenerateParams = {
-  root: string;
-  database: t.Database;
-  tsconfig_path?: string;
-};
-
 export async function generate(args: t.Arguments) {
-  const debug = args.flags?.verbose === true;
-  ray.config.set({debug, spinner: log.spinner});
+  common.set_verbosity(args);
   const params = _resolve_generate_params(args);
   log.spinner.start();
   log.spinner.text(`Generating...`);
@@ -43,12 +35,21 @@ export async function generate(args: t.Arguments) {
   log.success(`Uranio successfully generated client`);
 }
 
-function _resolve_generate_params(args: t.Arguments): GenerateParams {
+function _resolve_generate_params(args: t.Arguments): t.GenerateParams {
   const root_path = common.resolve_param_root(args);
   const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
-  const database = _resolve_param_database(args);
+  const yaml_params = common.read_yaml_params(root_path);
+  let naming_convention = yaml_params.naming_convention;
+  if(!naming_convention){
+    naming_convention = _resolve_param_naming_convention(args);
+  }
+  let database = yaml_params.database;
+  if(!database){
+    database = _resolve_param_database(args);
+  }
   return {
     database,
+    naming_convention,
     root: root_path,
     tsconfig_path,
   };
@@ -67,22 +68,22 @@ function _resolve_param_tsconfig_path(
 function _resolve_param_database(args: t.Arguments): t.Database {
   if (args.flags && utils.valid.string(args.flags?.['database'])) {
     const db = args.flags['database'];
-    _assert_database(db);
+    common.assert_database(db);
     return db;
   }
   return t.DATABASE.MONGODB;
 }
 
-function _assert_database(db: unknown): asserts db is t.Database {
-  if (!Object.values(t.DATABASE).includes(db as any)) {
-    throw new exception.UranioCLIException(
-      `Invalid database flag value. Possible value are` +
-        ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`
-    );
+function _resolve_param_naming_convention(args: t.Arguments): t.NamingConvention {
+  if (args.flags && utils.valid.string(args.flags?.['naming-convention'])) {
+    const naming_convention = args.flags['naming-convention'];
+    common.assert_naming_convention(naming_convention);
+    return naming_convention;
   }
+  return t.NAMING_CONVENTION.CAMEL_CASE;
 }
 
-async function _copy_dot_uranio(params: GenerateParams) {
+async function _copy_dot_uranio(params: t.GenerateParams) {
   log.spinner.text(`Coping dot uranio...`);
   const dot_path = `${params.root}/node_modules/uranio/.uranio`;
   const destination_path = `${params.root}/node_modules/.uranio`;
@@ -93,7 +94,7 @@ async function _copy_dot_uranio(params: GenerateParams) {
   log.debug(`Copied dot uranio directory`);
 }
 
-async function _update_dot_uranio(params: GenerateParams) {
+async function _update_dot_uranio(params: t.GenerateParams) {
   log.spinner.text(`Updating dot uranio files...`);
   const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`;
   const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
@@ -136,7 +137,7 @@ async function _update_dot_uranio(params: GenerateParams) {
   log.debug(`Updated dot uranio files`);
 }
 
-async function _build_dot_uranio(params: GenerateParams) {
+async function _build_dot_uranio(params: t.GenerateParams) {
   log.spinner.text(`Transpiling dot uranio files...`);
   const copied_dot_uranio_tsconfig_path = `${params.root}/node_modules/.uranio/tsconfig.json`;
   // await ray.spawn(`yarn tsc --project ${copied_dot_uranio_tsconfig_path}`);
@@ -144,14 +145,14 @@ async function _build_dot_uranio(params: GenerateParams) {
   log.debug(`Transpiled dot uranio files`);
 }
 
-function _resolve_tsconfig_path(params: GenerateParams) {
+function _resolve_tsconfig_path(params: t.GenerateParams) {
   if (utils.valid.string(params.tsconfig_path)) {
     return params.tsconfig_path;
   }
   return `${params.root}/tsconfig.json`;
 }
 
-function _get_uranio_extended_interfaces(params: GenerateParams) {
+function _get_uranio_extended_interfaces(params: t.GenerateParams) {
   const tsconfig_path = _resolve_tsconfig_path(params);
   const scanned = plutonio.scan(tsconfig_path);
   // log.trace(scanned);

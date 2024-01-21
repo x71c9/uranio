@@ -29,7 +29,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.valid = void 0;
+exports.object = exports.valid = void 0;
 const valid = __importStar(require("./valid"));
 exports.valid = valid;
+const object = __importStar(require("./object"));
+exports.object = object;
 //# sourceMappingURL=index.js.map

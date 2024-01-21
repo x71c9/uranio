@@ -43,6 +43,10 @@ _handle_exception_wrapper(index_2.default.resolve_args, args)().then(async (reso
     }
     async function _run_command(args) {
         switch (args.command) {
+            case 'init': {
+                await index_2.default.init(args);
+                break;
+            }
             case 'generate': {
                 await index_2.default.generate(args);
                 break;

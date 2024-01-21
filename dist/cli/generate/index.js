@@ -48,13 +48,10 @@ const r4y_1 = __importDefault(require("r4y"));
 const plutonio_1 = __importDefault(require("plutonio"));
 const index_1 = require("../log/index");
 const utils = __importStar(require("../utils/index"));
-const exception = __importStar(require("../exception/index"));
 const common = __importStar(require("../common/index"));
 const t = __importStar(require("../types"));
 async function generate(args) {
-    var _a;
-    const debug = ((_a = args.flags) === null || _a === void 0 ? void 0 : _a.verbose) === true;
-    r4y_1.default.config.set({ debug, spinner: index_1.log.spinner });
+    common.set_verbosity(args);
     const params = _resolve_generate_params(args);
     index_1.log.spinner.start();
     index_1.log.spinner.text(`Generating...`);
@@ -68,9 +65,18 @@ exports.generate = generate;
 function _resolve_generate_params(args) {
     const root_path = common.resolve_param_root(args);
     const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
-    const database = _resolve_param_database(args);
+    const yaml_params = common.read_yaml_params(root_path);
+    let naming_convention = yaml_params.naming_convention;
+    if (!naming_convention) {
+        naming_convention = _resolve_param_naming_convention(args);
+    }
+    let database = yaml_params.database;
+    if (!database) {
+        database = _resolve_param_database(args);
+    }
     return {
         database,
+        naming_convention,
         root: root_path,
         tsconfig_path,
     };
@@ -86,16 +92,19 @@ function _resolve_param_database(args) {
     var _a;
     if (args.flags && utils.valid.string((_a = args.flags) === null || _a === void 0 ? void 0 : _a['database'])) {
         const db = args.flags['database'];
-        _assert_database(db);
+        common.assert_database(db);
         return db;
     }
     return t.DATABASE.MONGODB;
 }
-function _assert_database(db) {
-    if (!Object.values(t.DATABASE).includes(db)) {
-        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
-            ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
+function _resolve_param_naming_convention(args) {
+    var _a;
+    if (args.flags && utils.valid.string((_a = args.flags) === null || _a === void 0 ? void 0 : _a['naming-convention'])) {
+        const naming_convention = args.flags['naming-convention'];
+        common.assert_naming_convention(naming_convention);
+        return naming_convention;
     }
+    return t.NAMING_CONVENTION.CAMEL_CASE;
 }
 async function _copy_dot_uranio(params) {
     index_1.log.spinner.text(`Coping dot uranio...`);

@@ -18,6 +18,10 @@ _handle_exception_wrapper(cli.resolve_args, args)().then(
     }
     async function _run_command(args: cli.Arguments) {
       switch (args.command) {
+        case 'init': {
+          await cli.init(args);
+          break;
+        }
         case 'generate': {
           await cli.generate(args);
           break;

@@ -41,6 +41,7 @@ const flag_shorts = {
 };
 const flag_types = {
     'database': 'string',
+    'naming-convention': 'string',
     'root': 'string',
     'tsconfig-path': 'string',
     'verbose': 'boolean',

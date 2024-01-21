@@ -24,10 +24,12 @@
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
-    "dev:bin": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
+    "dev:bin:generate": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
+    "dev:bin:init": "node ./dist/bin.js init",
     "dev:bin:verbose": "node ./dist/bin.js generate -v -d mysql --root ~/repos/avk-47/core",
     "dev:bin:version": "node ./dist/bin.js --root ~/repos/uranio/builder",
-    "dev:run": "yarn tsc-watch --onSuccess \"yarn dev:bin\"",
+    "dev:run:generate": "yarn tsc-watch --onSuccess \"yarn dev:bin:generate\"",
+    "dev:run:init": "yarn tsc-watch --onSuccess \"yarn dev:bin:init\"",
     "dev:run:verbose": "yarn tsc-watch --onSuccess \"yarn dev:bin:verbose\"",
     "dev:run:version": "yarn tsc-watch --onSuccess \"yarn dev:bin:version\"",
     "push:patch": "bash ./scripts/version.sh patch",
@@ -36,6 +38,7 @@
     "upgrade:plutonio": "yarn remove plutonio && yarn add plutonio"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.9.0",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
@@ -55,9 +58,11 @@
   "dependencies": {
     "app-root-path": "^3.1.0",
     "i0n": "^0.8.1",
+    "inquirer": "^8.0.0",
     "mongodb": "^6.3.0",
     "mysql2": "^3.7.0",
     "plutonio": "^0.5.2",
-    "r4y": "^0.6.0"
+    "r4y": "^0.6.0",
+    "yaml": "^2.3.4"
   }
 }
