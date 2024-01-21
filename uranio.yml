@@ -1,0 +1,2 @@
+database: mongodb
+naming_convention: snake_case

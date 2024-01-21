@@ -32,9 +32,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolve_param_root = void 0;
+exports._assert_yaml_params = exports.assert_naming_convention = exports.assert_database = exports.resolve_param_root = exports.set_verbosity = exports.read_yaml_params = void 0;
+const fs_1 = __importDefault(require("fs"));
+const yaml_1 = __importDefault(require("yaml"));
 const app_root_path_1 = __importDefault(require("app-root-path"));
+const r4y_1 = __importDefault(require("r4y"));
+const index_1 = require("../log/index");
 const utils = __importStar(require("../utils/index"));
+const exception = __importStar(require("../exception/index"));
+const t = __importStar(require("../types"));
+function read_yaml_params(root_path) {
+    const yaml_path = `${root_path}/uranio.yml`;
+    if (!fs_1.default.existsSync(yaml_path)) {
+        throw new exception.UranioCLIException(`Missing uranio.yml file. Run 'uranio init' in order to create one`);
+    }
+    const data = fs_1.default.readFileSync(yaml_path, 'utf-8');
+    const yaml_params = yaml_1.default.parse(data);
+    _assert_yaml_params(yaml_params);
+    return yaml_params;
+}
+exports.read_yaml_params = read_yaml_params;
+function set_verbosity(args) {
+    var _a;
+    const debug = ((_a = args.flags) === null || _a === void 0 ? void 0 : _a.verbose) === true;
+    r4y_1.default.config.set({ debug, spinner: index_1.log.spinner });
+}
+exports.set_verbosity = set_verbosity;
 function resolve_param_root(args) {
     var _a;
     if (args.flags && utils.valid.string((_a = args.flags) === null || _a === void 0 ? void 0 : _a['root'])) {
@@ -44,4 +67,42 @@ function resolve_param_root(args) {
     return root_path;
 }
 exports.resolve_param_root = resolve_param_root;
+function assert_database(db) {
+    if (!Object.values(t.DATABASE).includes(db)) {
+        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
+            ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
+    }
+}
+exports.assert_database = assert_database;
+function assert_naming_convention(naming_convention) {
+    if (!Object.values(t.NAMING_CONVENTION).includes(naming_convention)) {
+        throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
+            ` [${Object.values(t.NAMING_CONVENTION)}]. Evaluating '${naming_convention}'`);
+    }
+}
+exports.assert_naming_convention = assert_naming_convention;
+const yaml_params_keys = [
+    'database',
+    'naming_convention',
+];
+const yaml_params_values = {
+    database: Object.values(t.DATABASE),
+    naming_convention: Object.values(t.NAMING_CONVENTION),
+};
+function _assert_yaml_params(params) {
+    if (!params || typeof params !== 'object') {
+        throw new exception.UranioCLIException(`Invalid Yaml Params. Cannot read uranio.yml`);
+    }
+    for (let [key, value] of Object.entries(params)) {
+        if (!yaml_params_keys.includes(key)) {
+            throw new exception.UranioCLIException(`Invalid Yaml Params key. Only the following are allowed:` +
+                ` [${yaml_params_keys}]. Evaluating '${key}'`);
+        }
+        if (!yaml_params_values[key].includes(value)) {
+            throw new exception.UranioCLIException(`Invalid Yaml Param value for key '${key}'. Only the following are` +
+                ` allowed: [${yaml_params_values[key]}]. Evaluating '${value}'`);
+        }
+    }
+}
+exports._assert_yaml_params = _assert_yaml_params;
 //# sourceMappingURL=index.js.map

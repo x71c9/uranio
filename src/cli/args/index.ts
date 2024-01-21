@@ -28,6 +28,7 @@ type FlagTypes = {
 
 const flag_types: FlagTypes = {
   'database': 'string',
+  'naming-convention': 'string',
   'root': 'string',
   'tsconfig-path': 'string',
   'verbose': 'boolean',
