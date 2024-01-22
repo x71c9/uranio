@@ -40,11 +40,11 @@ function _resolve_generate_params(args: t.Arguments): t.GenerateParams {
   const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
   const yaml_params = common.read_yaml_params(root_path);
   let naming_convention = yaml_params.naming_convention;
-  if(!naming_convention){
+  if (!naming_convention) {
     naming_convention = _resolve_param_naming_convention(args);
   }
   let database = yaml_params.database;
-  if(!database){
+  if (!database) {
     database = _resolve_param_database(args);
   }
   return {
@@ -74,7 +74,9 @@ function _resolve_param_database(args: t.Arguments): t.Database {
   return t.DATABASE.MONGODB;
 }
 
-function _resolve_param_naming_convention(args: t.Arguments): t.NamingConvention {
+function _resolve_param_naming_convention(
+  args: t.Arguments
+): t.NamingConvention {
   if (args.flags && utils.valid.string(args.flags?.['naming-convention'])) {
     const naming_convention = args.flags['naming-convention'];
     common.assert_naming_convention(naming_convention);
@@ -99,7 +101,7 @@ async function _update_dot_uranio(params: t.GenerateParams) {
   const dot_uranio_src_path = `${params.root}/node_modules/.uranio/src`;
   const uranio_extended_interfaces = _get_uranio_extended_interfaces(params);
 
-  if(Object.entries(uranio_extended_interfaces).length < 1){
+  if (Object.entries(uranio_extended_interfaces).length < 1) {
     log.info(`No interface was found`);
     return;
   }
@@ -107,8 +109,14 @@ async function _update_dot_uranio(params: t.GenerateParams) {
   log.trace(`Generating client...`);
   const client_text =
     params.database === t.DATABASE.MYSQL
-      ? _generate_mysql_uranio_client_module_text(uranio_extended_interfaces)
-      : _generate_mongodb_uranio_client_module_text(uranio_extended_interfaces);
+      ? _generate_mysql_uranio_client_module_text(
+          uranio_extended_interfaces,
+          params.naming_convention
+        )
+      : _generate_mongodb_uranio_client_module_text(
+          uranio_extended_interfaces,
+          params.naming_convention
+        );
 
   const uranio_client_path = `${dot_uranio_src_path}/client.ts`;
   fs.writeFileSync(uranio_client_path, client_text);
@@ -259,7 +267,8 @@ function _generate_mysql_uranio_index_module_text() {
 }
 
 function _generate_mongodb_uranio_client_module_text(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
 ) {
   let text = '';
   text += `/**\n`;
@@ -275,13 +284,14 @@ function _generate_mongodb_uranio_client_module_text(
   text += `import {mongodb_atom} from './types/atom';\n`;
   text += `\n`;
   text += _generate_mongodb_interface_definitions(interfaces);
-  text += _generate_mongodb_client(interfaces);
+  text += _generate_mongodb_client(interfaces, naming_convention);
   text += `\n`;
   return text;
 }
 
 function _generate_mysql_uranio_client_module_text(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
 ) {
   let text = '';
   text += `/**\n`;
@@ -297,30 +307,39 @@ function _generate_mysql_uranio_client_module_text(
   text += `import {mysql_atom} from './types/atom';\n`;
   text += `\n`;
   text += _generate_mysql_interface_definitions(interfaces);
-  text += _generate_mysql_client(interfaces);
+  text += _generate_mysql_client(interfaces, naming_convention);
   text += `\n`;
   return text;
 }
 
-function _generate_mongodb_client(interfaces: plutonio.Interfaces) {
+function _generate_mongodb_client(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   text += `export class UranioMongoDBClient extends MongoDBClient{\n`;
-  text += _generate_mongodb_client_attributes(interfaces);
+  text += _generate_mongodb_client_attributes(interfaces, naming_convention);
   text += `  constructor(params: MongoDBClientParams) {\n`;
   text += `    super(params);\n`;
-  text += _generate_mongodb_client_initialization(interfaces);
+  text += _generate_mongodb_client_initialization(
+    interfaces,
+    naming_convention
+  );
   text += `  }\n`;
   text += `}\n`;
   return text;
 }
 
-function _generate_mysql_client(interfaces: plutonio.Interfaces) {
+function _generate_mysql_client(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   text += `export class UranioMySQLClient extends MySQLClient{\n`;
-  text += _generate_mysql_client_attributes(interfaces);
+  text += _generate_mysql_client_attributes(interfaces, naming_convention);
   text += `  constructor(params: MySQLClientParams) {\n`;
   text += `    super(params);\n`;
-  text += _generate_mysql_client_initialization(interfaces);
+  text += _generate_mysql_client_initialization(interfaces, naming_convention);
   text += `  }\n`;
   text += `}\n`;
   return text;
@@ -358,20 +377,6 @@ function _generate_mysql_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
-      // if (prop.primitive === 'object' && prop.properties?.['___uranio']) {
-      //   if (prop.properties['___uranio'].original === "__uranio: 'primary';") {
-      //     const original = prop.original;
-      //     const match = original.match(/<([^>]+)>/);
-      //     if (match && match[1]) {
-      //       text += `  ${prop_name}: ${match[1]};\n`;
-      //       continue;
-      //     }
-      //     throw new exception.UranioCLIException(
-      //       `Cannot resolve uranio.primary for attribute ${prop_name}`
-      //     );
-      //   }
-      //   continue;
-      // }
       text += `  ${prop_name}: ${prop.primitive};\n`;
     }
     text += `}\n`;
@@ -380,57 +385,102 @@ function _generate_mysql_interface_definitions(
   return text;
 }
 
-function _generate_mongodb_client_attributes(interfaces: plutonio.Interfaces) {
+function _generate_mongodb_client_attributes(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
-    let lc = _first_letter_lowercase(name);
+    let lc = _process_collection_name(name, naming_convention);
     text += `  public ${lc}: MongoDBAtomClient<${name}>;\n`;
   }
   return text;
 }
 
 function _generate_mongodb_client_initialization(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
-    let lc = _first_letter_lowercase(name);
+    let lc = _process_collection_name(name, naming_convention);
     // Different from MySQL since it pass `this.db` instead of `this`
     text += `    this.${lc} = new MongoDBAtomClient<${name}>(this.db, '${lc}');\n`;
   }
   return text;
 }
 
-function _generate_mysql_client_attributes(interfaces: plutonio.Interfaces) {
+function _generate_mysql_client_attributes(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
-    let lc = _first_letter_lowercase(name);
+    let lc = _process_collection_name(name, naming_convention);
     text += `  public ${lc}: MySQLAtomClient<${name}>;\n`;
   }
   return text;
 }
 
 function _generate_mysql_client_initialization(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
-    let lc = _first_letter_lowercase(name);
+    let lc = _process_collection_name(name, naming_convention);
     // Different from Mongo since it pass `this` instead of `this.db`
     text += `    this.${lc} = new MySQLAtomClient<${name}>(this, '${lc}');\n`;
   }
   return text;
 }
 
-function _first_letter_lowercase(str: string): string {
-  if (typeof str !== 'string' || str.length === 0) {
-    return str;
+function _process_collection_name(
+  input: string,
+  naming_convention: t.NamingConvention
+): string {
+  switch (naming_convention) {
+    case 'camelCase': {
+      return _pascal_to_camel(input);
+    }
+    case 'snake_case': {
+      return _pascal_to_snake(input);
+    }
+    default: {
+      return input;
+    }
   }
-  return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
 function _debug_interfaces(uranio_extended_interfaces: plutonio.Interfaces) {
   for (let [key, _value] of Object.entries(uranio_extended_interfaces)) {
     log.info(`Processing Interface: ${key}`);
   }
+}
+
+function _pascal_to_snake(input: string): string {
+  if (!input || !input[0] || typeof input !== 'string') {
+    return input;
+  }
+  const result: string[] = [input[0].toLowerCase()];
+  for (let i = 1; i < input.length; i++) {
+    const char = input[i];
+    if (!char) {
+      continue;
+    }
+    if (char.toUpperCase() === char) {
+      result.push('_', char.toLowerCase());
+    } else {
+      result.push(char);
+    }
+  }
+
+  return result.join('');
+}
+
+function _pascal_to_camel(input: string): string {
+  if (!input || !input[0] || typeof input !== 'string') {
+    return input;
+  }
+  return input[0].toLowerCase() + input.slice(1);
 }

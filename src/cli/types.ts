@@ -45,7 +45,7 @@ export type Arguments = {
 export const NAMING_CONVENTION = {
   SNAKE_CASE: 'snake_case',
   CAMEL_CASE: 'camelCase',
-  SAME: 'same',
+  PASCAL: 'PascalCase',
 } as const;
 
 export type NamingConvention = ObjectValue<typeof NAMING_CONVENTION>;
