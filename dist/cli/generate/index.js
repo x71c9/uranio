@@ -319,6 +319,17 @@ function _generate_mysql_client(interfaces, naming_convention) {
     text += `}\n`;
     return text;
 }
+function _resolve_primitve(prop) {
+    var _a;
+    if (prop.primitive === 'date') {
+        return 'Date';
+    }
+    if (prop.primitive === 'array') {
+        const primitive_item = ((_a = prop.item) === null || _a === void 0 ? void 0 : _a.primitive) || 'any';
+        return `${primitive_item}[]`;
+    }
+    return prop.primitive;
+}
 function _generate_mongodb_interface_definitions(interfaces) {
     let text = '';
     for (const [name, inter] of Object.entries(interfaces)) {
@@ -329,7 +340,7 @@ function _generate_mongodb_interface_definitions(interfaces) {
             continue;
         }
         for (const [prop_name, prop] of Object.entries(inter.properties)) {
-            text += `  ${prop_name}: ${prop.primitive};\n`;
+            text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
         }
         text += `}\n`;
         text += `\n`;
@@ -346,7 +357,7 @@ function _generate_mysql_interface_definitions(interfaces) {
             continue;
         }
         for (const [prop_name, prop] of Object.entries(inter.properties)) {
-            text += `  ${prop_name}: ${prop.primitive};\n`;
+            text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
         }
         text += `}\n`;
         text += `\n`;
