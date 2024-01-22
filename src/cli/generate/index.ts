@@ -345,6 +345,17 @@ function _generate_mysql_client(
   return text;
 }
 
+function _resolve_primitve(prop: plutonio.TypeAttributes): string{
+  if(prop.primitive === 'date'){
+    return 'Date';
+  }
+  if(prop.primitive === 'array'){
+    const primitive_item = prop.item?.primitive || 'any';
+    return `${primitive_item}[]`;
+  }
+  return prop.primitive;
+}
+
 function _generate_mongodb_interface_definitions(
   interfaces: plutonio.Interfaces
 ) {
@@ -357,7 +368,7 @@ function _generate_mongodb_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
-      text += `  ${prop_name}: ${prop.primitive};\n`;
+      text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
     }
     text += `}\n`;
     text += `\n`;
@@ -377,7 +388,7 @@ function _generate_mysql_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
-      text += `  ${prop_name}: ${prop.primitive};\n`;
+      text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
     }
     text += `}\n`;
     text += `\n`;
