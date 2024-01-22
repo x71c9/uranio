@@ -35,7 +35,7 @@ export type Arguments = {
 export declare const NAMING_CONVENTION: {
     readonly SNAKE_CASE: "snake_case";
     readonly CAMEL_CASE: "camelCase";
-    readonly SAME: "same";
+    readonly PASCAL: "PascalCase";
 };
 export type NamingConvention = ObjectValue<typeof NAMING_CONVENTION>;
 export type InitParams = {

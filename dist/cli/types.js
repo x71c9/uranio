@@ -27,6 +27,6 @@ exports.COMMAND = {
 exports.NAMING_CONVENTION = {
     SNAKE_CASE: 'snake_case',
     CAMEL_CASE: 'camelCase',
-    SAME: 'same',
+    PASCAL: 'PascalCase',
 };
 //# sourceMappingURL=types.js.map
