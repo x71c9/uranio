@@ -7,6 +7,7 @@
 import mongodb, {ObjectId} from 'mongodb';
 
 import * as atom_types from '../types/atom';
+import * as sql_types from '../types/sql';
 import * as where_types from '../types/where';
 
 export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
@@ -19,9 +20,17 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     this.collection = this.db.collection<S>(name);
   }
 
-  public async get_atom(where: where_types.Where<S>): Promise<S | null> {
+  public async get_atom({
+    where,
+    order,
+  }: {
+    where?: where_types.Where<S>;
+    order?: sql_types.OrderBy;
+  }): Promise<S | null> {
     where = _instance_object_id(where);
-    let item = await this.collection.findOne<S>(where as mongodb.Filter<S>);
+    let item = await this.collection.findOne<S>(where as mongodb.Filter<S>, {
+      sort: order,
+    });
     if (!item) {
       return null;
     }
@@ -29,10 +38,18 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return item;
   }
 
-  public async get_atoms(where: where_types.Where<S>): Promise<S[]> {
+  public async get_atoms({
+    where,
+    order,
+    limit,
+  }: {
+    where?: where_types.Where<S>;
+    order?: sql_types.OrderBy;
+    limit?: number;
+  }): Promise<S[]> {
     where = _instance_object_id(where);
     let items = await this.collection
-      .find<S>(where as mongodb.Filter<S>)
+      .find<S>(where as mongodb.Filter<S>, {sort: order, limit})
       .toArray();
     for (let item of items) {
       item = _string_id(item) as S;
@@ -66,10 +83,13 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return items;
   }
 
-  public async update_atom(
-    where: where_types.Where<S>,
-    atom: Partial<S>
-  ): Promise<mongodb.UpdateResult> {
+  public async update_atom({
+    where,
+    atom,
+  }: {
+    where?: where_types.Where<S>;
+    atom: Partial<S>;
+  }): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
     // atom = _remove_id(atom) as Partial<S>;
     atom = _replace_string_id_to_object_id(atom) as Partial<S>;
@@ -80,10 +100,13 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_update;
   }
 
-  public async update_atoms(
-    where: where_types.Where<S>,
-    atom: Partial<S>
-  ): Promise<mongodb.UpdateResult> {
+  public async update_atoms({
+    where,
+    atom,
+  }: {
+    where?: where_types.Where<S>;
+    atom: Partial<S>;
+  }): Promise<mongodb.UpdateResult> {
     where = _instance_object_id(where);
     // atom = _remove_id(atom) as Partial<S>;
     atom = _replace_string_id_to_object_id(atom) as Partial<S>;
@@ -94,9 +117,11 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_update;
   }
 
-  public async delete_atom(
-    where: where_types.Where<S>
-  ): Promise<mongodb.DeleteResult> {
+  public async delete_atom({
+    where,
+  }: {
+    where?: where_types.Where<S>;
+  }): Promise<mongodb.DeleteResult> {
     where = _instance_object_id(where);
     const response_delete = await this.collection.deleteOne(
       where as mongodb.Filter<S>
@@ -104,9 +129,11 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_delete;
   }
 
-  public async delete_atoms(
-    where: where_types.Where<S>
-  ): Promise<mongodb.DeleteResult> {
+  public async delete_atoms({
+    where,
+  }: {
+    where?: where_types.Where<S>;
+  }): Promise<mongodb.DeleteResult> {
     where = _instance_object_id(where);
     const response_delete = await this.collection.deleteMany(
       where as mongodb.Filter<S>
@@ -146,8 +173,11 @@ function _replace_string_id_to_object_id<A extends atom_types.mongodb_atom>(
 }
 
 function _instance_object_id<A extends atom_types.mongodb_atom>(
-  where: where_types.Where<A>
-): where_types.Where<A> {
+  where?: where_types.Where<A>
+): where_types.Where<A> | undefined {
+  if (!where) {
+    return where;
+  }
   for (let [key, value] of Object.entries(where)) {
     if (key === '_id' && typeof value === 'string') {
       where['_id'] = new ObjectId(value) as any;
