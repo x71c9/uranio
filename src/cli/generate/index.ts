@@ -20,6 +20,7 @@ import ray from 'r4y';
 import plutonio from 'plutonio';
 import {log} from '../log/index';
 import * as utils from '../utils/index';
+import * as exception from '../exception/index';
 import * as common from '../common/index';
 import * as t from '../types';
 
@@ -345,15 +346,61 @@ function _generate_mysql_client(
   return text;
 }
 
-function _resolve_primitve(prop: plutonio.TypeAttributes): string{
-  if(prop.primitive === 'date'){
-    return 'Date';
+function _resolve_primitve(prop: plutonio.TypeAttributes): string {
+  switch(prop.primitive){
+    case plutonio.PRIMITIVE.UNRESOLVED: {
+      return 'unknown';
+    }
+    case plutonio.PRIMITIVE.ENUM: {
+      return _resolve_primitive_enum(prop);
+    }
+    case plutonio.PRIMITIVE.DATE: {
+      return 'Date';
+    }
+    case plutonio.PRIMITIVE.ARRAY: {
+      if(!prop.item){
+        return 'any[]';
+      }
+      const primitive_item = _resolve_primitve(prop.item);
+      return `(${primitive_item})[]`;
+    }
+    case plutonio.PRIMITIVE.ANY:
+    case plutonio.PRIMITIVE.BOOLEAN:
+    case plutonio.PRIMITIVE.NULL:
+    case plutonio.PRIMITIVE.NUMBER:
+    case plutonio.PRIMITIVE.OBJECT:
+    case plutonio.PRIMITIVE.STRING:
+    case plutonio.PRIMITIVE.UNDEFINED:
+    case plutonio.PRIMITIVE.UNKNOWN:{
+      return prop.primitive;
+    }
+    default: {
+      throw new exception.UranioCLIException(
+        `Invalid Plutonio primitive. Evaluating '${prop.primitive}'`
+      )
+    }
   }
-  if(prop.primitive === 'array'){
-    const primitive_item = prop.item?.primitive || 'any';
-    return `${primitive_item}[]`;
+}
+
+function _resolve_primitive_enum(prop: plutonio.TypeAttributes): string{
+  const primitives:(string | number)[] = [];
+  if(!prop.values){
+    return 'unknown';
   }
-  return prop.primitive;
+  for(const value of prop.values){
+    switch(typeof value){
+      case 'string':{
+        primitives.push(`"${value}"`);
+        break;
+      }
+      case 'number':{
+        primitives.push(value);
+        break;
+      }
+    }
+  }
+  const joined_types = primitives.join(' | ');
+  return joined_types;
 }
 
 function _generate_mongodb_interface_definitions(

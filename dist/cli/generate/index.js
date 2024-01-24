@@ -48,6 +48,7 @@ const r4y_1 = __importDefault(require("r4y"));
 const plutonio_1 = __importDefault(require("plutonio"));
 const index_1 = require("../log/index");
 const utils = __importStar(require("../utils/index"));
+const exception = __importStar(require("../exception/index"));
 const common = __importStar(require("../common/index"));
 const t = __importStar(require("../types"));
 async function generate(args) {
@@ -320,15 +321,57 @@ function _generate_mysql_client(interfaces, naming_convention) {
     return text;
 }
 function _resolve_primitve(prop) {
-    var _a;
-    if (prop.primitive === 'date') {
-        return 'Date';
+    switch (prop.primitive) {
+        case plutonio_1.default.PRIMITIVE.UNRESOLVED: {
+            return 'unknown';
+        }
+        case plutonio_1.default.PRIMITIVE.ENUM: {
+            return _resolve_primitive_enum(prop);
+        }
+        case plutonio_1.default.PRIMITIVE.DATE: {
+            return 'Date';
+        }
+        case plutonio_1.default.PRIMITIVE.ARRAY: {
+            if (!prop.item) {
+                return 'any[]';
+            }
+            const primitive_item = _resolve_primitve(prop.item);
+            return `(${primitive_item})[]`;
+        }
+        case plutonio_1.default.PRIMITIVE.ANY:
+        case plutonio_1.default.PRIMITIVE.BOOLEAN:
+        case plutonio_1.default.PRIMITIVE.NULL:
+        case plutonio_1.default.PRIMITIVE.NUMBER:
+        case plutonio_1.default.PRIMITIVE.OBJECT:
+        case plutonio_1.default.PRIMITIVE.STRING:
+        case plutonio_1.default.PRIMITIVE.UNDEFINED:
+        case plutonio_1.default.PRIMITIVE.UNKNOWN: {
+            return prop.primitive;
+        }
+        default: {
+            throw new exception.UranioCLIException(`Invalid Plutonio primitive. Evaluating '${prop.primitive}'`);
+        }
     }
-    if (prop.primitive === 'array') {
-        const primitive_item = ((_a = prop.item) === null || _a === void 0 ? void 0 : _a.primitive) || 'any';
-        return `${primitive_item}[]`;
+}
+function _resolve_primitive_enum(prop) {
+    const primitives = [];
+    if (!prop.values) {
+        return 'unknown';
     }
-    return prop.primitive;
+    for (const value of prop.values) {
+        switch (typeof value) {
+            case 'string': {
+                primitives.push(`"${value}"`);
+                break;
+            }
+            case 'number': {
+                primitives.push(value);
+                break;
+            }
+        }
+    }
+    const joined_types = primitives.join(' | ');
+    return joined_types;
 }
 function _generate_mongodb_interface_definitions(interfaces) {
     let text = '';
