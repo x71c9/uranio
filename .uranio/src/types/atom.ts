@@ -6,19 +6,23 @@
  *
  */
 
+import {ObjectId} from 'mongodb';
+
 export interface atom {}
 
-// export type unique<T> = T & {__uranio: 'unique'};
-
-// export type primary<T> = T & {__uranio: 'primary'};
-
 export type primary<T> = T;
+
+export type mongodb_id = ObjectId;
 
 export interface mysql_atom extends atom {}
 
 export interface mongodb_atom extends atom {
   _id: primary<string>;
 }
+
+// export type unique<T> = T & {__uranio: 'unique'};
+
+// export type primary<T> = T & {__uranio: 'primary'};
 
 // type PrimaryAttribute<A extends atom> = {
 //   [K in keyof A]: A[K] extends {__uranio: 'primary'} ? K : never;
