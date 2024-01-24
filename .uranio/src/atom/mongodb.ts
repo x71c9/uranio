@@ -167,7 +167,7 @@ function _replace_string_id_to_object_id<A extends atom_types.mongodb_atom>(
   atom: Partial<A>
 ): Partial<A> {
   if (atom._id && typeof atom._id === 'string') {
-    atom._id = new mongodb.ObjectId(atom._id) as any;
+    atom._id = new ObjectId(atom._id) as any;
   }
   return atom;
 }

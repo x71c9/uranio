@@ -24,7 +24,7 @@
     "build": "yarn tsc -b",
     "dev": "yarn tsc -w",
     "dev:base": "node ./dist/index.js",
-    "dev:bin:generate": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
+    "dev:bin:generate": "node ./dist/bin.js generate --root ~/repos/avk-47/core",
     "dev:bin:init": "node ./dist/bin.js init",
     "dev:bin:verbose": "node ./dist/bin.js generate -v -d mysql --root ~/repos/avk-47/core",
     "dev:bin:version": "node ./dist/bin.js --root ~/repos/uranio/builder",
