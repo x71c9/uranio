@@ -204,9 +204,8 @@ function _generate_mongodb_uranio_types_module_text() {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `import {mongodb_atom as atom} from './atom';\n`;
-    text += `import {primary} from './atom';\n`;
-    text += `export {atom, primary};\n`;
+    text += `import {mongodb_atom as atom, primary, mongodb_id} from './atom';\n`;
+    text += `export {atom, primary, mongodb_id};\n`;
     text += `\n`;
     return text;
 }
@@ -220,8 +219,7 @@ function _generate_mysql_uranio_types_module_text() {
     text += ` *\n`;
     text += ` */\n`;
     text += `\n`;
-    text += `import {mysql_atom as atom} from './atom';\n`;
-    text += `import {primary} from './atom';\n`;
+    text += `import {mysql_atom as atom, primary} from './atom';\n`;
     text += `export {atom, primary};\n`;
     text += `\n`;
     return text;
