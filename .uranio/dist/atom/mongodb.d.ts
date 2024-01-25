@@ -37,4 +37,7 @@ export declare class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     delete_atoms({ where, }: {
         where?: where_types.Where<S>;
     }): Promise<mongodb.DeleteResult>;
+    get_random_atom({ where }: {
+        where?: where_types.Where<S>;
+    }): Promise<mongodb.BSON.Document | undefined>;
 }
