@@ -141,16 +141,16 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_delete;
   }
 
-  public async get_random_atom({
-    where
-  }:{
-    where?: where_types.Where<S>
-  }){
-    where = _instance_object_id(where);
-    const match_stage = {$match: where};
+  public async get_random_atom({where}: {where?: where_types.Where<S>}) {
     // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
     const sample_stage = {$sample: {size: 1}};
-    const cursor = this.collection.aggregate([match_stage, sample_stage]);
+    const stages: mongodb.BSON.Document[] = [];
+    where = _instance_object_id(where);
+    if (where && Object.keys(where).length > 0) {
+      stages.push({$match: where});
+    }
+    stages.push(sample_stage);
+    const cursor = this.collection.aggregate(stages);
     const [response] = await cursor.toArray();
     return response;
   }

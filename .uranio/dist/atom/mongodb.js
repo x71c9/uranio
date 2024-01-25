@@ -77,11 +77,15 @@ class MongoDBAtomClient {
         return response_delete;
     }
     async get_random_atom({ where }) {
-        where = _instance_object_id(where);
-        const match_stage = { $match: where };
         // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
         const sample_stage = { $sample: { size: 1 } };
-        const cursor = this.collection.aggregate([match_stage, sample_stage]);
+        const stages = [];
+        where = _instance_object_id(where);
+        if (where && Object.keys(where).length > 0) {
+            stages.push({ $match: where });
+        }
+        stages.push(sample_stage);
+        const cursor = this.collection.aggregate(stages);
         const [response] = await cursor.toArray();
         return response;
     }
