@@ -280,7 +280,7 @@ function _generate_mongodb_uranio_client_module_text(
   text += `\n`;
   text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';\n`;
   text += `import {MongoDBAtomClient} from './atom/mongodb';\n`;
-  text += `import {mongodb_atom} from './types/atom';\n`;
+  text += `import * as atom_types from './types/atom';\n`;
   text += `\n`;
   text += _generate_mongodb_interface_definitions(interfaces);
   text += _generate_mongodb_client(interfaces, naming_convention);
@@ -303,7 +303,7 @@ function _generate_mysql_uranio_client_module_text(
   text += `\n`;
   text += `import {MySQLClient, MySQLClientParams} from './client/mysql';\n`;
   text += `import {MySQLAtomClient} from './atom/mysql';\n`;
-  text += `import {mysql_atom} from './types/atom';\n`;
+  text += `import * as atom_types from './types/atom';\n`;
   text += `\n`;
   text += _generate_mysql_interface_definitions(interfaces);
   text += _generate_mysql_client(interfaces, naming_convention);
@@ -347,6 +347,9 @@ function _generate_mysql_client(
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
   switch(prop.primitive){
     case plutonio.PRIMITIVE.UNRESOLVED: {
+      if(prop.original.indexOf('.mongodb_id')){
+        return 'atom_types.mongodb_id';
+      }
       return 'unknown';
     }
     case plutonio.PRIMITIVE.ENUM: {
@@ -368,8 +371,7 @@ function _resolve_primitve(prop: plutonio.TypeAttributes): string {
     case plutonio.PRIMITIVE.NUMBER:
     case plutonio.PRIMITIVE.OBJECT:
     case plutonio.PRIMITIVE.STRING:
-    case plutonio.PRIMITIVE.UNDEFINED:
-    case plutonio.PRIMITIVE.UNKNOWN:{
+    case plutonio.PRIMITIVE.UNDEFINED:{
       return prop.primitive;
     }
     default: {
@@ -406,7 +408,7 @@ function _generate_mongodb_interface_definitions(
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
-    text += `interface ${name} extends mongodb_atom {\n`;
+    text += `interface ${name} extends atom_types.mongodb_atom {\n`;
     if (!inter.properties) {
       text += `}\n`;
       text += `\n`;
@@ -426,7 +428,7 @@ function _generate_mysql_interface_definitions(
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
-    text += `interface ${name} extends mysql_atom {\n`;
+    text += `interface ${name} extends atom_types.mysql_atom {\n`;
     if (!inter.properties) {
       text += `}\n`;
       text += `\n`;

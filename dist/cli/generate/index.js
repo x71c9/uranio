@@ -270,7 +270,7 @@ function _generate_mongodb_uranio_client_module_text(interfaces, naming_conventi
     text += `\n`;
     text += `import {MongoDBClient, MongoDBClientParams} from './client/mongodb';\n`;
     text += `import {MongoDBAtomClient} from './atom/mongodb';\n`;
-    text += `import {mongodb_atom} from './types/atom';\n`;
+    text += `import * as atom_types from './types/atom';\n`;
     text += `\n`;
     text += _generate_mongodb_interface_definitions(interfaces);
     text += _generate_mongodb_client(interfaces, naming_convention);
@@ -289,7 +289,7 @@ function _generate_mysql_uranio_client_module_text(interfaces, naming_convention
     text += `\n`;
     text += `import {MySQLClient, MySQLClientParams} from './client/mysql';\n`;
     text += `import {MySQLAtomClient} from './atom/mysql';\n`;
-    text += `import {mysql_atom} from './types/atom';\n`;
+    text += `import * as atom_types from './types/atom';\n`;
     text += `\n`;
     text += _generate_mysql_interface_definitions(interfaces);
     text += _generate_mysql_client(interfaces, naming_convention);
@@ -321,6 +321,9 @@ function _generate_mysql_client(interfaces, naming_convention) {
 function _resolve_primitve(prop) {
     switch (prop.primitive) {
         case plutonio_1.default.PRIMITIVE.UNRESOLVED: {
+            if (prop.original.indexOf('.mongodb_id')) {
+                return 'atom_types.mongodb_id';
+            }
             return 'unknown';
         }
         case plutonio_1.default.PRIMITIVE.ENUM: {
@@ -342,8 +345,7 @@ function _resolve_primitve(prop) {
         case plutonio_1.default.PRIMITIVE.NUMBER:
         case plutonio_1.default.PRIMITIVE.OBJECT:
         case plutonio_1.default.PRIMITIVE.STRING:
-        case plutonio_1.default.PRIMITIVE.UNDEFINED:
-        case plutonio_1.default.PRIMITIVE.UNKNOWN: {
+        case plutonio_1.default.PRIMITIVE.UNDEFINED: {
             return prop.primitive;
         }
         default: {
@@ -374,7 +376,7 @@ function _resolve_primitive_enum(prop) {
 function _generate_mongodb_interface_definitions(interfaces) {
     let text = '';
     for (const [name, inter] of Object.entries(interfaces)) {
-        text += `interface ${name} extends mongodb_atom {\n`;
+        text += `interface ${name} extends atom_types.mongodb_atom {\n`;
         if (!inter.properties) {
             text += `}\n`;
             text += `\n`;
@@ -391,7 +393,7 @@ function _generate_mongodb_interface_definitions(interfaces) {
 function _generate_mysql_interface_definitions(interfaces) {
     let text = '';
     for (const [name, inter] of Object.entries(interfaces)) {
-        text += `interface ${name} extends mysql_atom {\n`;
+        text += `interface ${name} extends atom_types.mysql_atom {\n`;
         if (!inter.properties) {
             text += `}\n`;
             text += `\n`;

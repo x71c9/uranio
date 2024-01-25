@@ -140,6 +140,20 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     );
     return response_delete;
   }
+
+  public async get_random_atom({
+    where
+  }:{
+    where?: where_types.Where<S>
+  }){
+    where = _instance_object_id(where);
+    const match_stage = {$match: where};
+    // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
+    const sample_stage = {$sample: {size: 1}};
+    const cursor = this.collection.aggregate([match_stage, sample_stage]);
+    const [response] = await cursor.toArray();
+    return response;
+  }
 }
 
 type StringId<T extends unknown> = T extends {_id: any}

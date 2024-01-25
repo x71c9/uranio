@@ -76,6 +76,15 @@ class MongoDBAtomClient {
         const response_delete = await this.collection.deleteMany(where);
         return response_delete;
     }
+    async get_random_atom({ where }) {
+        where = _instance_object_id(where);
+        const match_stage = { $match: where };
+        // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
+        const sample_stage = { $sample: { size: 1 } };
+        const cursor = this.collection.aggregate([match_stage, sample_stage]);
+        const [response] = await cursor.toArray();
+        return response;
+    }
 }
 exports.MongoDBAtomClient = MongoDBAtomClient;
 function _string_id(item) {
