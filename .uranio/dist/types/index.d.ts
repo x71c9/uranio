@@ -5,5 +5,5 @@
  * @packageDocumentation
  *
  */
-import { atom, primary, mongodb_id } from './atom';
-export { atom, primary, mongodb_id };
+import { atom, mongodb_id } from './atom';
+export { atom, mongodb_id };
