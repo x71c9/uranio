@@ -321,7 +321,7 @@ function _generate_mysql_client(interfaces, naming_convention) {
 function _resolve_primitve(prop) {
     switch (prop.primitive) {
         case plutonio_1.default.PRIMITIVE.UNRESOLVED: {
-            if (prop.original.indexOf('.mongodb_id')) {
+            if (prop.original.indexOf('.mongodb_id') !== -1) {
                 return 'atom_types.mongodb_id';
             }
             return 'unknown';

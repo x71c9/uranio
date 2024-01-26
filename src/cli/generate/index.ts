@@ -347,7 +347,7 @@ function _generate_mysql_client(
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
   switch(prop.primitive){
     case plutonio.PRIMITIVE.UNRESOLVED: {
-      if(prop.original.indexOf('.mongodb_id')){
+      if(prop.original.indexOf('.mongodb_id') !== -1){
         return 'atom_types.mongodb_id';
       }
       return 'unknown';

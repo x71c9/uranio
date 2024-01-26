@@ -87,6 +87,9 @@ class MongoDBAtomClient {
         stages.push(sample_stage);
         const cursor = this.collection.aggregate(stages);
         const [response] = await cursor.toArray();
+        if (!response) {
+            return null;
+        }
         return response;
     }
 }
