@@ -51,9 +51,9 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     let items = await this.collection
       .find<S>(where as mongodb.Filter<S>, {sort: order, limit})
       .toArray();
-    for (let item of items) {
-      item = _string_id(item) as S;
-    }
+    // for (let item of items) {
+    //   item = _string_id(item) as S;
+    // }
     return items;
   }
 
@@ -159,19 +159,19 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
   }
 }
 
-type StringId<T extends unknown> = T extends {_id: any}
-  ? Omit<T, '_id'> & {_id: string}
-  : T;
+// type StringId<T extends unknown> = T extends {_id: any}
+//   ? Omit<T, '_id'> & {_id: string}
+//   : T;
 
-function _string_id<T extends unknown>(item: T): StringId<T> {
-  if (item && typeof item === 'object' && '_id' in item) {
-    if (item._id?.toString) {
-      item._id = item._id.toString();
-    }
-    item._id = String(item._id);
-  }
-  return item as StringId<T>;
-}
+// function _string_id<T extends unknown>(item: T): StringId<T> {
+//   if (item && typeof item === 'object' && '_id' in item) {
+//     if (item._id?.toString) {
+//       item._id = item._id.toString();
+//     }
+//     item._id = String(item._id);
+//   }
+//   return item as StringId<T>;
+// }
 
 // function _remove_id<A extends atom_types.mongodb_atom>(
 //   atom: Partial<A>
