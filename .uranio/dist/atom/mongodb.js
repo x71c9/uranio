@@ -29,9 +29,9 @@ class MongoDBAtomClient {
         let items = await this.collection
             .find(where, { sort: order, limit })
             .toArray();
-        for (let item of items) {
-            item = _string_id(item);
-        }
+        // for (let item of items) {
+        //   item = _string_id(item) as S;
+        // }
         return items;
     }
     async put_atom(atom) {
@@ -94,16 +94,18 @@ class MongoDBAtomClient {
     }
 }
 exports.MongoDBAtomClient = MongoDBAtomClient;
-function _string_id(item) {
-    var _a;
-    if (item && typeof item === 'object' && '_id' in item) {
-        if ((_a = item._id) === null || _a === void 0 ? void 0 : _a.toString) {
-            item._id = item._id.toString();
-        }
-        item._id = String(item._id);
-    }
-    return item;
-}
+// type StringId<T extends unknown> = T extends {_id: any}
+//   ? Omit<T, '_id'> & {_id: string}
+//   : T;
+// function _string_id<T extends unknown>(item: T): StringId<T> {
+//   if (item && typeof item === 'object' && '_id' in item) {
+//     if (item._id?.toString) {
+//       item._id = item._id.toString();
+//     }
+//     item._id = String(item._id);
+//   }
+//   return item as StringId<T>;
+// }
 // function _remove_id<A extends atom_types.mongodb_atom>(
 //   atom: Partial<A>
 // ): atom_types.Shape<A> {
