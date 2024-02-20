@@ -2,7 +2,7 @@
 
 ![uranio logo](./img/uranio_logo_1440x220.png)
 
-Uranio is the lighest Typescript Object Document Mapper (ODM) for MongoDB and
+Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB and
 Object Relational Mapping (ORM) for MySQL.\
 It creates a client for querying collections/tabls in a database by just parsing
 the types in a repository.
@@ -20,7 +20,7 @@ yarn add uranio
 
 Run:
 ```bash
-uranio generate -d mondodb
+uranio generate -d mongodb
 // or
 uranio generate -d mysql
 ```
