@@ -50,13 +50,13 @@ import uranio from 'uranio';
 const uri = process.env.MONGO_DATABASE_URI || '';
 const db_name = process.env.MONGO_DATABASE_NAME || '';
 
-const urn = uranio.Client({uri, db_name});
+const urn = uranio.MongoDBClient({uri, db_name});
 
 // Get all products
-const products = await urn.products.get_items({});
+const products = await urn.products.get_atoms({});
 
 // Create a product
-await urn.products.put_item({
+await urn.products.put_atom({
   title: 'Uranio mug',
   description: 'A radioactive mug for your coding breakfast',
   price: 4.99
