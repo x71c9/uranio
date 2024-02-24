@@ -136,8 +136,14 @@ async function _update_dot_uranio(params: t.GenerateParams) {
   log.trace(`Generating types...`);
   const types_text =
     params.database === t.DATABASE.MYSQL
-      ? _generate_mysql_uranio_types_module_text()
-      : _generate_mongodb_uranio_types_module_text();
+      ? _generate_mysql_uranio_types_module_text(
+          uranio_extended_interfaces,
+          params.naming_convention
+        )
+      : _generate_mongodb_uranio_types_module_text(
+          uranio_extended_interfaces,
+          params.naming_convention
+        );
 
   const uranio_types_path = `${dot_uranio_src_path}/types/index.ts`;
   fs.writeFileSync(uranio_types_path, types_text);
@@ -197,7 +203,10 @@ function _get_uranio_extended_interfaces(params: t.GenerateParams) {
   return uranio_extended_interfaces;
 }
 
-function _generate_mongodb_uranio_types_module_text() {
+function _generate_mongodb_uranio_types_module_text(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -210,10 +219,15 @@ function _generate_mongodb_uranio_types_module_text() {
   text += `import {mongodb_atom as atom, mongodb_id} from './atom';\n`;
   text += `export {atom, mongodb_id};\n`;
   text += `\n`;
+  text += _generate_atom_name_type(interfaces, naming_convention);
+  text += `\n`;
   return text;
 }
 
-function _generate_mysql_uranio_types_module_text() {
+function _generate_mysql_uranio_types_module_text(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
   let text = '';
   text += `/**\n`;
   text += ` *\n`;
@@ -225,6 +239,8 @@ function _generate_mysql_uranio_types_module_text() {
   text += `\n`;
   text += `import {mysql_atom as atom} from './atom';\n`;
   text += `export {atom};\n`;
+  text += `\n`;
+  text += _generate_atom_name_type(interfaces, naming_convention);
   text += `\n`;
   return text;
 }
@@ -311,6 +327,22 @@ function _generate_mysql_uranio_client_module_text(
   return text;
 }
 
+function _generate_atom_name_type(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention
+) {
+  let text = '';
+  text += `type ObjectValue<T> = T[keyof T];\n\n`;
+  text += `export const ATOM_NAME = {\n`;
+  for (const [name, _inter] of Object.entries(interfaces)) {
+    let lc = _process_collection_name(name, naming_convention);
+    text += `  ${lc.toUpperCase()}: '${lc}',\n`;
+  }
+  text += `} as const;\n\n`;
+  text += `export type AtomName = ObjectValue<typeof ATOM_NAME>;\n`;
+  return text;
+}
+
 function _generate_mongodb_client(
   interfaces: plutonio.Interfaces,
   naming_convention: t.NamingConvention
@@ -345,9 +377,9 @@ function _generate_mysql_client(
 }
 
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
-  switch(prop.primitive){
+  switch (prop.primitive) {
     case plutonio.PRIMITIVE.UNRESOLVED: {
-      if(prop.original.indexOf('.mongodb_id') !== -1){
+      if (prop.original.indexOf('.mongodb_id') !== -1) {
         return 'atom_types.mongodb_id';
       }
       return 'unknown';
@@ -359,7 +391,7 @@ function _resolve_primitve(prop: plutonio.TypeAttributes): string {
       return 'Date';
     }
     case plutonio.PRIMITIVE.ARRAY: {
-      if(!prop.item){
+      if (!prop.item) {
         return 'any[]';
       }
       const primitive_item = _resolve_primitve(prop.item);
@@ -371,29 +403,29 @@ function _resolve_primitve(prop: plutonio.TypeAttributes): string {
     case plutonio.PRIMITIVE.NUMBER:
     case plutonio.PRIMITIVE.OBJECT:
     case plutonio.PRIMITIVE.STRING:
-    case plutonio.PRIMITIVE.UNDEFINED:{
+    case plutonio.PRIMITIVE.UNDEFINED: {
       return prop.primitive;
     }
     default: {
       throw new exception.UranioCLIException(
         `Invalid Plutonio primitive. Evaluating '${prop.primitive}'`
-      )
+      );
     }
   }
 }
 
-function _resolve_primitive_enum(prop: plutonio.TypeAttributes): string{
-  const primitives:(string | number)[] = [];
-  if(!prop.values){
+function _resolve_primitive_enum(prop: plutonio.TypeAttributes): string {
+  const primitives: (string | number)[] = [];
+  if (!prop.values) {
     return 'unknown';
   }
-  for(const value of prop.values){
-    switch(typeof value){
-      case 'string':{
+  for (const value of prop.values) {
+    switch (typeof value) {
+      case 'string': {
         primitives.push(`"${value}"`);
         break;
       }
-      case 'number':{
+      case 'number': {
         primitives.push(value);
         break;
       }

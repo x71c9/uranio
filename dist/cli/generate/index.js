@@ -141,8 +141,8 @@ async function _update_dot_uranio(params) {
     index_1.log.debug(`Generated index`);
     index_1.log.trace(`Generating types...`);
     const types_text = params.database === t.DATABASE.MYSQL
-        ? _generate_mysql_uranio_types_module_text()
-        : _generate_mongodb_uranio_types_module_text();
+        ? _generate_mysql_uranio_types_module_text(uranio_extended_interfaces, params.naming_convention)
+        : _generate_mongodb_uranio_types_module_text(uranio_extended_interfaces, params.naming_convention);
     const uranio_types_path = `${dot_uranio_src_path}/types/index.ts`;
     fs_1.default.writeFileSync(uranio_types_path, types_text);
     index_1.log.debug(`Generated types`);
@@ -194,7 +194,7 @@ function _get_uranio_extended_interfaces(params) {
     _debug_interfaces(uranio_extended_interfaces);
     return uranio_extended_interfaces;
 }
-function _generate_mongodb_uranio_types_module_text() {
+function _generate_mongodb_uranio_types_module_text(interfaces, naming_convention) {
     let text = '';
     text += `/**\n`;
     text += ` *\n`;
@@ -207,9 +207,11 @@ function _generate_mongodb_uranio_types_module_text() {
     text += `import {mongodb_atom as atom, mongodb_id} from './atom';\n`;
     text += `export {atom, mongodb_id};\n`;
     text += `\n`;
+    text += _generate_atom_name_type(interfaces, naming_convention);
+    text += `\n`;
     return text;
 }
-function _generate_mysql_uranio_types_module_text() {
+function _generate_mysql_uranio_types_module_text(interfaces, naming_convention) {
     let text = '';
     text += `/**\n`;
     text += ` *\n`;
@@ -221,6 +223,8 @@ function _generate_mysql_uranio_types_module_text() {
     text += `\n`;
     text += `import {mysql_atom as atom} from './atom';\n`;
     text += `export {atom};\n`;
+    text += `\n`;
+    text += _generate_atom_name_type(interfaces, naming_convention);
     text += `\n`;
     return text;
 }
@@ -294,6 +298,18 @@ function _generate_mysql_uranio_client_module_text(interfaces, naming_convention
     text += _generate_mysql_interface_definitions(interfaces);
     text += _generate_mysql_client(interfaces, naming_convention);
     text += `\n`;
+    return text;
+}
+function _generate_atom_name_type(interfaces, naming_convention) {
+    let text = '';
+    text += `type ObjectValue<T> = T[keyof T];\n\n`;
+    text += `export const ATOM_NAME = {\n`;
+    for (const [name, _inter] of Object.entries(interfaces)) {
+        let lc = _process_collection_name(name, naming_convention);
+        text += `  ${lc.toUpperCase()}: '${lc}',\n`;
+    }
+    text += `} as const;\n\n`;
+    text += `export type AtomName = ObjectValue<typeof ATOM_NAME>;\n`;
     return text;
 }
 function _generate_mongodb_client(interfaces, naming_convention) {
