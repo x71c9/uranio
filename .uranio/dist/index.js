@@ -21,10 +21,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MySQLClient = exports.MongoDBClient = void 0;
+exports.DynamoDBClient = exports.MySQLClient = exports.MongoDBClient = void 0;
 __exportStar(require("./types/index"), exports);
 const client_1 = require("./client");
 Object.defineProperty(exports, "MongoDBClient", { enumerable: true, get: function () { return client_1.UranioMongoDBClient; } });
 const client_2 = require("./client");
 Object.defineProperty(exports, "MySQLClient", { enumerable: true, get: function () { return client_2.UranioMySQLClient; } });
+const client_3 = require("./client");
+Object.defineProperty(exports, "DynamoDBClient", { enumerable: true, get: function () { return client_3.UranioDynamoDBClient; } });
 //# sourceMappingURL=index.js.map
