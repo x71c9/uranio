@@ -56,6 +56,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.564.0",
+    "@aws-sdk/util-dynamodb": "^3.564.0",
     "app-root-path": "^3.1.0",
     "i0n": "^0.8.1",
     "inquirer": "^8.0.0",
