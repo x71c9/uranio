@@ -90,25 +90,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
   }
 
   async put_atom(shape: Partial<S>) {
-    const dynamo_item: {[key: string]: AttributeValue} = {};
-    for (const [key, value] of Object.entries(shape)) {
-      switch (typeof value) {
-        case 'string':
-          dynamo_item[key] = {S: value};
-          break;
-        case 'number':
-          dynamo_item[key] = {N: value.toString()};
-          break;
-        case 'boolean':
-          dynamo_item[key] = {BOOL: value};
-          break;
-        default:
-          throw new Error(
-            `Unsupported attribute type '${typeof value}' for` +
-              ` attribute name '${key}'`,
-          );
-      }
-    }
+    const dynamo_item = _resolve_dynamo_map(shape);
     const params: PutItemCommandInput = {
       TableName: this.name,
       Item: dynamo_item,
@@ -434,4 +416,72 @@ function _dynamo_attribute_type_for(
     `Attribute type not supported. Attribute name '${name}'` +
       ` , attribute type '${typeof value}'`,
   );
+}
+
+function _resolve_dynamo_list(value: unknown[], key: string) {
+  const final_list: AttributeValue[] = [];
+  for (let i = 0; i < value.length; i++) {
+    const list_item = value[i]!;
+    const dynamo_value = _resolve_dynamo_item_value(list_item, key);
+    final_list.push(dynamo_value);
+  }
+  return final_list;
+}
+
+function _resolve_dynamo_item_value(
+  value: unknown,
+  key: string
+): AttributeValue {
+  if (Array.isArray(value)) {
+    if(_all_strings(value)){
+      return {SS: value}
+    }
+    if(_all_numbers(value)){
+      return {NS: value}
+    }
+    return {L: _resolve_dynamo_list(value, key)};
+  } else {
+    switch (typeof value) {
+      case 'string': {
+        return {S: value};
+      }
+      case 'number': {
+        return {N: value.toString()};
+      }
+      case 'boolean': {
+        return {BOOL: value};
+      }
+      case 'object': {
+        if (value === null) {
+          return {NULL: true}
+        }
+        return {M: _resolve_dynamo_map(value)};
+      }
+      default:
+        throw new Error(
+          `Unsupported attribute type '${typeof value}' for` +
+            ` attribute name '${key}'`
+        );
+    }
+  }
+}
+
+function _all_strings(arr: unknown[]):boolean{
+  return arr.every((item): item is string => typeof item === 'string')
+}
+
+function _all_numbers(arr: unknown[]):boolean{
+  return arr.every((item): item is number => typeof item === 'number')
+}
+
+function _resolve_dynamo_map(item: Record<string, any>) {
+  const dynamo_item: {[key: string]: AttributeValue} = {};
+  for (let [key, value] of Object.entries(item)) {
+    const dynamo_value = _resolve_dynamo_item_value(value, key);
+    if(!dynamo_value){
+      continue;
+    }
+    dynamo_item[key] = dynamo_value;
+  }
+  return dynamo_item;
 }
