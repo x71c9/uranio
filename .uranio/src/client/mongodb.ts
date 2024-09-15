@@ -6,7 +6,11 @@
  *
  */
 
-import mongodb, {MongoClient, ServerApiVersion} from 'mongodb';
+import mongodb, {
+  MongoClient,
+  MongoClientOptions,
+  ServerApiVersion,
+} from 'mongodb';
 import {log} from '../log/index';
 
 export type MongoDBClientParams = {
@@ -14,17 +18,18 @@ export type MongoDBClientParams = {
   db_name: string;
 };
 
-export class MongoDBClient{
+export class MongoDBClient {
   protected client: mongodb.MongoClient;
   protected db: mongodb.Db;
   constructor(params: MongoDBClientParams) {
-    this.client = new MongoClient(params.uri, {
+    const options = {
       serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
       },
-    });
+    } as MongoClientOptions;
+    this.client = new MongoClient(params.uri, options);
     this.db = this.client.db(params.db_name);
   }
   public async connect() {
