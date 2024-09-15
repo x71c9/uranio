@@ -25,10 +25,7 @@ import * as atom_types from '../types/atom';
 import * as dynamodb_types from '../types/dynamodb';
 
 export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
-  constructor(
-    public client: DynamoDBClient,
-    public name: string,
-  ) {}
+  constructor(public client: DynamoDBClient, public name: string) {}
 
   async get_atom_by_primary_index<I extends dynamodb_types.AttrType>({
     attribute_name,
@@ -114,7 +111,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     item: Record<string, any>;
   }) {
     const updateExpression = Object.keys(item)
-      .map((key) => `SET ${key} = :${key}`)
+      .map((key) => `${key} = :${key}`)
       .join(', ');
     const params: UpdateItemCommandInput = {
       TableName: this.name,
@@ -123,13 +120,13 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
           [attribute_type]: attribute_value,
         },
       },
-      UpdateExpression: updateExpression,
+      UpdateExpression: `SET ${updateExpression}`,
       ExpressionAttributeValues: Object.entries(item).reduce(
         (acc, [key, value]) => ({
           ...acc,
-          [`:${key}`]: {[_dynamo_attribute_type_for(key, value)]: value},
+          [`:${key}`]: _resolve_dynamo_item_value(value, key),
         }),
-        {},
+        {}
       ),
     } as unknown as UpdateItemCommandInput;
     // log.trace(`UPDATE BY PRIMARY INDEX PARAMS: `, params);
@@ -182,7 +179,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
   }
 
   async is_secondary_global_index_value_unique<
-    I extends dynamodb_types.AttrType,
+    I extends dynamodb_types.AttrType
   >({
     index_name,
     attribute_name,
@@ -240,7 +237,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
 }
 
 export class DynamoDBAtomWithIdClient<
-  T extends Record<string, any>,
+  T extends Record<string, any>
 > extends DynamoDBAtomClient<T> {
   public async get_atom_by_id(id: string) {
     return this.get_atom_by_primary_index({
@@ -274,11 +271,11 @@ export class DynamoDBAtomWithIdClient<
 }
 
 export class DynamoDBAtomWithCompositePrimaryKeyClient<
-  T extends Record<string, any>,
+  T extends Record<string, any>
 > extends DynamoDBAtomClient<T> {
   public async get_atom_by_composite_primary_key<
     P extends dynamodb_types.AttrType,
-    S extends dynamodb_types.AttrType,
+    S extends dynamodb_types.AttrType
   >({
     partition_key_name,
     partition_key_type,
@@ -318,7 +315,7 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
   }
   public async update_by_composite_primary_index<
     P extends dynamodb_types.AttrType,
-    S extends dynamodb_types.AttrType,
+    S extends dynamodb_types.AttrType
   >({
     partition_key_name,
     partition_key_type,
@@ -337,7 +334,7 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
     item: Record<string, any>;
   }) {
     const updateExpression = Object.keys(item)
-      .map((key) => `SET ${key} = :${key}`)
+      .map((key) => `${key} = :${key}`)
       .join(', ');
     const params: UpdateItemCommandInput = {
       TableName: this.name,
@@ -349,13 +346,13 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
           [sort_key_type]: sort_key_value,
         },
       },
-      UpdateExpression: updateExpression,
+      UpdateExpression: `SET ${updateExpression}`,
       ExpressionAttributeValues: Object.entries(item).reduce(
         (acc, [key, value]) => ({
           ...acc,
-          [`:${key}`]: {[_dynamo_attribute_type_for(key, value)]: value},
+          [`:${key}`]: _resolve_dynamo_item_value(value, key),
         }),
-        {},
+        {}
       ),
     } as unknown as UpdateItemCommandInput;
     // log.trace(`UPDATE BY COMPOSITE PRIMARY INDEX PARAMS: `, params);
@@ -366,7 +363,7 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
   }
   public async delete_by_composite_key<
     P extends dynamodb_types.AttrType,
-    S extends dynamodb_types.AttrType,
+    S extends dynamodb_types.AttrType
   >({
     partition_key_name,
     partition_key_type,
@@ -399,22 +396,38 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
 
 function _dynamo_attribute_type_for(
   name: string,
-  value: unknown,
+  value: unknown
 ): dynamodb_types.AttrType {
-  switch (typeof value) {
-    case 'string': {
-      return 'S';
+  if (Array.isArray(value)) {
+    if (_all_strings(value)) {
+      return 'SS';
     }
-    case 'number': {
-      return 'N';
+    if (_all_numbers(value)) {
+      return 'NS';
     }
-    case 'boolean': {
-      return 'B';
+    return 'L';
+  } else {
+    switch (typeof value) {
+      case 'string': {
+        return 'S';
+      }
+      case 'number': {
+        return 'N';
+      }
+      case 'boolean': {
+        return 'BOOL';
+      }
+      case 'object': {
+        if (value === null) {
+          return 'NULL';
+        }
+        return 'M';
+      }
     }
   }
   throw new Error(
     `Attribute type not supported. Attribute name '${name}'` +
-      ` , attribute type '${typeof value}'`,
+      ` , attribute type '${typeof value}'`
   );
 }
 
@@ -433,11 +446,11 @@ function _resolve_dynamo_item_value(
   key: string
 ): AttributeValue {
   if (Array.isArray(value)) {
-    if(_all_strings(value)){
-      return {SS: value}
+    if (_all_strings(value)) {
+      return {SS: value};
     }
-    if(_all_numbers(value)){
-      return {NS: value}
+    if (_all_numbers(value)) {
+      return {NS: value};
     }
     return {L: _resolve_dynamo_list(value, key)};
   } else {
@@ -453,7 +466,7 @@ function _resolve_dynamo_item_value(
       }
       case 'object': {
         if (value === null) {
-          return {NULL: true}
+          return {NULL: true};
         }
         return {M: _resolve_dynamo_map(value)};
       }
@@ -466,19 +479,19 @@ function _resolve_dynamo_item_value(
   }
 }
 
-function _all_strings(arr: unknown[]):boolean{
-  return arr.every((item): item is string => typeof item === 'string')
+function _all_strings(arr: unknown[]): boolean {
+  return arr.every((item): item is string => typeof item === 'string');
 }
 
-function _all_numbers(arr: unknown[]):boolean{
-  return arr.every((item): item is number => typeof item === 'number')
+function _all_numbers(arr: unknown[]): boolean {
+  return arr.every((item): item is number => typeof item === 'number');
 }
 
 function _resolve_dynamo_map(item: Record<string, any>) {
   const dynamo_item: {[key: string]: AttributeValue} = {};
   for (let [key, value] of Object.entries(item)) {
     const dynamo_value = _resolve_dynamo_item_value(value, key);
-    if(!dynamo_value){
+    if (!dynamo_value) {
       continue;
     }
     dynamo_item[key] = dynamo_value;
