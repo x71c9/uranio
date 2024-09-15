@@ -1888,10 +1888,10 @@ pidtree@0.6.0:
   resolved "https://registry.yarnpkg.com/pidtree/-/pidtree-0.6.0.tgz#90ad7b6d42d5841e69e0a2419ef38f8883aa057c"
   integrity sha512-eG2dWTVw5bzqGRztnHExczNxt5VGsE6OwTeCG3fdUf9KBsZzO3R5OIIIzWR+iZA0NtZ+RDVdaoE2dK1cn6jH4g==
 
-plutonio@^0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.6.3.tgz#d50b81b1422e3f48f96d1610208e845eae52f650"
-  integrity sha512-FHoM4ws7zVx++EB2Mb1jjemJm9ru7mGPUs9lUzAB7i14ojCCbAW8OG5PG9so3T/iHBsh7vNwCBGW+PsFG/GZpg==
+plutonio@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.6.4.tgz#796a5163a17c93fa653649c7a00824f2b49a4cbd"
+  integrity sha512-zCjlUt27sgX8VDo5ovtQMYkjkRWXh8wA2Pzb5Ze0Tz5VInerY/RZzReqs7P/rqqJscT6hUxozWdNLu1XEREWWg==
   dependencies:
     i0n "^0.8.1"
     typescript "^5.3.3"
