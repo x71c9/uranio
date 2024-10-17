@@ -16,7 +16,8 @@ function deep_clone(obj) {
     if (!obj || typeof obj !== 'object') {
         return obj;
     }
-    return JSON.parse(JSON.stringify(obj));
+    // return JSON.parse(JSON.stringify(obj));
+    return structuredClone(obj);
 }
 exports.deep_clone = deep_clone;
 //# sourceMappingURL=object.js.map
