@@ -53,7 +53,7 @@
     "lint-staged": "^13.2.1",
     "prettier": "2.8.7",
     "tsc-watch": "^6.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.564.0",
@@ -62,7 +62,7 @@
     "i0n": "^0.8.1",
     "inquirer": "^8.0.0",
     "mongodb": "^6.3.0",
-    "mysql2": "^3.9.7",
+    "mysql2": "^3.11.4",
     "plutonio": "^0.6.1",
     "r4y": "^0.6.0",
     "yaml": "^2.3.4"

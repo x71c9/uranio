@@ -41,7 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.init = void 0;
+exports.init = init;
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
 const inquirer_1 = __importDefault(require("inquirer"));
@@ -58,7 +58,6 @@ async function init(args) {
     index_1.log.spinner.stop();
     index_1.log.success(`Uranio successfully initialized`);
 }
-exports.init = init;
 async function _create_init_yaml(params) {
     index_1.log.spinner.text(`Creating uranio.yml...`);
     const yaml_params = utils.object.deep_clone(params);
