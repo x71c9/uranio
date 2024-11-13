@@ -42,7 +42,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generate = void 0;
+exports.generate = generate;
 const fs_1 = __importDefault(require("fs"));
 const r4y_1 = __importDefault(require("r4y"));
 const plutonio_1 = __importDefault(require("plutonio"));
@@ -62,7 +62,6 @@ async function generate(args) {
     index_1.log.spinner.stop();
     index_1.log.success(`Uranio successfully generated client`);
 }
-exports.generate = generate;
 function _resolve_generate_params(args) {
     const root_path = common.resolve_param_root(args);
     const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
