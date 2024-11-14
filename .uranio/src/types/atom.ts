@@ -20,6 +20,8 @@ export interface mongodb_atom extends atom {
   _id: ObjectId
 }
 
+export interface dynamodb_atom extends atom {}
+
 // export type unique<T> = T & {__uranio: 'unique'};
 
 // export type primary<T> = T & {__uranio: 'primary'};
