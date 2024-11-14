@@ -4,5 +4,5 @@
  *
  * @packageDocumentation
  */
-export type AttrType = 'S' | 'N' | 'B';
-export type AttrValue<T extends AttrType> = T extends 'S' ? string : T extends 'N' ? number : T extends 'B' ? boolean : never;
+export type AttrType = 'S' | 'N' | 'BOOL' | 'NULL' | 'M' | 'SS' | 'NS' | 'L';
+export type AttrValue<T extends AttrType> = T extends 'S' ? string : T extends 'N' ? number : T extends 'BOOL' ? boolean : T extends 'NULL' ? null : T extends 'M' ? object : T extends 'SS' ? string[] : T extends 'NS' ? number[] : T extends 'L' ? any[] : never;

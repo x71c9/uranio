@@ -15,7 +15,7 @@ export declare class MySQLClient {
     main_connection: mysql.Connection | undefined;
     protected uri: string;
     constructor(params: MySQLClientParams);
-    exe(sql: string, values?: any): Promise<(mysql.QueryResult | mysql.FieldPacket[])[]>;
+    exe(sql: string, values?: any): Promise<any[]>;
     connect(): Promise<void>;
     disconnect(): Promise<void>;
     private _execute_from_pool_connection;
