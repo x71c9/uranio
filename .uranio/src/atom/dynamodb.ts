@@ -394,42 +394,42 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
   }
 }
 
-function _dynamo_attribute_type_for(
-  name: string,
-  value: unknown
-): dynamodb_types.AttrType {
-  if (Array.isArray(value)) {
-    if (_all_strings(value)) {
-      return 'SS';
-    }
-    if (_all_numbers(value)) {
-      return 'NS';
-    }
-    return 'L';
-  } else {
-    switch (typeof value) {
-      case 'string': {
-        return 'S';
-      }
-      case 'number': {
-        return 'N';
-      }
-      case 'boolean': {
-        return 'BOOL';
-      }
-      case 'object': {
-        if (value === null) {
-          return 'NULL';
-        }
-        return 'M';
-      }
-    }
-  }
-  throw new Error(
-    `Attribute type not supported. Attribute name '${name}'` +
-      ` , attribute type '${typeof value}'`
-  );
-}
+// function _dynamo_attribute_type_for(
+//   name: string,
+//   value: unknown
+// ): dynamodb_types.AttrType {
+//   if (Array.isArray(value)) {
+//     if (_all_strings(value)) {
+//       return 'SS';
+//     }
+//     if (_all_numbers(value)) {
+//       return 'NS';
+//     }
+//     return 'L';
+//   } else {
+//     switch (typeof value) {
+//       case 'string': {
+//         return 'S';
+//       }
+//       case 'number': {
+//         return 'N';
+//       }
+//       case 'boolean': {
+//         return 'BOOL';
+//       }
+//       case 'object': {
+//         if (value === null) {
+//           return 'NULL';
+//         }
+//         return 'M';
+//       }
+//     }
+//   }
+//   throw new Error(
+//     `Attribute type not supported. Attribute name '${name}'` +
+//       ` , attribute type '${typeof value}'`
+//   );
+// }
 
 function _resolve_dynamo_list(value: unknown[], key: string) {
   const final_list: AttributeValue[] = [];

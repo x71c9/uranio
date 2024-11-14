@@ -34,6 +34,8 @@ class MySQLClient {
         if (!this.main_connection) {
             await this.connect();
         }
+        // NOTE: For some reason they removed the execute method from the typescript
+        // declaration file. The execute method is still in the javascript
         const [rows, fields] = await this.main_connection.execute(sql, values);
         return [rows, fields];
     }
