@@ -53,23 +53,7 @@ class DynamoDBAtomClient {
         return unmarshalled;
     }
     async put_atom(shape) {
-        const dynamo_item = {};
-        for (const [key, value] of Object.entries(shape)) {
-            switch (typeof value) {
-                case 'string':
-                    dynamo_item[key] = { S: value };
-                    break;
-                case 'number':
-                    dynamo_item[key] = { N: value.toString() };
-                    break;
-                case 'boolean':
-                    dynamo_item[key] = { BOOL: value };
-                    break;
-                default:
-                    throw new Error(`Unsupported attribute type '${typeof value}' for` +
-                        ` attribute name '${key}'`);
-            }
-        }
+        const dynamo_item = _resolve_dynamo_map(shape);
         const params = {
             TableName: this.name,
             Item: dynamo_item,
@@ -82,7 +66,7 @@ class DynamoDBAtomClient {
     }
     async update_atom_by_primary_index({ attribute_name, attribute_type, attribute_value, item, }) {
         const updateExpression = Object.keys(item)
-            .map((key) => `SET ${key} = :${key}`)
+            .map((key) => `${key} = :${key}`)
             .join(', ');
         const params = {
             TableName: this.name,
@@ -91,10 +75,10 @@ class DynamoDBAtomClient {
                     [attribute_type]: attribute_value,
                 },
             },
-            UpdateExpression: updateExpression,
+            UpdateExpression: `SET ${updateExpression}`,
             ExpressionAttributeValues: Object.entries(item).reduce((acc, [key, value]) => ({
                 ...acc,
-                [`:${key}`]: { [_dynamo_attribute_type_for(key, value)]: value },
+                [`:${key}`]: _resolve_dynamo_item_value(value, key),
             }), {}),
         };
         // log.trace(`UPDATE BY PRIMARY INDEX PARAMS: `, params);
@@ -222,7 +206,7 @@ class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
     }
     async update_by_composite_primary_index({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, item, }) {
         const updateExpression = Object.keys(item)
-            .map((key) => `SET ${key} = :${key}`)
+            .map((key) => `${key} = :${key}`)
             .join(', ');
         const params = {
             TableName: this.name,
@@ -234,10 +218,10 @@ class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
                     [sort_key_type]: sort_key_value,
                 },
             },
-            UpdateExpression: updateExpression,
+            UpdateExpression: `SET ${updateExpression}`,
             ExpressionAttributeValues: Object.entries(item).reduce((acc, [key, value]) => ({
                 ...acc,
-                [`:${key}`]: { [_dynamo_attribute_type_for(key, value)]: value },
+                [`:${key}`]: _resolve_dynamo_item_value(value, key),
             }), {}),
         };
         // log.trace(`UPDATE BY COMPOSITE PRIMARY INDEX PARAMS: `, params);
@@ -262,19 +246,99 @@ class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
     }
 }
 exports.DynamoDBAtomWithCompositePrimaryKeyClient = DynamoDBAtomWithCompositePrimaryKeyClient;
-function _dynamo_attribute_type_for(name, value) {
-    switch (typeof value) {
-        case 'string': {
-            return 'S';
+// function _dynamo_attribute_type_for(
+//   name: string,
+//   value: unknown
+// ): dynamodb_types.AttrType {
+//   if (Array.isArray(value)) {
+//     if (_all_strings(value)) {
+//       return 'SS';
+//     }
+//     if (_all_numbers(value)) {
+//       return 'NS';
+//     }
+//     return 'L';
+//   } else {
+//     switch (typeof value) {
+//       case 'string': {
+//         return 'S';
+//       }
+//       case 'number': {
+//         return 'N';
+//       }
+//       case 'boolean': {
+//         return 'BOOL';
+//       }
+//       case 'object': {
+//         if (value === null) {
+//           return 'NULL';
+//         }
+//         return 'M';
+//       }
+//     }
+//   }
+//   throw new Error(
+//     `Attribute type not supported. Attribute name '${name}'` +
+//       ` , attribute type '${typeof value}'`
+//   );
+// }
+function _resolve_dynamo_list(value, key) {
+    const final_list = [];
+    for (let i = 0; i < value.length; i++) {
+        const list_item = value[i];
+        const dynamo_value = _resolve_dynamo_item_value(list_item, key);
+        final_list.push(dynamo_value);
+    }
+    return final_list;
+}
+function _resolve_dynamo_item_value(value, key) {
+    if (Array.isArray(value)) {
+        if (_all_strings(value)) {
+            return { SS: value };
         }
-        case 'number': {
-            return 'N';
+        if (_all_numbers(value)) {
+            return { NS: value };
         }
-        case 'boolean': {
-            return 'B';
+        return { L: _resolve_dynamo_list(value, key) };
+    }
+    else {
+        switch (typeof value) {
+            case 'string': {
+                return { S: value };
+            }
+            case 'number': {
+                return { N: value.toString() };
+            }
+            case 'boolean': {
+                return { BOOL: value };
+            }
+            case 'object': {
+                if (value === null) {
+                    return { NULL: true };
+                }
+                return { M: _resolve_dynamo_map(value) };
+            }
+            default:
+                throw new Error(`Unsupported attribute type '${typeof value}' for` +
+                    ` attribute name '${key}'`);
         }
     }
-    throw new Error(`Attribute type not supported. Attribute name '${name}'` +
-        ` , attribute type '${typeof value}'`);
+}
+function _all_strings(arr) {
+    return arr.every((item) => typeof item === 'string');
+}
+function _all_numbers(arr) {
+    return arr.every((item) => typeof item === 'number');
+}
+function _resolve_dynamo_map(item) {
+    const dynamo_item = {};
+    for (let [key, value] of Object.entries(item)) {
+        const dynamo_value = _resolve_dynamo_item_value(value, key);
+        if (!dynamo_value) {
+            continue;
+        }
+        dynamo_item[key] = dynamo_value;
+    }
+    return dynamo_item;
 }
 //# sourceMappingURL=dynamodb.js.map
