@@ -29,7 +29,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolve_args = void 0;
+exports.resolve_args = resolve_args;
 const exception = __importStar(require("../exception/index"));
 const utils = __importStar(require("../utils/index"));
 const t = __importStar(require("../types"));
@@ -56,7 +56,6 @@ function resolve_args(args) {
         flags,
     };
 }
-exports.resolve_args = resolve_args;
 function _assert_command(command) {
     if (!command) {
         return;

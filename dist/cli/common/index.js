@@ -32,7 +32,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._assert_yaml_params = exports.assert_naming_convention = exports.assert_database = exports.resolve_param_root = exports.set_verbosity = exports.read_yaml_params = void 0;
+exports.read_yaml_params = read_yaml_params;
+exports.set_verbosity = set_verbosity;
+exports.resolve_param_root = resolve_param_root;
+exports.assert_database = assert_database;
+exports.assert_naming_convention = assert_naming_convention;
+exports._assert_yaml_params = _assert_yaml_params;
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
 const app_root_path_1 = __importDefault(require("app-root-path"));
@@ -51,13 +56,11 @@ function read_yaml_params(root_path) {
     _assert_yaml_params(yaml_params);
     return yaml_params;
 }
-exports.read_yaml_params = read_yaml_params;
 function set_verbosity(args) {
     var _a;
     const debug = ((_a = args.flags) === null || _a === void 0 ? void 0 : _a.verbose) === true;
     r4y_1.default.config.set({ debug, spinner: index_1.log.spinner });
 }
-exports.set_verbosity = set_verbosity;
 function resolve_param_root(args) {
     var _a;
     if (args.flags && utils.valid.string((_a = args.flags) === null || _a === void 0 ? void 0 : _a['root'])) {
@@ -66,21 +69,18 @@ function resolve_param_root(args) {
     const root_path = app_root_path_1.default.toString();
     return root_path;
 }
-exports.resolve_param_root = resolve_param_root;
 function assert_database(db) {
     if (!Object.values(t.DATABASE).includes(db)) {
         throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
             ` [${Object.values(t.DATABASE)}]. Evaluating '${db}'`);
     }
 }
-exports.assert_database = assert_database;
 function assert_naming_convention(naming_convention) {
     if (!Object.values(t.NAMING_CONVENTION).includes(naming_convention)) {
         throw new exception.UranioCLIException(`Invalid database flag value. Possible value are` +
             ` [${Object.values(t.NAMING_CONVENTION)}]. Evaluating '${naming_convention}'`);
     }
 }
-exports.assert_naming_convention = assert_naming_convention;
 const yaml_params_keys = [
     'database',
     'naming_convention',
@@ -104,5 +104,4 @@ function _assert_yaml_params(params) {
         }
     }
 }
-exports._assert_yaml_params = _assert_yaml_params;
 //# sourceMappingURL=index.js.map

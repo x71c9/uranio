@@ -32,7 +32,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.version = void 0;
+exports.version = version;
 const fs_1 = __importDefault(require("fs"));
 const index_1 = require("../log/index");
 const exception = __importStar(require("../exception/index"));
@@ -47,5 +47,4 @@ async function version(args) {
     const parsed_json = JSON.parse(data);
     index_1.log.info(`Uranio version: ${parsed_json.version}`);
 }
-exports.version = version;
 //# sourceMappingURL=index.js.map
