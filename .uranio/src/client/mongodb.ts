@@ -30,7 +30,7 @@ export class MongoDBClient {
       },
     } as MongoClientOptions;
     this.client = new MongoClient(params.uri, options);
-    this.db = this.client.db(params.db_name);
+    this.db = this.client.db(params.db_name, {ignoreUndefined: true});
   }
   public async connect() {
     log.trace('Connecting...');

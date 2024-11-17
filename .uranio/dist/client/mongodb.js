@@ -12,14 +12,15 @@ const mongodb_1 = require("mongodb");
 const index_1 = require("../log/index");
 class MongoDBClient {
     constructor(params) {
-        this.client = new mongodb_1.MongoClient(params.uri, {
+        const options = {
             serverApi: {
                 version: mongodb_1.ServerApiVersion.v1,
                 strict: true,
                 deprecationErrors: true,
             },
-        });
-        this.db = this.client.db(params.db_name);
+        };
+        this.client = new mongodb_1.MongoClient(params.uri, options);
+        this.db = this.client.db(params.db_name, { ignoreUndefined: true });
     }
     async connect() {
         index_1.log.trace('Connecting...');
