@@ -1,6 +1,6 @@
 {
   "name": "uranio",
-  "version": "0.1.60",
+  "version": "0.1.61",
   "description": "Uranio is a type-safe ODM for MongoDB",
   "main": "dist/index.js",
   "repository": {
