@@ -21,8 +21,8 @@ export declare class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
         order?: sql_types.OrderBy;
         limit?: number;
     }): Promise<S[]>;
-    put_atom(atom: Partial<S>): Promise<mongodb.InsertOneResult>;
-    put_atoms(atoms: Partial<S>[]): Promise<mongodb.InsertManyResult>;
+    put_atom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult>;
+    put_atoms(atoms: Omit<S, '_id'>[]): Promise<mongodb.InsertManyResult>;
     update_atom({ where, atom, }: {
         where?: where_types.Where<S>;
         atom: Partial<S>;
