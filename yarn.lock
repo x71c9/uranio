@@ -2883,10 +2883,10 @@ pidtree@0.6.0:
   resolved "https://registry.yarnpkg.com/pidtree/-/pidtree-0.6.0.tgz#90ad7b6d42d5841e69e0a2419ef38f8883aa057c"
   integrity sha512-eG2dWTVw5bzqGRztnHExczNxt5VGsE6OwTeCG3fdUf9KBsZzO3R5OIIIzWR+iZA0NtZ+RDVdaoE2dK1cn6jH4g==
 
-plutonio@^0.6.5:
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.6.5.tgz#fa9f721dcf3aa755296994e9f864b08c31e8cce1"
-  integrity sha512-fHMHjGf3ejgf8tn/mvZMdLmNzypn3P/s4yotDouKDsM0Bqo83VJWXCQlgzPZV23/d6vr1Ua5AP3lztSJk+PZEQ==
+plutonio@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/plutonio/-/plutonio-0.7.0.tgz#9557ffcb8ab33a2a8aeb1383ae161c07b5e804e1"
+  integrity sha512-X8JXP+Avik9wpotsufmAHWGQDTXKSCJHXYJvdWYQBvayMJ1ixE0MfiiEX2ev52uVHgegx4Z8OLt2ESgQYDiHJg==
   dependencies:
     i0n "^0.8.1"
     typescript "^5.3.3"
@@ -3392,9 +3392,9 @@ typed-array-length@^1.0.6:
     possible-typed-array-names "^1.0.0"
 
 typescript@^5.3.3:
-  version "5.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.2.tgz#3169cf8c4c8a828cde53ba9ecb3d2b1d5dd67be6"
-  integrity sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.3.tgz#919b44a7dbb8583a9b856d162be24a54bf80073e"
+  integrity sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==
 
 typescript@^5.6.3:
   version "5.6.3"

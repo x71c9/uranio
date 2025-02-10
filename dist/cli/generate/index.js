@@ -333,6 +333,9 @@ function _generate_mysql_client(interfaces, naming_convention) {
     text += `}\n`;
     return text;
 }
+function _resolve_optional(prop) {
+    return (prop.optional === true) ? '?' : '';
+}
 function _resolve_primitve(prop) {
     switch (prop.primitive) {
         case plutonio_1.default.PRIMITIVE.UNRESOLVED: {
@@ -398,7 +401,7 @@ function _generate_mongodb_interface_definitions(interfaces) {
             continue;
         }
         for (const [prop_name, prop] of Object.entries(inter.properties)) {
-            text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
+            text += `  ${prop_name}${_resolve_optional(prop)}: ${_resolve_primitve(prop)};\n`;
         }
         text += `}\n`;
         text += `\n`;
@@ -415,7 +418,7 @@ function _generate_mysql_interface_definitions(interfaces) {
             continue;
         }
         for (const [prop_name, prop] of Object.entries(inter.properties)) {
-            text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
+            text += `  ${prop_name}${_resolve_optional(prop)}: ${_resolve_primitve(prop)};\n`;
         }
         text += `}\n`;
         text += `\n`;

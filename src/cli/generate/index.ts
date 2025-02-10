@@ -376,6 +376,10 @@ function _generate_mysql_client(
   return text;
 }
 
+function _resolve_optional(prop: plutonio.TypeAttributes): string {
+  return (prop.optional === true) ? '?' : '';
+}
+
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
   switch (prop.primitive) {
     case plutonio.PRIMITIVE.UNRESOLVED: {
@@ -447,7 +451,7 @@ function _generate_mongodb_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
-      text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
+      text += `  ${prop_name}${_resolve_optional(prop)}: ${_resolve_primitve(prop)};\n`;
     }
     text += `}\n`;
     text += `\n`;
@@ -467,7 +471,7 @@ function _generate_mysql_interface_definitions(
       continue;
     }
     for (const [prop_name, prop] of Object.entries(inter.properties)) {
-      text += `  ${prop_name}: ${_resolve_primitve(prop)};\n`;
+      text += `  ${prop_name}${_resolve_optional(prop)}: ${_resolve_primitve(prop)};\n`;
     }
     text += `}\n`;
     text += `\n`;
