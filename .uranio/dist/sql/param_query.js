@@ -30,7 +30,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compose_insert = exports.compose_delete = exports.compose_update = exports.compose_select = void 0;
+exports.compose_select = compose_select;
+exports.compose_update = compose_update;
+exports.compose_delete = compose_delete;
+exports.compose_insert = compose_insert;
 // import crypto from 'crypto';
 const full = __importStar(require("./full_query"));
 const sql_types = __importStar(require("../types/sql"));
@@ -48,7 +51,6 @@ function compose_select({ projection = ['*'], table, where, order, limit, }) {
     const map = _transform_map_to_object(value_map);
     return { query: param_query, map };
 }
-exports.compose_select = compose_select;
 function compose_update({ table, update, where, }) {
     const full_query = full.compose_update({
         table,
@@ -64,7 +66,6 @@ function compose_update({ table, update, where, }) {
     const map = _transform_map_to_object(query_value_map);
     return { query: param_query, map };
 }
-exports.compose_update = compose_update;
 function compose_delete({ table, where, }) {
     const full_query = full.compose_delete({
         table,
@@ -75,7 +76,6 @@ function compose_delete({ table, where, }) {
     const map = _transform_map_to_object(query_value_map);
     return { query: param_query, map };
 }
-exports.compose_delete = compose_delete;
 function compose_insert({ table, columns, records, }) {
     const full_query = full.compose_insert({
         table,
@@ -87,7 +87,6 @@ function compose_insert({ table, columns, records, }) {
     const param_query = `${pre_query} VALUES ?`;
     return { query: param_query, query_records: records };
 }
-exports.compose_insert = compose_insert;
 let id_count = 0;
 function _generate_unique_consecutive_id() {
     const id = `x${String(id_count).padStart(4, '0')}`;

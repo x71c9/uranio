@@ -57,9 +57,9 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return items;
   }
 
-  public async put_atom(atom: Partial<S>): Promise<mongodb.InsertOneResult> {
+  public async put_atom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult> {
     // shape = _remove_id(shape as Partial<S>);
-    atom = _replace_string_id_to_object_id(atom);
+    atom = _replace_string_id_to_object_id(atom) as Omit<S, '_id'>;
     const respone_insert = await this.collection.insertOne(
       atom as mongodb.OptionalUnlessRequiredId<S>
     );
@@ -67,7 +67,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
   }
 
   public async put_atoms(
-    atoms: Partial<S>[]
+    atoms: Omit<S, '_id'>[]
   ): Promise<mongodb.InsertManyResult> {
     const atoms_no_ids: mongodb.OptionalUnlessRequiredId<S>[] = [];
     for (const atom of atoms) {
@@ -181,7 +181,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
 // }
 
 function _replace_string_id_to_object_id<A extends atom_types.mongodb_atom>(
-  atom: Partial<A>
+  atom: any
 ): Partial<A> {
   if (atom._id && typeof atom._id === 'string') {
     atom._id = new ObjectId(atom._id) as any;

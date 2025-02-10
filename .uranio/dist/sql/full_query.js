@@ -30,7 +30,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compose_insert = exports.compose_delete = exports.compose_update = exports.compose_select = void 0;
+exports.compose_select = compose_select;
+exports.compose_update = compose_update;
+exports.compose_delete = compose_delete;
+exports.compose_insert = compose_insert;
 const sql_types = __importStar(require("../types/sql"));
 function compose_select({ projection = ['*'], table, where, order, limit, }) {
     let query_string = 'SELECT';
@@ -43,7 +46,6 @@ function compose_select({ projection = ['*'], table, where, order, limit, }) {
     query_string += _resolve_limit(limit);
     return query_string;
 }
-exports.compose_select = compose_select;
 function compose_update({ table, update, where, }) {
     let query_string = 'UPDATE';
     query_string += ` \`${table}\``;
@@ -52,14 +54,12 @@ function compose_update({ table, update, where, }) {
     query_string += ` WHERE ` + _resolve_where(where);
     return query_string;
 }
-exports.compose_update = compose_update;
 function compose_delete({ table, where, }) {
     let query_string = 'DELETE';
     query_string += ` FROM \`${table}\``;
     query_string += ` WHERE ` + _resolve_where(where);
     return query_string;
 }
-exports.compose_delete = compose_delete;
 function compose_insert({ table, columns, records, }) {
     let query_string = 'INSERT INTO';
     query_string += ` \`${table}\``;
@@ -67,7 +67,6 @@ function compose_insert({ table, columns, records, }) {
     query_string += _resolve_records(columns, records);
     return query_string;
 }
-exports.compose_insert = compose_insert;
 function _resolve_where(where) {
     if (!where ||
         typeof where !== 'object' ||
