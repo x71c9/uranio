@@ -4,7 +4,7 @@
 
 Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB and
 Object Relational Mapping (ORM) for MySQL.\
-It creates a client for querying collections/tabls in a database by just parsing
+It creates a client for querying collections/tables in a database by just parsing
 the types in a repository.
 
 It is the simplest and fastest way to query a database without the need to build
@@ -13,7 +13,7 @@ a Data Access Layer (DAL) from the defined types.
 ## Install
 
 ```
-yarn add uranio
+npm install uranio
 ```
 
 ## How it works
