@@ -11,3 +11,4 @@ reports/
 coverage/
 /**/node_modules
 .uranio/yarn*
+.direnv
