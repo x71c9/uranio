@@ -64,7 +64,9 @@ export class MySQLClient {
     log.trace(`Retrieving pool connection...`);
     const pool_connection = await this.pool.getConnection();
     log.trace(`[${pool_connection.threadId}] Retrieved pool connection`);
-    const [rows, fields] = await pool_connection.execute(sql, values);
+    // NOTE: For some reason they removed the execute method from the typescript
+    // declaration file. The execute method is still in the javascript
+    const [rows, fields] = await (pool_connection as any).execute(sql, values);
     log.trace(`Releasing pool connection...`);
     pool_connection.release();
     log.trace(`[${pool_connection.threadId}] Released pool connection`);
