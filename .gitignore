@@ -1,5 +1,4 @@
 node_modules/
-.DS_Store
 Thumbs.db
 *.swp
 *.swo
@@ -11,3 +10,6 @@ reports/
 coverage/
 /**/node_modules
 .uranio/yarn*
+.DS_Store
+.direnv
+adiacenti
