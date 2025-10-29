@@ -27,9 +27,9 @@ export class MongoDBClient {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
-        maxPoolSize: 10,
-        minPoolSize: 0,
       },
+      maxPoolSize: 10,
+      minPoolSize: 0,
     } as MongoClientOptions;
     this.client = new MongoClient(params.uri, options);
     this.db = this.client.db(params.db_name, {ignoreUndefined: true});
