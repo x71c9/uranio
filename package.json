@@ -14,28 +14,28 @@
   },
   "lint-staged": {
     "src/**/*.{js,ts,json}": [
-      "yarn prettier --write"
+      "npx prettier --write"
     ]
   },
   "scripts": {
-    ".uranio:build": "yarn tsc --project ./.uranio",
+    ".uranio:build": "npx tsc --project ./.uranio",
     ".uranio:copy": "bash ./scripts/copy_dot_uranio.sh",
-    ".uranio:dev:.uranio": "yarn .uranio:build && yarn .uranio:copy",
-    "build": "yarn tsc -b",
-    "dev": "yarn tsc -w",
+    ".uranio:dev:.uranio": "npx .uranio:build && npx .uranio:copy",
+    "build": "npx tsc -b",
+    "dev": "npx tsc -w",
     "dev:base": "node ./dist/index.js",
-    "dev:bin:generate": "node ./dist/bin.js generate --root ~/repos/uranio/builder",
+    "dev:bin:generate": "node ./dist/bin.js generate --root ~/depositi/uranio/adiacenti/uranio-builder",
     "dev:bin:init": "node ./dist/bin.js init",
-    "dev:bin:verbose": "node ./dist/bin.js generate -v -d mysql --root ~/repos/avk-47/core",
-    "dev:bin:version": "node ./dist/bin.js --root ~/repos/uranio/builder",
-    "dev:run:generate": "yarn tsc-watch --onSuccess \"yarn dev:bin:generate\"",
-    "dev:run:init": "yarn tsc-watch --onSuccess \"yarn dev:bin:init\"",
-    "dev:run:verbose": "yarn tsc-watch --onSuccess \"yarn dev:bin:verbose\"",
-    "dev:run:version": "yarn tsc-watch --onSuccess \"yarn dev:bin:version\"",
+    "dev:bin:verbose": "node ./dist/bin.js generate -v -d mysql --root ~/depositi/uranio/adiacenti/core",
+    "dev:bin:version": "node ./dist/bin.js --root ~/depositi/uranio/adiacenti/uranio-builder",
+    "dev:run:generate": "npx tsc-watch --onSuccess \"npx dev:bin:generate\"",
+    "dev:run:init": "npx tsc-watch --onSuccess \"npx dev:bin:init\"",
+    "dev:run:verbose": "npx tsc-watch --onSuccess \"npx dev:bin:verbose\"",
+    "dev:run:version": "npx tsc-watch --onSuccess \"npx dev:bin:version\"",
     "push:patch": "bash ./scripts/version.sh patch",
     "push:minor": "bash ./scripts/version.sh minor",
     "push:major": "bash ./scripts/version.sh major",
-    "upgrade:plutonio": "yarn remove plutonio && yarn add plutonio"
+    "upgrade:plutonio": "npx remove plutonio && npx add plutonio"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
