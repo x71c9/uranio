@@ -22,13 +22,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.compose_select = compose_select;
 exports.compose_update = compose_update;
@@ -82,10 +92,10 @@ function compose_insert({ table, columns, records, }) {
         columns,
         records
     });
-    const splitted_query = full_query.split(' VALUES ');
-    const pre_query = splitted_query[0];
-    const param_query = `${pre_query} VALUES ?`;
-    return { query: param_query, query_records: records };
+    const value_map = _generate_value_map_from_records(columns, records);
+    const param_query = _replace_value_with_param(full_query, value_map);
+    const map = _transform_map_to_object(value_map);
+    return { query: param_query, query_records: map };
 }
 let id_count = 0;
 function _generate_unique_consecutive_id() {
@@ -105,6 +115,17 @@ function _generate_value_map_from_update(update) {
     for (const [_key, value] of Object.entries(update)) {
         const id = _generate_unique_consecutive_id();
         value_map.set(id, value);
+    }
+    return value_map;
+}
+function _generate_value_map_from_records(columns, records) {
+    const value_map = new Map();
+    for (const record of records) {
+        for (const column of columns) {
+            const value = record[column];
+            const id = _generate_unique_consecutive_id();
+            value_map.set(id, value);
+        }
     }
     return value_map;
 }

@@ -27,7 +27,7 @@ class MySQLClient {
         const with_values = typeof values !== 'undefined'
             ? ` with values [${Object.entries(values)}]`
             : '';
-        index_1.log.trace(`Excuting query '${sql}'${with_values}...`);
+        index_1.log.trace(`Excuting query '${sql}'${with_values}`);
         if (this.pool) {
             return await this._execute_from_pool_connection(sql, values);
         }
@@ -60,6 +60,8 @@ class MySQLClient {
         index_1.log.trace(`Retrieving pool connection...`);
         const pool_connection = await this.pool.getConnection();
         index_1.log.trace(`[${pool_connection.threadId}] Retrieved pool connection`);
+        // NOTE: For some reason they removed the execute method from the typescript
+        // declaration file. The execute method is still in the javascript
         const [rows, fields] = await pool_connection.execute(sql, values);
         index_1.log.trace(`Releasing pool connection...`);
         pool_connection.release();

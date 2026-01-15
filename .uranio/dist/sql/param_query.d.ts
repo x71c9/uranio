@@ -39,5 +39,5 @@ export declare function compose_insert<S extends atom_types.atom>({ table, colum
     records: Partial<S>[];
 }): {
     query: string;
-    query_records: Partial<S>[];
+    query_records: Record<string, any>;
 };

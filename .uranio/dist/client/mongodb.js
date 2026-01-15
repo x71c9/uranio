@@ -18,14 +18,26 @@ class MongoDBClient {
                 strict: true,
                 deprecationErrors: true,
             },
+            maxPoolSize: 10,
+            minPoolSize: 0,
         };
         this.client = new mongodb_1.MongoClient(params.uri, options);
         this.db = this.client.db(params.db_name, { ignoreUndefined: true });
     }
     async connect() {
-        index_1.log.trace('Connecting...');
-        await this.client.connect();
-        index_1.log.trace('Connected.');
+        try {
+            // Check if the client is already connected by pinging the database
+            await this.client.db().command({ ping: 1 });
+            index_1.log.trace('MongoDB is already connected.');
+        }
+        catch (error) {
+            index_1.log.trace('Connecting to MongoDB...');
+            await this.client.connect();
+            index_1.log.trace('MongoDB connected.');
+        }
+        // log.trace('Connecting...');
+        // await this.client.connect();
+        // log.trace('Connected.');
     }
     async disconnect() {
         index_1.log.trace('Disconnecting...');

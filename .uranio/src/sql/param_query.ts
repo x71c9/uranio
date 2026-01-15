@@ -96,10 +96,10 @@ export function compose_insert<S extends atom_types.atom>({
     columns,
     records
   });
-  const splitted_query = full_query.split(' VALUES ');
-  const pre_query = splitted_query[0];
-  const param_query = `${pre_query} VALUES ?`;
-  return {query: param_query, query_records: records};
+  const value_map = _generate_value_map_from_records(columns, records);
+  const param_query = _replace_value_with_param(full_query, value_map);
+  const map = _transform_map_to_object(value_map);
+  return {query: param_query, query_records: map};
 }
 
 let id_count = 0;
@@ -124,6 +124,21 @@ function _generate_value_map_from_update<S extends atom_types.atom>(
   for (const [_key, value] of Object.entries(update)) {
     const id = _generate_unique_consecutive_id();
     value_map.set(id, value);
+  }
+  return value_map;
+}
+
+function _generate_value_map_from_records<S extends atom_types.atom>(
+  columns: (keyof S)[],
+  records: Partial<S>[]
+): Map<string, any> {
+  const value_map = new Map<string, any>();
+  for (const record of records) {
+    for (const column of columns) {
+      const value = record[column];
+      const id = _generate_unique_consecutive_id();
+      value_map.set(id, value);
+    }
   }
   return value_map;
 }
