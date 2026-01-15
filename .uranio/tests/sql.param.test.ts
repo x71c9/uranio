@@ -102,7 +102,7 @@ describe('Testing SQL param query INSERT', () => {
       records
     });
     let final_query = '';
-    final_query += 'INSERT INTO `uranio-table` (`boo`, `foo`) VALUES ?';
+    final_query += 'INSERT INTO `uranio-table` (`boo`, `foo`) VALUES (:x0029, :x0030), (:x0031, :x0032)';
     assert.strictEqual(query, final_query);
   });
 });
