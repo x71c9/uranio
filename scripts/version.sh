@@ -7,6 +7,28 @@ if [[ `git status --porcelain` ]]; then
   exit 1
 fi;
 
+# Check if logged in to npm
+echo "Checking npm login status..."
+if ! npm whoami --loglevel=error > /dev/null 2>&1; then
+  echo
+  echo "You are not logged in to npm."
+  echo "Please log in to continue."
+  echo
+  npm login
+  if ! npm whoami --loglevel=error > /dev/null 2>&1; then
+    echo
+    echo "Error: npm login failed. Aborting."
+    echo
+    exit 1
+  fi
+  echo
+  echo "Successfully logged in to npm as: $(npm whoami)"
+  echo
+else
+  echo "Already logged in to npm as: $(npm whoami --loglevel=error)"
+  echo
+fi
+
 SEMANTIC_NAME=""
 FORCE_FLAG=""
 
