@@ -224,6 +224,11 @@ function _replace_value_with_param(
     }
     if(v instanceof RegExp){
       final_query = final_query.replaceAll(` ${v.source}`, ` :${k}`);
+      continue;
+    }
+    if(v instanceof Date){
+      final_query = final_query.replaceAll(` ${v.toString()}`, ` :${k}`);
+      continue;
     }
     switch (typeof v) {
       case 'string': {
