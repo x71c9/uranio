@@ -16,10 +16,12 @@ const index_1 = require("../log/index");
 class MySQLClient {
     constructor(params) {
         this.uri = params.uri;
+        this.timezone = params.timezone || '+00:00';
         if (params.use_pool === true) {
             this.pool = promise_1.default.createPool({
                 uri: params.uri,
                 namedPlaceholders: true,
+                timezone: this.timezone,
             });
         }
     }
@@ -44,6 +46,7 @@ class MySQLClient {
         this.main_connection = await promise_1.default.createConnection({
             uri: this.uri,
             namedPlaceholders: true,
+            timezone: this.timezone,
         });
         index_1.log.debug(`Connected to MySQL database`);
     }

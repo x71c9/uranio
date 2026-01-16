@@ -12,18 +12,22 @@ import {log} from '../log/index';
 export type MySQLClientParams = {
   uri: string;
   use_pool?: boolean;
+  timezone?: string;
 };
 
 export class MySQLClient {
   public pool?: mysql.Pool;
   public main_connection: mysql.Connection | undefined;
   protected uri: string;
+  protected timezone: string;
   constructor(params: MySQLClientParams) {
     this.uri = params.uri;
+    this.timezone = params.timezone || '+00:00';
     if (params.use_pool === true) {
       this.pool = mysql.createPool({
         uri: params.uri,
         namedPlaceholders: true,
+        timezone: this.timezone,
       });
     }
   }
@@ -49,6 +53,7 @@ export class MySQLClient {
     this.main_connection = await mysql.createConnection({
       uri: this.uri,
       namedPlaceholders: true,
+      timezone: this.timezone,
     });
     log.debug(`Connected to MySQL database`);
   }
