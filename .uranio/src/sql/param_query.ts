@@ -227,7 +227,8 @@ function _replace_value_with_param(
       continue;
     }
     if(v instanceof Date){
-      final_query = final_query.replaceAll(` ${v.toString()}`, ` :${k}`);
+      const placeholder = `__DATE_PLACEHOLDER_${v.getTime()}__`;
+      final_query = final_query.replaceAll(` ${placeholder}`, ` :${k}`);
       continue;
     }
     switch (typeof v) {
