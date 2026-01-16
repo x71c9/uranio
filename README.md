@@ -85,6 +85,47 @@ interface Product extends uranio.atom {
 // }
 ```
 
+## Configuration
+
+### MySQL Client Options
+
+When creating a MySQL client, you can configure additional options:
+
+```typescript
+import uranio from 'uranio';
+
+const uri = process.env.MYSQL_DATABASE_URI || '';
+
+// Default: UTC timezone, no connection pool
+const urn = uranio.MySQLClient({ uri });
+
+// With connection pool
+const urn = uranio.MySQLClient({
+  uri,
+  use_pool: true
+});
+
+// Custom timezone (default is UTC '+00:00')
+const urn = uranio.MySQLClient({
+  uri,
+  use_pool: true,
+  timezone: '+04:00'  // Dubai timezone (GST)
+});
+
+// Use local server timezone
+const urn = uranio.MySQLClient({
+  uri,
+  timezone: 'local'
+});
+```
+
+**Timezone Parameter:**
+- **Default**: `'+00:00'` (UTC) - All dates are stored in UTC
+- **Custom**: Any valid timezone offset like `'+04:00'` (Dubai), `'+09:00'` (Tokyo)
+- **Local**: `'local'` - Uses the database server's timezone
+
+The timezone setting affects how JavaScript `Date` objects are converted when storing to and retrieving from the database. Using UTC (default) is recommended for consistency across different timezones.
+
 ### Credits
 
 Logo credits [https://www.jacopotripodi.com/](https://www.jacopotripodi.com/)
