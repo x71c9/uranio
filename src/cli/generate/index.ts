@@ -93,6 +93,7 @@ async function _copy_dot_uranio(params: t.GenerateParams) {
   log.spinner.stop();
   await ray.spawn(`rm -rf ${destination_path}`);
   await ray.spawn(`cp -rf ${dot_path} ${destination_path}`);
+  await _remove_unused_database_files(params);
   log.spinner.start();
   log.debug(`Copied dot uranio directory`);
 }
@@ -150,6 +151,91 @@ async function _update_dot_uranio(params: t.GenerateParams) {
   log.debug(`Generated types`);
 
   log.debug(`Updated dot uranio files`);
+}
+
+async function _remove_unused_database_files(params: t.GenerateParams) {
+  const destination_path = `${params.root}/node_modules/.uranio`;
+  const client_path = `${destination_path}/src/client`;
+  const atom_path = `${destination_path}/src/atom`;
+  const types_atom_path = `${destination_path}/src/types/atom.ts`;
+
+  // Remove unused database client and atom files based on selected database
+  if (params.database === t.DATABASE.MONGODB) {
+    await ray.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts`);
+    await ray.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts`);
+    await _clean_types_atom_file(types_atom_path, 'mongodb');
+    log.debug(`Removed unused MySQL and DynamoDB files`);
+  } else if (params.database === t.DATABASE.MYSQL) {
+    await ray.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/dynamodb.ts`);
+    await ray.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/dynamodb.ts`);
+    await _clean_types_atom_file(types_atom_path, 'mysql');
+    log.debug(`Removed unused MongoDB and DynamoDB files`);
+  } else {
+    // DynamoDB
+    await ray.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/mysql.ts`);
+    await ray.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/mysql.ts`);
+    await _clean_types_atom_file(types_atom_path, 'dynamodb');
+    log.debug(`Removed unused MongoDB and MySQL files`);
+  }
+}
+
+async function _clean_types_atom_file(
+  file_path: string,
+  database: 'mongodb' | 'mysql' | 'dynamodb'
+) {
+  let cleaned_content = '';
+
+  if (database === 'mongodb') {
+    // Keep only mongodb-related imports and types
+    cleaned_content = `/**
+ *
+ * Atom client interface module
+ *
+ * @packageDocumentation
+ *
+ */
+
+import {ObjectId} from 'mongodb';
+
+export interface atom {}
+
+export type mongodb_id = ObjectId;
+
+export interface mongodb_atom extends atom {
+  _id: ObjectId
+}
+`;
+  } else if (database === 'mysql') {
+    // No imports needed for MySQL
+    cleaned_content = `/**
+ *
+ * Atom client interface module
+ *
+ * @packageDocumentation
+ *
+ */
+
+export interface atom {}
+
+export interface mysql_atom extends atom {}
+`;
+  } else {
+    // DynamoDB - no special imports needed
+    cleaned_content = `/**
+ *
+ * Atom client interface module
+ *
+ * @packageDocumentation
+ *
+ */
+
+export interface atom {}
+
+export interface dynamodb_atom extends atom {}
+`;
+  }
+
+  fs.writeFileSync(file_path, cleaned_content);
 }
 
 async function _build_dot_uranio(params: t.GenerateParams) {
