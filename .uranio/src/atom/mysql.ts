@@ -23,7 +23,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     const {query, map} = sql.param.compose_select({
       table: this.name,
       where,
-      limit: 'LIMIT 1',
+      limit: '1',
     });
     const [rows] = await this.client.exe(query, map);
     if (Array.isArray(rows) && rows[0]) {
