@@ -2,8 +2,8 @@
 
 ![uranio logo](./img/uranio_logo_1440x220.png)
 
-Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB and
-Object Relational Mapping (ORM) for MySQL.\
+Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB,
+Object Relational Mapping (ORM) for MySQL, and DynamoDB.\
 It creates a client for querying collections/tables in a database by just parsing
 the types in a repository.
 
@@ -12,8 +12,21 @@ a Data Access Layer (DAL) from the defined types.
 
 ## Install
 
+Uranio uses peer dependencies for database SDKs, so you only install what you need:
+
+### For MongoDB users:
+```bash
+npm install uranio mongodb
 ```
-npm install uranio
+
+### For MySQL users:
+```bash
+npm install uranio mysql2
+```
+
+### For DynamoDB users:
+```bash
+npm install uranio @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
 ```
 
 ## How it works
@@ -125,6 +138,34 @@ const urn = uranio.MySQLClient({
 - **Local**: `'local'` - Uses the database server's timezone
 
 The timezone setting affects how JavaScript `Date` objects are converted when storing to and retrieving from the database. Using UTC (default) is recommended for consistency across different timezones.
+
+## Troubleshooting
+
+### Missing Database SDK Error
+
+If you get an error like:
+```
+Error: Cannot find module 'mongodb'
+Error: Cannot find module 'mysql2'
+Error: Cannot find module '@aws-sdk/client-dynamodb'
+```
+
+This means you haven't installed the required database SDK. Install the SDK for your chosen database:
+
+```bash
+# For MongoDB
+npm install mongodb
+
+# For MySQL
+npm install mysql2
+
+# For DynamoDB
+npm install @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
+```
+
+### Peer Dependency Warnings
+
+When installing Uranio, npm may show peer dependency warnings. These are expected since Uranio supports multiple databases. You only need to install the SDK for the database you're actually using.
 
 ### Credits
 
