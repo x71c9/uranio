@@ -28,6 +28,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "uranio": "0.2.0"
+    "uranio": "1.0.0"
   }
 }
