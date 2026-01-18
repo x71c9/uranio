@@ -17,7 +17,7 @@ class MySQLClient {
     constructor(params) {
         this.uri = params.uri;
         this.timezone = params.timezone || '+00:00';
-        if (params.use_pool === true) {
+        if (params.usePool === true) {
             this.pool = promise_1.default.createPool({
                 uri: params.uri,
                 namedPlaceholders: true,
@@ -33,17 +33,17 @@ class MySQLClient {
         if (this.pool) {
             return await this._execute_from_pool_connection(sql, values);
         }
-        if (!this.main_connection) {
+        if (!this.mainConnection) {
             await this.connect();
         }
         // NOTE: For some reason they removed the execute method from the typescript
         // declaration file. The execute method is still in the javascript
-        const [rows, fields] = await this.main_connection.execute(sql, values);
+        const [rows, fields] = await this.mainConnection.execute(sql, values);
         return [rows, fields];
     }
     async connect() {
         index_1.log.trace(`Connecting to MySQL database...`);
-        this.main_connection = await promise_1.default.createConnection({
+        this.mainConnection = await promise_1.default.createConnection({
             uri: this.uri,
             namedPlaceholders: true,
             timezone: this.timezone,
@@ -53,7 +53,7 @@ class MySQLClient {
     async disconnect() {
         var _a;
         index_1.log.trace(`Disconnecting from MySQL database...`);
-        await ((_a = this.main_connection) === null || _a === void 0 ? void 0 : _a.end());
+        await ((_a = this.mainConnection) === null || _a === void 0 ? void 0 : _a.end());
         index_1.log.debug(`Disconnected from MySQL database`);
     }
     async _execute_from_pool_connection(sql, values) {

@@ -20,7 +20,7 @@ describe('MySQL Client Mocked', () => {
   it('should return the mocked rows MYSQL POOL', async () => {
     const mysql_urn = new MySQLClient({
       uri: mysql_uri,
-      use_pool: true
+      usePool: true
     });
     const mock_rows = [{ id: 1, name: 'John' }, {id: 2, name: 'Franco'}];
     const mock_pool = {
@@ -86,7 +86,7 @@ describe('MySQL Client Integration Real DB', () => {
   it('should return the rows MYSQL POOL', async () => {
     const mysql_urn = new MySQLClient({
       uri: mysql_uri,
-      use_pool: true
+      usePool: true
     });
     const expected_row = {
       age: 28,

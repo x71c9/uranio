@@ -6,5 +6,5 @@
  *
  */
 
-import {atom, mongodb_id} from './atom';
-export {atom, mongodb_id};
+import {atom, mongodbId} from './atom';
+export {atom, mongodbId};

@@ -61,15 +61,15 @@ then Uranio generates a method for querying a collection named `products`:
 import uranio from 'uranio';
 
 const uri = process.env.MONGO_DATABASE_URI || '';
-const db_name = process.env.MONGO_DATABASE_NAME || '';
+const dbName = process.env.MONGO_DATABASE_NAME || '';
 
-const urn = uranio.MongoDBClient({uri, db_name});
+const urn = uranio.MongoDBClient({uri, dbName});
 
 // Get all products
-const products = await urn.products.get_atoms({});
+const products = await urn.products.getAtoms({});
 
 // Create a product
-await urn.products.put_atom({
+await urn.products.putAtom({
   title: 'Uranio mug',
   description: 'A radioactive mug for your coding breakfast',
   price: 4.99
@@ -115,13 +115,13 @@ const urn = uranio.MySQLClient({ uri });
 // With connection pool
 const urn = uranio.MySQLClient({
   uri,
-  use_pool: true
+  usePool: true
 });
 
 // Custom timezone (default is UTC '+00:00')
 const urn = uranio.MySQLClient({
   uri,
-  use_pool: true,
+  usePool: true,
   timezone: '+04:00'  // Dubai timezone (GST)
 });
 

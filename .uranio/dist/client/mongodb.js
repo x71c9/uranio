@@ -22,7 +22,7 @@ class MongoDBClient {
             minPoolSize: 0,
         };
         this.client = new mongodb_1.MongoClient(params.uri, options);
-        this.db = this.client.db(params.db_name, { ignoreUndefined: true });
+        this.db = this.client.db(params.dbName, { ignoreUndefined: true });
     }
     async connect() {
         try {

@@ -12,14 +12,14 @@ import {
 
 export type DynamoDBClientParams = {
   region: string;
-  table_name: string;
+  tableName: string;
 };
 
 export class DynamoDBClient{
   protected client: AWSDynamoDBClient;
-  public table_name: string;
+  public tableName: string;
   constructor(params: DynamoDBClientParams) {
     this.client = new AWSDynamoDBClient({region: params.region});
-    this.table_name = params.table_name;
+    this.tableName = params.tableName;
   }
 }

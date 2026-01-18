@@ -12,32 +12,32 @@ export declare class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     name: string;
     collection: mongodb.Collection<S>;
     constructor(db: mongodb.Db, name: string);
-    get_atom({ where, order, }: {
+    getAtom({ where, order, }: {
         where?: where_types.Where<S>;
         order?: sql_types.OrderBy;
     }): Promise<S | null>;
-    get_atoms({ where, order, limit, }: {
+    getAtoms({ where, order, limit, }: {
         where?: where_types.Where<S>;
         order?: sql_types.OrderBy;
         limit?: number;
     }): Promise<S[]>;
-    put_atom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult>;
-    put_atoms(atoms: Omit<S, '_id'>[]): Promise<mongodb.InsertManyResult>;
-    update_atom({ where, atom, }: {
+    putAtom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult>;
+    putAtoms(atoms: Omit<S, '_id'>[]): Promise<mongodb.InsertManyResult>;
+    updateAtom({ where, atom, }: {
         where?: where_types.Where<S>;
         atom: Partial<S>;
     }): Promise<mongodb.UpdateResult>;
-    update_atoms({ where, atom, }: {
+    updateAtoms({ where, atom, }: {
         where?: where_types.Where<S>;
         atom: Partial<S>;
     }): Promise<mongodb.UpdateResult>;
-    delete_atom({ where, }: {
+    deleteAtom({ where, }: {
         where?: where_types.Where<S>;
     }): Promise<mongodb.DeleteResult>;
-    delete_atoms({ where, }: {
+    deleteAtoms({ where, }: {
         where?: where_types.Where<S>;
     }): Promise<mongodb.DeleteResult>;
-    get_random_atom({ where }: {
+    getRandomAtom({ where }: {
         where?: where_types.Where<S>;
     }): Promise<S | null>;
 }

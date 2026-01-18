@@ -45,7 +45,7 @@ class MySQLAtomClient {
         this.client = client;
         this.name = name;
     }
-    async get_atom(where) {
+    async getAtom(where) {
         const { query, map } = sql.param.compose_select({
             table: this.name,
             where,
@@ -57,7 +57,7 @@ class MySQLAtomClient {
         }
         return null;
     }
-    async get_atoms({ where, order, limit, }) {
+    async getAtoms({ where, order, limit, }) {
         const { query, map } = sql.param.compose_select({
             table: this.name,
             where,
@@ -70,7 +70,7 @@ class MySQLAtomClient {
         }
         return [];
     }
-    async put_atom(shape) {
+    async putAtom(shape) {
         const columns = [];
         for (const [key, _] of Object.entries(shape)) {
             columns.push(key);
@@ -83,7 +83,7 @@ class MySQLAtomClient {
         const response = await this.client.exe(query, query_records);
         return response;
     }
-    async put_atoms(shapes) {
+    async putAtoms(shapes) {
         const columns = [];
         if (!Array.isArray(shapes) || shapes.length < 1 || !shapes[0]) {
             return null;
@@ -99,7 +99,7 @@ class MySQLAtomClient {
         const response = await this.client.exe(query, query_records);
         return response;
     }
-    async update_atoms(atom, where) {
+    async updateAtoms(atom, where) {
         const { query, map } = sql.param.compose_update({
             table: this.name,
             where,
@@ -108,7 +108,7 @@ class MySQLAtomClient {
         const response = await this.client.exe(query, map);
         return response;
     }
-    async delete_atoms(where) {
+    async deleteAtoms(where) {
         const { query, map } = sql.param.compose_delete({
             table: this.name,
             where,

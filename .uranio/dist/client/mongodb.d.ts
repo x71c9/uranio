@@ -8,7 +8,7 @@
 import mongodb from 'mongodb';
 export type MongoDBClientParams = {
     uri: string;
-    db_name: string;
+    dbName: string;
 };
 export declare class MongoDBClient {
     protected client: mongodb.MongoClient;

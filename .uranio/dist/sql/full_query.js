@@ -262,6 +262,10 @@ function _format_value(value) {
     if (value instanceof RegExp) {
         return value.source;
     }
+    if (value instanceof Date) {
+        // Return a unique placeholder that won't conflict with the date string
+        return `__DATE_PLACEHOLDER_${value.getTime()}__`;
+    }
     switch (typeof value) {
         case 'string': {
             query_string = `"${value.replaceAll('"', '"')}"`;

@@ -13,7 +13,7 @@ class DynamoDBAtomClient {
         this.client = client;
         this.name = name;
     }
-    async get_atom_by_primary_index({ attribute_name, attribute_type, attribute_value, }) {
+    async getAtomByPrimaryIndex({ attribute_name, attribute_type, attribute_value, }) {
         const params = {
             TableName: this.name,
             Key: {
@@ -30,7 +30,7 @@ class DynamoDBAtomClient {
         const unmarshalled = (0, util_dynamodb_1.unmarshall)(response.Item);
         return unmarshalled;
     }
-    async get_atom_by_global_secondary_index({ index_name, attribute_name, attribute_type, attribute_value, }) {
+    async getAtomByGlobalSecondaryIndex({ index_name, attribute_name, attribute_type, attribute_value, }) {
         const params = {
             TableName: this.name,
             IndexName: index_name,
@@ -52,7 +52,7 @@ class DynamoDBAtomClient {
         const unmarshalled = (0, util_dynamodb_1.unmarshall)(response.Items[0]);
         return unmarshalled;
     }
-    async put_atom(shape) {
+    async putAtom(shape) {
         const dynamo_item = _resolve_dynamo_map(shape);
         const params = {
             TableName: this.name,
@@ -64,7 +64,7 @@ class DynamoDBAtomClient {
         // log.trace(`PUT RESPONSE: `, response);
         return response;
     }
-    async update_atom_by_primary_index({ attribute_name, attribute_type, attribute_value, item, }) {
+    async updateAtomByPrimaryIndex({ attribute_name, attribute_type, attribute_value, item, }) {
         const updateExpression = Object.keys(item)
             .map((key) => `${key} = :${key}`)
             .join(', ');
@@ -87,7 +87,7 @@ class DynamoDBAtomClient {
         // log.trace(`UPDATE BY PRIMARY INDEX RESPONSE: `, respone);
         return respone;
     }
-    async delete_atom_by_primary_index({ attribute_name, attribute_type, attribute_value, }) {
+    async deleteAtomByPrimaryIndex({ attribute_name, attribute_type, attribute_value, }) {
         const params = {
             TableName: this.name,
             Key: {
@@ -100,8 +100,8 @@ class DynamoDBAtomClient {
         // log.trace(`DELETE BY PRIMARY INDEX RESPONSE: `, params);
         return response;
     }
-    async is_primary_index_value_unique({ attribute_name, attribute_type, attribute_value, }) {
-        const item = await this.get_atom_by_primary_index({
+    async isPrimaryIndexValueUnique({ attribute_name, attribute_type, attribute_value, }) {
+        const item = await this.getAtomByPrimaryIndex({
             attribute_name,
             attribute_type,
             attribute_value,
@@ -111,8 +111,8 @@ class DynamoDBAtomClient {
         }
         return true;
     }
-    async is_secondary_global_index_value_unique({ index_name, attribute_name, attribute_type, attribute_value, }) {
-        const item = await this.get_atom_by_global_secondary_index({
+    async isSecondaryGlobalIndexValueUnique({ index_name, attribute_name, attribute_type, attribute_value, }) {
+        const item = await this.getAtomByGlobalSecondaryIndex({
             index_name,
             attribute_name,
             attribute_type,
@@ -123,7 +123,7 @@ class DynamoDBAtomClient {
         }
         return true;
     }
-    async get_by_partition_key({ attribute_name, attribute_type, attribute_value, }) {
+    async getByPartitionKey({ attribute_name, attribute_type, attribute_value, }) {
         const params = {
             TableName: this.name,
             KeyConditionExpression: `${attribute_name} = :pk`,
@@ -149,30 +149,30 @@ class DynamoDBAtomClient {
 }
 exports.DynamoDBAtomClient = DynamoDBAtomClient;
 class DynamoDBAtomWithIdClient extends DynamoDBAtomClient {
-    async get_atom_by_id(id) {
-        return this.get_atom_by_primary_index({
+    async getAtomById(id) {
+        return this.getAtomByPrimaryIndex({
             attribute_name: 'id',
             attribute_value: id,
             attribute_type: 'S',
         });
     }
-    async update_atom_by_id(id, item) {
-        return this.update_atom_by_primary_index({
+    async updateAtomById(id, item) {
+        return this.updateAtomByPrimaryIndex({
             attribute_name: 'id',
             attribute_value: id,
             attribute_type: 'S',
             item,
         });
     }
-    async delete_by_id(id) {
-        return this.delete_atom_by_primary_index({
+    async deleteById(id) {
+        return this.deleteAtomByPrimaryIndex({
             attribute_name: 'id',
             attribute_value: id,
             attribute_type: 'S',
         });
     }
-    async is_id_unique(id) {
-        return await this.is_primary_index_value_unique({
+    async isIdUnique(id) {
+        return await this.isPrimaryIndexValueUnique({
             attribute_name: 'id',
             attribute_type: 'S',
             attribute_value: id,
@@ -181,7 +181,7 @@ class DynamoDBAtomWithIdClient extends DynamoDBAtomClient {
 }
 exports.DynamoDBAtomWithIdClient = DynamoDBAtomWithIdClient;
 class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
-    async get_atom_by_composite_primary_key({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, }) {
+    async getAtomByCompositePrimaryKey({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, }) {
         const params = {
             TableName: this.name,
             Key: {
@@ -204,7 +204,7 @@ class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
         const unmarshalled = (0, util_dynamodb_1.unmarshall)(item);
         return unmarshalled;
     }
-    async update_by_composite_primary_index({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, item, }) {
+    async updateByCompositePrimaryIndex({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, item, }) {
         const updateExpression = Object.keys(item)
             .map((key) => `${key} = :${key}`)
             .join(', ');
@@ -230,7 +230,7 @@ class DynamoDBAtomWithCompositePrimaryKeyClient extends DynamoDBAtomClient {
         // log.trace(`UPDATE BY COMPOSITE PRIMARY INDEX RESPONSE: `, respone);
         return respone;
     }
-    async delete_by_composite_key({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, }) {
+    async deleteByCompositeKey({ partition_key_name, partition_key_type, partition_key_value, sort_key_name, sort_key_type, sort_key_value, }) {
         const params = {
             TableName: this.name,
             Key: {
