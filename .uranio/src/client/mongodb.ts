@@ -15,7 +15,7 @@ import {log} from '../log/index';
 
 export type MongoDBClientParams = {
   uri: string;
-  db_name: string;
+  dbName: string;
 };
 
 export class MongoDBClient {
@@ -32,7 +32,7 @@ export class MongoDBClient {
       minPoolSize: 0,
     } as MongoClientOptions;
     this.client = new MongoClient(params.uri, options);
-    this.db = this.client.db(params.db_name, {ignoreUndefined: true});
+    this.db = this.client.db(params.dbName, {ignoreUndefined: true});
   }
   public async connect() {
     try {
@@ -44,9 +44,6 @@ export class MongoDBClient {
       await this.client.connect();
       log.trace('MongoDB connected.');
     }
-    // log.trace('Connecting...');
-    // await this.client.connect();
-    // log.trace('Connected.');
   }
   public async disconnect() {
     log.trace('Disconnecting...');

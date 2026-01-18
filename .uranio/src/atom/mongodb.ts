@@ -20,7 +20,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     this.collection = this.db.collection<S>(name);
   }
 
-  public async get_atom({
+  public async getAtom({
     where,
     order,
   }: {
@@ -38,7 +38,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return item;
   }
 
-  public async get_atoms({
+  public async getAtoms({
     where,
     order,
     limit,
@@ -57,7 +57,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return items;
   }
 
-  public async put_atom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult> {
+  public async putAtom(atom: Omit<S, '_id'>): Promise<mongodb.InsertOneResult> {
     // shape = _remove_id(shape as Partial<S>);
     atom = _replace_string_id_to_object_id(atom) as Omit<S, '_id'>;
     const respone_insert = await this.collection.insertOne(
@@ -66,7 +66,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return respone_insert;
   }
 
-  public async put_atoms(
+  public async putAtoms(
     atoms: Omit<S, '_id'>[]
   ): Promise<mongodb.InsertManyResult> {
     const atoms_no_ids: mongodb.OptionalUnlessRequiredId<S>[] = [];
@@ -83,7 +83,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return items;
   }
 
-  public async update_atom({
+  public async updateAtom({
     where,
     atom,
   }: {
@@ -100,7 +100,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_update;
   }
 
-  public async update_atoms({
+  public async updateAtoms({
     where,
     atom,
   }: {
@@ -117,7 +117,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_update;
   }
 
-  public async delete_atom({
+  public async deleteAtom({
     where,
   }: {
     where?: where_types.Where<S>;
@@ -129,7 +129,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_delete;
   }
 
-  public async delete_atoms({
+  public async deleteAtoms({
     where,
   }: {
     where?: where_types.Where<S>;
@@ -141,7 +141,7 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     return response_delete;
   }
 
-  public async get_random_atom({where}: {where?: where_types.Where<S>}): Promise<S | null>{
+  public async getRandomAtom({where}: {where?: where_types.Where<S>}): Promise<S | null>{
     // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
     const sample_stage = {$sample: {size: 1}};
     const stages: mongodb.BSON.Document[] = [];

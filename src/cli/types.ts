@@ -43,8 +43,8 @@ export type Arguments = {
 };
 
 export const NAMING_CONVENTION = {
-  SNAKE_CASE: 'snake_case',
   CAMEL_CASE: 'camelCase',
+  SNAKE_CASE: 'snake_case',
   PASCAL: 'PascalCase',
 } as const;
 

@@ -12,7 +12,7 @@ const client_dynamodb_1 = require("@aws-sdk/client-dynamodb");
 class DynamoDBClient {
     constructor(params) {
         this.client = new client_dynamodb_1.DynamoDBClient({ region: params.region });
-        this.table_name = params.table_name;
+        this.tableName = params.tableName;
     }
 }
 exports.DynamoDBClient = DynamoDBClient;

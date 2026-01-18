@@ -19,7 +19,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     public name: string
   ) {}
 
-  public async get_atom(where: where_types.Where<S>): Promise<S | null> {
+  public async getAtom(where: where_types.Where<S>): Promise<S | null> {
     const {query, map} = sql.param.compose_select({
       table: this.name,
       where,
@@ -32,7 +32,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     return null;
   }
 
-  public async get_atoms({
+  public async getAtoms({
     where,
     order,
     limit,
@@ -54,7 +54,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     return [];
   }
 
-  public async put_atom(shape: Partial<S>): Promise<any> {
+  public async putAtom(shape: Partial<S>): Promise<any> {
     const columns:(keyof S)[] = [];
     for(const [key, _] of Object.entries(shape)){
       columns.push(key as keyof S);
@@ -68,7 +68,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     return response;
   }
 
-  public async put_atoms(shapes: Partial<S>[]): Promise<any> {
+  public async putAtoms(shapes: Partial<S>[]): Promise<any> {
     const columns:(keyof S)[] = [];
     if(!Array.isArray(shapes) || shapes.length < 1 || !shapes[0]){
       return null;
@@ -85,7 +85,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     return response;
   }
 
-  public async update_atoms(
+  public async updateAtoms(
     atom: Partial<S>,
     where?: where_types.Where<S>,
   ): Promise<any> {
@@ -98,7 +98,7 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     return response;
   }
 
-  public async delete_atoms(where: where_types.Where<S>): Promise<any> {
+  public async deleteAtoms(where: where_types.Where<S>): Promise<any> {
     const {query, map} = sql.param.compose_delete({
       table: this.name,
       where,

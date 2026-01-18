@@ -8,7 +8,7 @@
 import { ObjectId } from 'mongodb';
 export interface atom {
 }
-export type mongodb_id = ObjectId;
+export type mongodbId = ObjectId;
 export interface mysql_atom extends atom {
 }
 export interface mongodb_atom extends atom {

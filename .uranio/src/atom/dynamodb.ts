@@ -27,7 +27,7 @@ import * as dynamodb_types from '../types/dynamodb';
 export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
   constructor(public client: DynamoDBClient, public name: string) {}
 
-  async get_atom_by_primary_index<I extends dynamodb_types.AttrType>({
+  async getAtomByPrimaryIndex<I extends dynamodb_types.AttrType>({
     attribute_name,
     attribute_type,
     attribute_value,
@@ -53,7 +53,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return unmarshalled as S;
   }
 
-  async get_atom_by_global_secondary_index<I extends dynamodb_types.AttrType>({
+  async getAtomByGlobalSecondaryIndex<I extends dynamodb_types.AttrType>({
     index_name,
     attribute_name,
     attribute_type,
@@ -86,7 +86,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return unmarshalled as S;
   }
 
-  async put_atom(shape: Partial<S>) {
+  async putAtom(shape: Partial<S>) {
     const dynamo_item = _resolve_dynamo_map(shape);
     const params: PutItemCommandInput = {
       TableName: this.name,
@@ -99,7 +99,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return response;
   }
 
-  async update_atom_by_primary_index<I extends dynamodb_types.AttrType>({
+  async updateAtomByPrimaryIndex<I extends dynamodb_types.AttrType>({
     attribute_name,
     attribute_type,
     attribute_value,
@@ -136,7 +136,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return respone;
   }
 
-  async delete_atom_by_primary_index<I extends dynamodb_types.AttrType>({
+  async deleteAtomByPrimaryIndex<I extends dynamodb_types.AttrType>({
     attribute_name,
     attribute_type,
     attribute_value,
@@ -158,7 +158,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return response;
   }
 
-  async is_primary_index_value_unique<I extends dynamodb_types.AttrType>({
+  async isPrimaryIndexValueUnique<I extends dynamodb_types.AttrType>({
     attribute_name,
     attribute_type,
     attribute_value,
@@ -167,7 +167,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     attribute_type: I;
     attribute_value: dynamodb_types.AttrValue<I>;
   }): Promise<boolean> {
-    const item = await this.get_atom_by_primary_index({
+    const item = await this.getAtomByPrimaryIndex({
       attribute_name,
       attribute_type,
       attribute_value,
@@ -178,7 +178,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return true;
   }
 
-  async is_secondary_global_index_value_unique<
+  async isSecondaryGlobalIndexValueUnique<
     I extends dynamodb_types.AttrType
   >({
     index_name,
@@ -191,7 +191,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     attribute_type: I;
     attribute_value: dynamodb_types.AttrValue<I>;
   }): Promise<boolean> {
-    const item = await this.get_atom_by_global_secondary_index({
+    const item = await this.getAtomByGlobalSecondaryIndex({
       index_name,
       attribute_name,
       attribute_type,
@@ -203,7 +203,7 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
     return true;
   }
 
-  public async get_by_partition_key<I extends dynamodb_types.AttrType>({
+  public async getByPartitionKey<I extends dynamodb_types.AttrType>({
     attribute_name,
     attribute_type,
     attribute_value,
@@ -239,30 +239,30 @@ export class DynamoDBAtomClient<S extends atom_types.dynamodb_atom> {
 export class DynamoDBAtomWithIdClient<
   T extends Record<string, any>
 > extends DynamoDBAtomClient<T> {
-  public async get_atom_by_id(id: string) {
-    return this.get_atom_by_primary_index({
+  public async getAtomById(id: string) {
+    return this.getAtomByPrimaryIndex({
       attribute_name: 'id',
       attribute_value: id,
       attribute_type: 'S',
     });
   }
-  public async update_atom_by_id(id: string, item: Record<string, any>) {
-    return this.update_atom_by_primary_index({
+  public async updateAtomById(id: string, item: Record<string, any>) {
+    return this.updateAtomByPrimaryIndex({
       attribute_name: 'id',
       attribute_value: id,
       attribute_type: 'S',
       item,
     });
   }
-  public async delete_by_id(id: string) {
-    return this.delete_atom_by_primary_index({
+  public async deleteById(id: string) {
+    return this.deleteAtomByPrimaryIndex({
       attribute_name: 'id',
       attribute_value: id,
       attribute_type: 'S',
     });
   }
-  public async is_id_unique(id: string): Promise<boolean> {
-    return await this.is_primary_index_value_unique({
+  public async isIdUnique(id: string): Promise<boolean> {
+    return await this.isPrimaryIndexValueUnique({
       attribute_name: 'id',
       attribute_type: 'S',
       attribute_value: id,
@@ -273,7 +273,7 @@ export class DynamoDBAtomWithIdClient<
 export class DynamoDBAtomWithCompositePrimaryKeyClient<
   T extends Record<string, any>
 > extends DynamoDBAtomClient<T> {
-  public async get_atom_by_composite_primary_key<
+  public async getAtomByCompositePrimaryKey<
     P extends dynamodb_types.AttrType,
     S extends dynamodb_types.AttrType
   >({
@@ -313,7 +313,7 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
     const unmarshalled = unmarshall(item);
     return unmarshalled as T;
   }
-  public async update_by_composite_primary_index<
+  public async updateByCompositePrimaryIndex<
     P extends dynamodb_types.AttrType,
     S extends dynamodb_types.AttrType
   >({
@@ -361,7 +361,7 @@ export class DynamoDBAtomWithCompositePrimaryKeyClient<
     // log.trace(`UPDATE BY COMPOSITE PRIMARY INDEX RESPONSE: `, respone);
     return respone;
   }
-  public async delete_by_composite_key<
+  public async deleteByCompositeKey<
     P extends dynamodb_types.AttrType,
     S extends dynamodb_types.AttrType
   >({

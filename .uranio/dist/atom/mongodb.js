@@ -13,7 +13,7 @@ class MongoDBAtomClient {
         this.name = name;
         this.collection = this.db.collection(name);
     }
-    async get_atom({ where, order, }) {
+    async getAtom({ where, order, }) {
         where = _instance_object_id(where);
         let item = await this.collection.findOne(where, {
             sort: order,
@@ -24,7 +24,7 @@ class MongoDBAtomClient {
         // item = _string_id(item) as S;
         return item;
     }
-    async get_atoms({ where, order, limit, }) {
+    async getAtoms({ where, order, limit, }) {
         where = _instance_object_id(where);
         let items = await this.collection
             .find(where, { sort: order, limit })
@@ -34,13 +34,13 @@ class MongoDBAtomClient {
         // }
         return items;
     }
-    async put_atom(atom) {
+    async putAtom(atom) {
         // shape = _remove_id(shape as Partial<S>);
         atom = _replace_string_id_to_object_id(atom);
         const respone_insert = await this.collection.insertOne(atom);
         return respone_insert;
     }
-    async put_atoms(atoms) {
+    async putAtoms(atoms) {
         const atoms_no_ids = [];
         for (const atom of atoms) {
             // const atom_no_id = _remove_id(
@@ -52,31 +52,31 @@ class MongoDBAtomClient {
         let items = await this.collection.insertMany(atoms_no_ids);
         return items;
     }
-    async update_atom({ where, atom, }) {
+    async updateAtom({ where, atom, }) {
         where = _instance_object_id(where);
         // atom = _remove_id(atom) as Partial<S>;
         atom = _replace_string_id_to_object_id(atom);
         const response_update = await this.collection.updateOne(where, { $set: atom });
         return response_update;
     }
-    async update_atoms({ where, atom, }) {
+    async updateAtoms({ where, atom, }) {
         where = _instance_object_id(where);
         // atom = _remove_id(atom) as Partial<S>;
         atom = _replace_string_id_to_object_id(atom);
         const response_update = await this.collection.updateMany(where, { $set: atom });
         return response_update;
     }
-    async delete_atom({ where, }) {
+    async deleteAtom({ where, }) {
         where = _instance_object_id(where);
         const response_delete = await this.collection.deleteOne(where);
         return response_delete;
     }
-    async delete_atoms({ where, }) {
+    async deleteAtoms({ where, }) {
         where = _instance_object_id(where);
         const response_delete = await this.collection.deleteMany(where);
         return response_delete;
     }
-    async get_random_atom({ where }) {
+    async getRandomAtom({ where }) {
         // https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
         const sample_stage = { $sample: { size: 1 } };
         const stages = [];
