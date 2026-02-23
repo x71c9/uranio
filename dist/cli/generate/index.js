@@ -63,7 +63,7 @@ const common = __importStar(require("../common/index"));
 const t = __importStar(require("../types"));
 async function generate(args) {
     common.set_verbosity(args);
-    const params = _resolve_generate_params(args);
+    const params = await _resolve_generate_params(args);
     index_1.log.spinner.start();
     index_1.log.spinner.text(`Generating...`);
     await _copy_dot_uranio(params);
@@ -72,8 +72,8 @@ async function generate(args) {
     index_1.log.spinner.stop();
     index_1.log.success(`Uranio successfully generated client`);
 }
-function _resolve_generate_params(args) {
-    const root_path = common.resolve_param_root(args);
+async function _resolve_generate_params(args) {
+    const root_path = await common.resolve_param_root(args);
     const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
     const yaml_params = common.read_yaml_params(root_path);
     let naming_convention = yaml_params.naming_convention;
@@ -242,7 +242,6 @@ export interface dynamodb_atom extends atom {}
 async function _build_dot_uranio(params) {
     index_1.log.spinner.text(`Transpiling dot uranio files...`);
     const copied_dot_uranio_tsconfig_path = `${params.root}/node_modules/.uranio/tsconfig.json`;
-    // await ray.spawn(`yarn tsc --project ${copied_dot_uranio_tsconfig_path}`);
     await r4y_1.default.spawn(`npx tsc --project ${copied_dot_uranio_tsconfig_path}`);
     index_1.log.debug(`Transpiled dot uranio files`);
 }

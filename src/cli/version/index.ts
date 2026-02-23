@@ -12,7 +12,7 @@ import * as common from '../common/index';
 import * as t from '../types';
 
 export async function version(args: t.Arguments) {
-  const root_path = common.resolve_param_root(args);
+  const root_path = await common.resolve_param_root(args);
   const uranio_package_json_path = `${root_path}/node_modules/uranio/package.json`;
   if (!fs.existsSync(uranio_package_json_path)) {
     throw new exception.UranioCLIException(

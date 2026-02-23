@@ -20,7 +20,7 @@
   "scripts": {
     ".uranio:build": "npx tsc --project ./.uranio",
     ".uranio:copy": "bash ./scripts/copy_dot_uranio.sh",
-    ".uranio:dev:.uranio": "npx .uranio:build && npx .uranio:copy",
+    ".uranio:dev:.uranio": "npm run .uranio:build && npm run .uranio:copy",
     "build": "npx tsc -b",
     "dev": "npx tsc -w",
     "dev:base": "node ./dist/index.js",
@@ -50,9 +50,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "app-root-path": "^3.1.0",
     "i0n": "^0.9.0",
     "inquirer": "^13.3.0",
+    "pkg-dir": "^8.0.0",
     "plutonio": "^0.7.7",
     "r4y": "^0.9.0",
     "yaml": "^2.8.2"

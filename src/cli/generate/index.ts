@@ -26,7 +26,7 @@ import * as t from '../types';
 
 export async function generate(args: t.Arguments) {
   common.set_verbosity(args);
-  const params = _resolve_generate_params(args);
+  const params = await _resolve_generate_params(args);
   log.spinner.start();
   log.spinner.text(`Generating...`);
   await _copy_dot_uranio(params);
@@ -36,8 +36,8 @@ export async function generate(args: t.Arguments) {
   log.success(`Uranio successfully generated client`);
 }
 
-function _resolve_generate_params(args: t.Arguments): t.GenerateParams {
-  const root_path = common.resolve_param_root(args);
+async function _resolve_generate_params(args: t.Arguments): Promise<t.GenerateParams> {
+  const root_path = await common.resolve_param_root(args);
   const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
   const yaml_params = common.read_yaml_params(root_path);
   let naming_convention = yaml_params.naming_convention;

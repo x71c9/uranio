@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 rm -rf ./node_modules/.uranio
 cp -rf ./.uranio node_modules/.uranio
