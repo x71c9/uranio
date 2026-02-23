@@ -12,3 +12,4 @@ coverage/
 .uranio/yarn*
 .direnv
 adiacenti
+*.tsbuildinfo
