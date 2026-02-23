@@ -207,10 +207,10 @@ async function _remove_unused_database_files(params: t.GenerateParams) {
   switch (params.database) {
     case t.DATABASE.MYSQL: {
       await ray.spawn(
-        `rm -f ${client_path}/mongodb.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`,
+        `rm -f ${client_path}/mongodb.ts ${client_path}/postgresql.ts`,
       );
       await ray.spawn(
-        `rm -f ${atom_path}/mongodb.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`,
+        `rm -f ${atom_path}/mongodb.ts ${atom_path}/postgresql.ts`,
       );
       await _clean_types_atom_file(types_atom_path, 'mysql');
       log.debug(`Removed unused files`);
@@ -218,10 +218,10 @@ async function _remove_unused_database_files(params: t.GenerateParams) {
     }
     case t.DATABASE.MONGODB: {
       await ray.spawn(
-        `rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`,
+        `rm -f ${client_path}/mysql.ts ${client_path}/postgresql.ts`,
       );
       await ray.spawn(
-        `rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`,
+        `rm -f ${atom_path}/mysql.ts ${atom_path}/postgresql.ts`,
       );
       await _clean_types_atom_file(types_atom_path, 'mongodb');
       log.debug(`Removed unused files`);
@@ -229,10 +229,10 @@ async function _remove_unused_database_files(params: t.GenerateParams) {
     }
     case t.DATABASE.POSTGRESQL: {
       await ray.spawn(
-        `rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/mongodb.ts`,
+        `rm -f ${client_path}/mysql.ts ${client_path}/mongodb.ts`,
       );
       await ray.spawn(
-        `rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/mongodb.ts`,
+        `rm -f ${atom_path}/mysql.ts ${atom_path}/mongodb.ts`,
       );
       await _clean_types_atom_file(types_atom_path, 'postgresql');
       log.debug(`Removed unused files`);
@@ -243,7 +243,7 @@ async function _remove_unused_database_files(params: t.GenerateParams) {
 
 async function _clean_types_atom_file(
   file_path: string,
-  database: 'mongodb' | 'mysql' | 'dynamodb' | 'postgresql',
+  database: 'mongodb' | 'mysql' | 'postgresql',
 ) {
   let cleaned_content = '';
   switch (database) {
@@ -284,7 +284,6 @@ export interface mongodb_atom extends atom {
       break;
     }
     case t.DATABASE.POSTGRESQL: {
-    // DynamoDB - no special imports needed
     cleaned_content = `/**
  *
  * Atom client interface module
