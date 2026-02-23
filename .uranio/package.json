@@ -26,6 +26,6 @@
     "@aws-sdk/util-dynamodb": "^3.995.0",
     "mongodb": "^7.1.0",
     "mysql2": "^3.17.5",
-    "uranio": "1.0.7"
+    "uranio": "1.0.8"
   }
 }
