@@ -10,6 +10,8 @@ reports/
 coverage/
 /**/node_modules
 .uranio/yarn*
+.uranio/dist/
 .direnv
 adiacenti
 *.tsbuildinfo
+uranio.yml
