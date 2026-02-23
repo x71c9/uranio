@@ -81,13 +81,15 @@ export class PostgreSQLClient {
     sql: string,
     namedParams?: Record<string, any>
   ): {query: string; paramValues: any[]} {
+    // Convert MySQL backticks to PostgreSQL double quotes
+    let convertedQuery = sql.replace(/`/g, '"');
+
     if (!namedParams || Object.keys(namedParams).length === 0) {
-      return {query: sql, paramValues: []};
+      return {query: convertedQuery, paramValues: []};
     }
     // Sort keys to ensure consistent ordering
     const sortedKeys = Object.keys(namedParams).sort();
     let paramIndex = 1;
-    let convertedQuery = sql;
     const paramValues: any[] = [];
 
     // Replace each :paramName with $1, $2, etc.
