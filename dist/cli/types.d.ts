@@ -33,8 +33,8 @@ export type Arguments = {
     flags?: Flags;
 };
 export declare const NAMING_CONVENTION: {
-    readonly SNAKE_CASE: "snake_case";
     readonly CAMEL_CASE: "camelCase";
+    readonly SNAKE_CASE: "snake_case";
     readonly PASCAL: "PascalCase";
 };
 export type NamingConvention = ObjectValue<typeof NAMING_CONVENTION>;

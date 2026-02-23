@@ -62,7 +62,7 @@ async function _resolve_init_params(args: t.Arguments): Promise<t.InitParams> {
 
 async function _ask_for_database(): Promise<t.Database> {
   const response = await inquirer.prompt({
-    type: 'list',
+    type: 'select',
     name: 'database',
     message: 'Which database do you want to use?',
     choices: Object.values(t.DATABASE),
@@ -74,7 +74,7 @@ async function _ask_for_database(): Promise<t.Database> {
 
 async function _ask_for_naming_convention(): Promise<t.NamingConvention>{
   const response = await inquirer.prompt({
-    type: 'list',
+    type: 'select',
     name: 'naming_convention',
     message: 'Which naming convention do you want to use?',
     choices: Object.values(t.NAMING_CONVENTION),
