@@ -38,36 +38,30 @@
     "upgrade:plutonio": "npx remove plutonio && npx add plutonio"
   },
   "devDependencies": {
-    "@types/inquirer": "^8.2.10",
-    "@types/node": "^20.9.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.1",
-    "@typescript-eslint/parser": "^5.59.1",
-    "eslint": "^8.39.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-json": "^3.1.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.1",
-    "prettier": "2.8.7",
-    "tsc-watch": "^6.0.0",
-    "typescript": "^5.6.3"
+    "@types/inquirer": "^9.0.9",
+    "@types/node": "^25.3.0",
+    "eslint": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-json": "^4.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "3.8.1",
+    "tsc-watch": "^7.2.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
     "i0n": "^0.9.0",
-    "inquirer": "^8.2.6",
-    "plutonio": "^0.7.2",
+    "inquirer": "^13.3.0",
+    "plutonio": "^0.7.7",
     "r4y": "^0.9.0",
     "yaml": "^2.8.2"
   },
   "peerDependencies": {
-    "mongodb": ">=7.0.0",
-    "mysql2": ">=3.16.0",
     "@aws-sdk/client-dynamodb": ">=3.969.0",
-    "@aws-sdk/util-dynamodb": ">=3.969.0"
+    "@aws-sdk/util-dynamodb": ">=3.969.0",
+    "mongodb": ">=7.0.0",
+    "mysql2": ">=3.16.0"
   },
   "peerDependenciesMeta": {
     "mongodb": {
