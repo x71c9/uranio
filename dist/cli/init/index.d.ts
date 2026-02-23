@@ -5,7 +5,7 @@
  * `init` command do the following:
  *
  * - ask for the following data:
- *   - type of database: 'mongodb' | 'mysql'
+ *   - type of database: 'mongodb' | 'mysql' | 'postgresql'
  *   - type of naming convention: 'snake_case' | 'camelCase' | 'PascalCase'
  *
  * - create a yaml file in the root directory of the project with the selected

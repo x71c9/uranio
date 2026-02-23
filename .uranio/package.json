@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.3.0",
+    "@types/pg": "^8.16.0",
     "dotenv": "^16.3.1",
     "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
@@ -26,6 +27,7 @@
     "@aws-sdk/util-dynamodb": "^3.995.0",
     "mongodb": "^7.1.0",
     "mysql2": "^3.17.5",
+    "pg": "^8.18.0",
     "uranio": "1.0.8"
   }
 }

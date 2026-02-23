@@ -20,6 +20,7 @@ export type Flags = {
 export declare const DATABASE: {
     readonly MONGODB: "mongodb";
     readonly MYSQL: "mysql";
+    readonly POSTGRESQL: "postgresql";
 };
 export type Database = ObjectValue<typeof DATABASE>;
 export declare const COMMAND: {

@@ -25,6 +25,7 @@ export type Flags = {
 export const DATABASE = {
   MONGODB: 'mongodb',
   MYSQL: 'mysql',
+  POSTGRESQL: 'postgresql',
 } as const;
 
 export type Database = ObjectValue<typeof DATABASE>;

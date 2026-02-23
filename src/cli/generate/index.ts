@@ -36,7 +36,9 @@ export async function generate(args: t.Arguments) {
   log.success(`Uranio successfully generated client`);
 }
 
-async function _resolve_generate_params(args: t.Arguments): Promise<t.GenerateParams> {
+async function _resolve_generate_params(
+  args: t.Arguments,
+): Promise<t.GenerateParams> {
   const root_path = await common.resolve_param_root(args);
   const tsconfig_path = _resolve_param_tsconfig_path(root_path, args);
   const yaml_params = common.read_yaml_params(root_path);
@@ -48,6 +50,8 @@ async function _resolve_generate_params(args: t.Arguments): Promise<t.GeneratePa
   if (!database) {
     database = _resolve_param_database(args);
   }
+  common.assert_database(database);
+  common.assert_naming_convention(naming_convention);
   return {
     database,
     naming_convention,
@@ -58,7 +62,7 @@ async function _resolve_generate_params(args: t.Arguments): Promise<t.GeneratePa
 
 function _resolve_param_tsconfig_path(
   root_path: string,
-  args: t.Arguments
+  args: t.Arguments,
 ): string {
   if (args.flags && utils.valid.string(args.flags?.['tsconfig-path'])) {
     return args.flags['tsconfig-path'];
@@ -76,7 +80,7 @@ function _resolve_param_database(args: t.Arguments): t.Database {
 }
 
 function _resolve_param_naming_convention(
-  args: t.Arguments
+  args: t.Arguments,
 ): t.NamingConvention {
   if (args.flags && utils.valid.string(args.flags?.['naming-convention'])) {
     const naming_convention = args.flags['naming-convention'];
@@ -109,42 +113,81 @@ async function _update_dot_uranio(params: t.GenerateParams) {
   }
 
   log.trace(`Generating client...`);
-  const client_text =
-    params.database === t.DATABASE.MYSQL
-      ? _generate_mysql_uranio_client_module_text(
-          uranio_extended_interfaces,
-          params.naming_convention
-        )
-      : _generate_mongodb_uranio_client_module_text(
-          uranio_extended_interfaces,
-          params.naming_convention
-        );
+  let client_text = '';
+  switch (params.database) {
+    case t.DATABASE.MYSQL: {
+      client_text = _generate_mysql_uranio_client_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+    case t.DATABASE.MONGODB: {
+      client_text = _generate_mongodb_uranio_client_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+    case t.DATABASE.POSTGRESQL: {
+      client_text = _generate_postgresql_uranio_client_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+  }
 
   const uranio_client_path = `${dot_uranio_src_path}/client.ts`;
   fs.writeFileSync(uranio_client_path, client_text);
   log.debug(`Generated client`);
 
   log.trace(`Generating index...`);
-  const index_text =
-    params.database === t.DATABASE.MYSQL
-      ? _generate_mysql_uranio_index_module_text()
-      : _generate_mongodb_uranio_index_module_text();
+  let index_text = '';
+  switch (params.database) {
+    case t.DATABASE.MYSQL: {
+      index_text = _generate_mysql_uranio_index_module_text();
+      break;
+    }
+    case t.DATABASE.MONGODB: {
+      index_text = _generate_mongodb_uranio_index_module_text();
+      break;
+    }
+    case t.DATABASE.POSTGRESQL: {
+      index_text = _generate_postgresql_uranio_index_module_text();
+      break;
+    }
+  }
 
   const uranio_index_path = `${dot_uranio_src_path}/index.ts`;
   fs.writeFileSync(uranio_index_path, index_text);
   log.debug(`Generated index`);
 
   log.trace(`Generating types...`);
-  const types_text =
-    params.database === t.DATABASE.MYSQL
-      ? _generate_mysql_uranio_types_module_text(
-          uranio_extended_interfaces,
-          params.naming_convention
-        )
-      : _generate_mongodb_uranio_types_module_text(
-          uranio_extended_interfaces,
-          params.naming_convention
-        );
+  let types_text = '';
+  switch (params.database) {
+    case t.DATABASE.MYSQL: {
+      types_text = _generate_mysql_uranio_types_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+    case t.DATABASE.MONGODB: {
+      types_text = _generate_mongodb_uranio_types_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+    case t.DATABASE.POSTGRESQL: {
+      types_text = _generate_postgresql_uranio_types_module_text(
+        uranio_extended_interfaces,
+        params.naming_convention,
+      );
+      break;
+    }
+  }
 
   const uranio_types_path = `${dot_uranio_src_path}/types/index.ts`;
   fs.writeFileSync(uranio_types_path, types_text);
@@ -160,34 +203,67 @@ async function _remove_unused_database_files(params: t.GenerateParams) {
   const types_atom_path = `${destination_path}/src/types/atom.ts`;
 
   // Remove unused database client and atom files based on selected database
-  if (params.database === t.DATABASE.MONGODB) {
-    await ray.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts`);
-    await ray.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts`);
-    await _clean_types_atom_file(types_atom_path, 'mongodb');
-    log.debug(`Removed unused MySQL and DynamoDB files`);
-  } else if (params.database === t.DATABASE.MYSQL) {
-    await ray.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/dynamodb.ts`);
-    await ray.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/dynamodb.ts`);
-    await _clean_types_atom_file(types_atom_path, 'mysql');
-    log.debug(`Removed unused MongoDB and DynamoDB files`);
-  } else {
-    // DynamoDB
-    await ray.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/mysql.ts`);
-    await ray.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/mysql.ts`);
-    await _clean_types_atom_file(types_atom_path, 'dynamodb');
-    log.debug(`Removed unused MongoDB and MySQL files`);
+
+  switch (params.database) {
+    case t.DATABASE.MYSQL: {
+      await ray.spawn(
+        `rm -f ${client_path}/mongodb.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`,
+      );
+      await ray.spawn(
+        `rm -f ${atom_path}/mongodb.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`,
+      );
+      await _clean_types_atom_file(types_atom_path, 'mysql');
+      log.debug(`Removed unused files`);
+      break;
+    }
+    case t.DATABASE.MONGODB: {
+      await ray.spawn(
+        `rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`,
+      );
+      await ray.spawn(
+        `rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`,
+      );
+      await _clean_types_atom_file(types_atom_path, 'mongodb');
+      log.debug(`Removed unused files`);
+      break;
+    }
+    case t.DATABASE.POSTGRESQL: {
+      await ray.spawn(
+        `rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/mongodb.ts`,
+      );
+      await ray.spawn(
+        `rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/mongodb.ts`,
+      );
+      await _clean_types_atom_file(types_atom_path, 'postgresql');
+      log.debug(`Removed unused files`);
+      break;
+    }
   }
 }
 
 async function _clean_types_atom_file(
   file_path: string,
-  database: 'mongodb' | 'mysql' | 'dynamodb'
+  database: 'mongodb' | 'mysql' | 'dynamodb' | 'postgresql',
 ) {
   let cleaned_content = '';
+  switch (database) {
+    case t.DATABASE.MYSQL: {
+      cleaned_content = `/**
+ *
+ * Atom client interface module
+ *
+ * @packageDocumentation
+ *
+ */
 
-  if (database === 'mongodb') {
-    // Keep only mongodb-related imports and types
-    cleaned_content = `/**
+export interface atom {}
+
+export interface mysql_atom extends atom {}
+`;
+      break;
+    }
+    case t.DATABASE.MONGODB: {
+      cleaned_content = `/**
  *
  * Atom client interface module
  *
@@ -205,21 +281,9 @@ export interface mongodb_atom extends atom {
   _id: ObjectId
 }
 `;
-  } else if (database === 'mysql') {
-    // No imports needed for MySQL
-    cleaned_content = `/**
- *
- * Atom client interface module
- *
- * @packageDocumentation
- *
- */
-
-export interface atom {}
-
-export interface mysql_atom extends atom {}
-`;
-  } else {
+      break;
+    }
+    case t.DATABASE.POSTGRESQL: {
     // DynamoDB - no special imports needed
     cleaned_content = `/**
  *
@@ -231,8 +295,10 @@ export interface mysql_atom extends atom {}
 
 export interface atom {}
 
-export interface dynamodb_atom extends atom {}
+export interface postgresql_atom extends atom {}
 `;
+      break;
+    }
   }
 
   fs.writeFileSync(file_path, cleaned_content);
@@ -277,7 +343,7 @@ function _get_uranio_extended_interfaces(params: t.GenerateParams) {
       }
       if (name in uranio_extended_interfaces) {
         log.warn(
-          `An Atom with the same name [${name}] already exists. Overriding...`
+          `An Atom with the same name [${name}] already exists. Overriding...`,
         );
       }
       uranio_extended_interfaces[name] = inter;
@@ -290,7 +356,7 @@ function _get_uranio_extended_interfaces(params: t.GenerateParams) {
 
 function _generate_mongodb_uranio_types_module_text(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `/**\n`;
@@ -309,9 +375,30 @@ function _generate_mongodb_uranio_types_module_text(
   return text;
 }
 
+function _generate_postgresql_uranio_types_module_text(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention,
+) {
+  let text = '';
+  text += `/**\n`;
+  text += ` *\n`;
+  text += ` * [Auto-generated module by "uranio generate" command]\n`;
+  text += ` *\n`;
+  text += ` * Types index module\n`;
+  text += ` *\n`;
+  text += ` */\n`;
+  text += `\n`;
+  text += `import {postgresql_atom as atom} from './atom';\n`;
+  text += `export {atom};\n`;
+  text += `\n`;
+  text += _generate_atom_name_type(interfaces, naming_convention);
+  text += `\n`;
+  return text;
+}
+
 function _generate_mysql_uranio_types_module_text(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `/**\n`;
@@ -348,6 +435,24 @@ function _generate_mongodb_uranio_index_module_text() {
   return text;
 }
 
+function _generate_postgresql_uranio_index_module_text() {
+  let text = '';
+  text += `/**\n`;
+  text += ` *\n`;
+  text += ` * [Auto-generated module by "uranio generate" command]\n`;
+  text += ` *\n`;
+  text += ` * Index module\n`;
+  text += ` *\n`;
+  text += ` */\n`;
+  text += `\n`;
+  text += `export * from './types/index';\n`;
+  text += `\n`;
+  text += `import {UranioPostgreSQLClient as PostgreSQLClient} from './client';\n`;
+  text += `export {PostgreSQLClient};`;
+  text += `\n`;
+  return text;
+}
+
 function _generate_mysql_uranio_index_module_text() {
   let text = '';
   text += `/**\n`;
@@ -368,7 +473,7 @@ function _generate_mysql_uranio_index_module_text() {
 
 function _generate_mongodb_uranio_client_module_text(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `/**\n`;
@@ -389,9 +494,32 @@ function _generate_mongodb_uranio_client_module_text(
   return text;
 }
 
+function _generate_postgresql_uranio_client_module_text(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention,
+) {
+  let text = '';
+  text += `/**\n`;
+  text += ` *\n`;
+  text += ` * [Auto-generated module by "uranio generate" command]\n`;
+  text += ` *\n`;
+  text += ` * Uranio PostgreSQLClient module\n`;
+  text += ` *\n`;
+  text += ` */\n`;
+  text += `\n`;
+  text += `import {PostgreSQLClient, PostgreSQLClientParams} from './client/postgresql';\n`;
+  text += `import {PostgreSQLAtomClient} from './atom/postgresql';\n`;
+  text += `import * as atom_types from './types/atom';\n`;
+  text += `\n`;
+  text += _generate_postgresql_interface_definitions(interfaces);
+  text += _generate_postgresql_client(interfaces, naming_convention);
+  text += `\n`;
+  return text;
+}
+
 function _generate_mysql_uranio_client_module_text(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `/**\n`;
@@ -414,7 +542,7 @@ function _generate_mysql_uranio_client_module_text(
 
 function _generate_atom_name_type(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `type ObjectValue<T> = T[keyof T];\n\n`;
@@ -430,7 +558,7 @@ function _generate_atom_name_type(
 
 function _generate_mongodb_client(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `export class UranioMongoDBClient extends MongoDBClient{\n`;
@@ -439,7 +567,7 @@ function _generate_mongodb_client(
   text += `    super(params);\n`;
   text += _generate_mongodb_client_initialization(
     interfaces,
-    naming_convention
+    naming_convention,
   );
   text += `  }\n`;
   text += `}\n`;
@@ -448,7 +576,7 @@ function _generate_mongodb_client(
 
 function _generate_mysql_client(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   text += `export class UranioMySQLClient extends MySQLClient{\n`;
@@ -461,8 +589,23 @@ function _generate_mysql_client(
   return text;
 }
 
+function _generate_postgresql_client(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention,
+) {
+  let text = '';
+  text += `export class UranioPostgreSQLClient extends PostgreSQLClient{\n`;
+  text += _generate_postgresql_client_attributes(interfaces, naming_convention);
+  text += `  constructor(params: PostgreSQLClientParams) {\n`;
+  text += `    super(params);\n`;
+  text += _generate_postgresql_client_initialization(interfaces, naming_convention);
+  text += `  }\n`;
+  text += `}\n`;
+  return text;
+}
+
 function _resolve_optional(prop: plutonio.TypeAttributes): string {
-  return (prop.optional === true) ? '?' : '';
+  return prop.optional === true ? '?' : '';
 }
 
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
@@ -497,7 +640,7 @@ function _resolve_primitve(prop: plutonio.TypeAttributes): string {
     }
     default: {
       throw new exception.UranioCLIException(
-        `Invalid Plutonio primitive. Evaluating '${prop.primitive}'`
+        `Invalid Plutonio primitive. Evaluating '${prop.primitive}'`,
       );
     }
   }
@@ -525,7 +668,7 @@ function _resolve_primitive_enum(prop: plutonio.TypeAttributes): string {
 }
 
 function _generate_mongodb_interface_definitions(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
@@ -545,7 +688,7 @@ function _generate_mongodb_interface_definitions(
 }
 
 function _generate_mysql_interface_definitions(
-  interfaces: plutonio.Interfaces
+  interfaces: plutonio.Interfaces,
 ) {
   let text = '';
   for (const [name, inter] of Object.entries(interfaces)) {
@@ -564,9 +707,29 @@ function _generate_mysql_interface_definitions(
   return text;
 }
 
+function _generate_postgresql_interface_definitions(
+  interfaces: plutonio.Interfaces,
+) {
+  let text = '';
+  for (const [name, inter] of Object.entries(interfaces)) {
+    text += `interface ${name} extends atom_types.postgresql_atom {\n`;
+    if (!inter.properties) {
+      text += `}\n`;
+      text += `\n`;
+      continue;
+    }
+    for (const [prop_name, prop] of Object.entries(inter.properties)) {
+      text += `  ${prop_name}${_resolve_optional(prop)}: ${_resolve_primitve(prop)};\n`;
+    }
+    text += `}\n`;
+    text += `\n`;
+  }
+  return text;
+}
+
 function _generate_mongodb_client_attributes(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
@@ -578,7 +741,7 @@ function _generate_mongodb_client_attributes(
 
 function _generate_mongodb_client_initialization(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
@@ -591,7 +754,7 @@ function _generate_mongodb_client_initialization(
 
 function _generate_mysql_client_attributes(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
@@ -603,7 +766,7 @@ function _generate_mysql_client_attributes(
 
 function _generate_mysql_client_initialization(
   interfaces: plutonio.Interfaces,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ) {
   let text = '';
   for (const [name, _inter] of Object.entries(interfaces)) {
@@ -614,9 +777,34 @@ function _generate_mysql_client_initialization(
   return text;
 }
 
+function _generate_postgresql_client_attributes(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention,
+) {
+  let text = '';
+  for (const [name, _inter] of Object.entries(interfaces)) {
+    let lc = _process_collection_name(name, naming_convention);
+    text += `  public ${lc}: PostgreSQLAtomClient<${name}>;\n`;
+  }
+  return text;
+}
+
+function _generate_postgresql_client_initialization(
+  interfaces: plutonio.Interfaces,
+  naming_convention: t.NamingConvention,
+) {
+  let text = '';
+  for (const [name, _inter] of Object.entries(interfaces)) {
+    let lc = _process_collection_name(name, naming_convention);
+    // Different from Mongo since it pass `this` instead of `this.db`
+    text += `    this.${lc} = new PostgreSQLAtomClient<${name}>(this, '${lc}');\n`;
+  }
+  return text;
+}
+
 function _process_collection_name(
   input: string,
-  naming_convention: t.NamingConvention
+  naming_convention: t.NamingConvention,
 ): string {
   switch (naming_convention) {
     case 'camelCase': {
