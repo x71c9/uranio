@@ -3,7 +3,7 @@
 ![uranio logo](./img/uranio_logo_1440x220.png)
 
 Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB,
-Object Relational Mapping (ORM) for MySQL, and DynamoDB.\
+Object Relational Mapping (ORM) for MySQL and PostgreSQL, and DynamoDB.\
 It creates a client for querying collections/tables in a database by just parsing
 the types in a repository.
 
@@ -24,6 +24,12 @@ npm install uranio mongodb
 npm install uranio mysql2
 ```
 
+### For PostgreSQL users:
+```bash
+npm install uranio pg
+npm install --save-dev @types/pg
+```
+
 ### For DynamoDB users:
 ```bash
 npm install uranio @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
@@ -36,6 +42,8 @@ Run:
 uranio generate -d mongodb
 // or
 uranio generate -d mysql
+// or
+uranio generate -d postgresql
 ```
 
 The above command search for all interfaces in your repository that extends
@@ -139,6 +147,29 @@ const urn = uranio.MySQLClient({
 
 The timezone setting affects how JavaScript `Date` objects are converted when storing to and retrieving from the database. Using UTC (default) is recommended for consistency across different timezones.
 
+### PostgreSQL Client Options
+
+When creating a PostgreSQL client, you can configure additional options:
+
+```typescript
+import uranio from 'uranio';
+
+const uri = process.env.POSTGRESQL_DATABASE_URI || '';
+
+// Default: no connection pool
+const urn = uranio.PostgreSQLClient({ uri });
+
+// With connection pool (recommended for production)
+const urn = uranio.PostgreSQLClient({
+  uri,
+  usePool: true
+});
+```
+
+**Connection Pool:**
+- Connection pooling is recommended for production environments to manage database connections efficiently
+- PostgreSQL handles timezones natively, so no timezone configuration is needed
+
 ## Troubleshooting
 
 ### Missing Database SDK Error
@@ -147,6 +178,7 @@ If you get an error like:
 ```
 Error: Cannot find module 'mongodb'
 Error: Cannot find module 'mysql2'
+Error: Cannot find module 'pg'
 Error: Cannot find module '@aws-sdk/client-dynamodb'
 ```
 
@@ -158,6 +190,10 @@ npm install mongodb
 
 # For MySQL
 npm install mysql2
+
+# For PostgreSQL
+npm install pg
+npm install --save-dev @types/pg
 
 # For DynamoDB
 npm install @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
