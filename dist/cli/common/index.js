@@ -50,7 +50,7 @@ exports.assert_naming_convention = assert_naming_convention;
 exports._assert_yaml_params = _assert_yaml_params;
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
-const app_root_path_1 = __importDefault(require("app-root-path"));
+const pkg_dir_1 = require("pkg-dir");
 const r4y_1 = __importDefault(require("r4y"));
 const index_1 = require("../log/index");
 const utils = __importStar(require("../utils/index"));
@@ -71,12 +71,18 @@ function set_verbosity(args) {
     const debug = ((_a = args.flags) === null || _a === void 0 ? void 0 : _a.verbose) === true;
     r4y_1.default.config.set({ debug, spinner: index_1.log.spinner });
 }
-function resolve_param_root(args) {
+async function resolve_param_root(args) {
     var _a;
     if (args.flags && utils.valid.string((_a = args.flags) === null || _a === void 0 ? void 0 : _a['root'])) {
         return args.flags['root'];
     }
-    const root_path = app_root_path_1.default.toString();
+    // Use pkg-dir to find project root by searching for package.json
+    // This works correctly with symlinked installations (file:../.. or npm link)
+    const root_path = await (0, pkg_dir_1.packageDirectory)();
+    if (!root_path) {
+        throw new exception.UranioCLIException('Could not find project root (package.json). ' +
+            'Make sure you are running this command from within a Node.js project.');
+    }
     return root_path;
 }
 function assert_database(db) {

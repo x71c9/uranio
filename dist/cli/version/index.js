@@ -48,7 +48,7 @@ const index_1 = require("../log/index");
 const exception = __importStar(require("../exception/index"));
 const common = __importStar(require("../common/index"));
 async function version(args) {
-    const root_path = common.resolve_param_root(args);
+    const root_path = await common.resolve_param_root(args);
     const uranio_package_json_path = `${root_path}/node_modules/uranio/package.json`;
     if (!fs_1.default.existsSync(uranio_package_json_path)) {
         throw new exception.UranioCLIException(`Missing uranio package.json [${uranio_package_json_path}]`);

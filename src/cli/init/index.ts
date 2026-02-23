@@ -44,7 +44,7 @@ async function _create_init_yaml(params: t.InitParams): Promise<void>{
 }
 
 async function _resolve_init_params(args: t.Arguments): Promise<t.InitParams> {
-  const root = common.resolve_param_root(args);
+  const root = await common.resolve_param_root(args);
   let database = _resolve_param_database(args);
   if (!database) {
     database = await _ask_for_database();

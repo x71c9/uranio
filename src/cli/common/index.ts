@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import yaml from 'yaml';
-import root from 'app-root-path';
+import {packageDirectory} from 'pkg-dir';
 import ray from 'r4y';
 import {log} from '../log/index';
 import * as utils from '../utils/index';
@@ -32,11 +32,19 @@ export function set_verbosity(args: t.Arguments) {
   ray.config.set({debug, spinner: log.spinner});
 }
 
-export function resolve_param_root(args: t.Arguments): string {
+export async function resolve_param_root(args: t.Arguments): Promise<string> {
   if (args.flags && utils.valid.string(args.flags?.['root'])) {
     return args.flags['root'];
   }
-  const root_path = root.toString();
+  // Use pkg-dir to find project root by searching for package.json
+  // This works correctly with symlinked installations (file:../.. or npm link)
+  const root_path = await packageDirectory();
+  if (!root_path) {
+    throw new exception.UranioCLIException(
+      'Could not find project root (package.json). ' +
+        'Make sure you are running this command from within a Node.js project.'
+    );
+  }
   return root_path;
 }
 
