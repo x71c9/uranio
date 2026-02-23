@@ -3,7 +3,7 @@
 ![uranio logo](./img/uranio_logo_1440x220.png)
 
 Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB,
-Object Relational Mapping (ORM) for MySQL and PostgreSQL, and DynamoDB.\
+and Object Relational Mapping (ORM) for MySQL and PostgreSQL.\
 It creates a client for querying collections/tables in a database by just parsing
 the types in a repository.
 
@@ -28,11 +28,6 @@ npm install uranio mysql2
 ```bash
 npm install uranio pg
 npm install --save-dev @types/pg
-```
-
-### For DynamoDB users:
-```bash
-npm install uranio @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
 ```
 
 ## How it works
@@ -179,7 +174,6 @@ If you get an error like:
 Error: Cannot find module 'mongodb'
 Error: Cannot find module 'mysql2'
 Error: Cannot find module 'pg'
-Error: Cannot find module '@aws-sdk/client-dynamodb'
 ```
 
 This means you haven't installed the required database SDK. Install the SDK for your chosen database:
@@ -194,9 +188,6 @@ npm install mysql2
 # For PostgreSQL
 npm install pg
 npm install --save-dev @types/pg
-
-# For DynamoDB
-npm install @aws-sdk/client-dynamodb @aws-sdk/util-dynamodb
 ```
 
 ### Peer Dependency Warnings

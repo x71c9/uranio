@@ -14,8 +14,5 @@ export {MongoDBClient};
 import {UranioMySQLClient as MySQLClient} from './client';
 export {MySQLClient};
 
-import {UranioDynamoDBClient as DynamoDBClient} from './client';
-export {DynamoDBClient};
-
 import {UranioPostgreSQLClient as PostgreSQLClient} from './client';
 export {PostgreSQLClient};

@@ -18,7 +18,5 @@ export interface mongodb_atom extends atom {
   _id: ObjectId
 }
 
-export interface dynamodb_atom extends atom {}
-
 export interface postgresql_atom extends atom {}
 
