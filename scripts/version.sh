@@ -1,11 +1,21 @@
 #!/bin/sh
 
-if [[ `git status --porcelain` ]]; then
+# Check if on master branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$current_branch" != "master" ]; then
+  echo
+  echo "Error: You must be on the 'master' branch to publish."
+  echo "Current branch: $current_branch"
+  echo
+  exit 1
+fi
+
+if [ -n "$(git status --porcelain)" ]; then
   echo
   echo "Error: Git working directory is not clean. Please commit your changes or stash them."
   echo
   exit 1
-fi;
+fi
 
 # Check if logged in to npm
 echo "Checking npm login status..."
@@ -51,7 +61,7 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-if [ "$SEMANTIC_NAME" == "" ]; then
+if [ "$SEMANTIC_NAME" = "" ]; then
   echo
   echo "Missing semantic name parameter. Valid values are [patch, minor, major]"
   echo
@@ -59,7 +69,7 @@ if [ "$SEMANTIC_NAME" == "" ]; then
   exit 1
 fi
 
-if [ "$FORCE_FLAG" == "--force" ]; then
+if [ "$FORCE_FLAG" = "--force" ]; then
   response="y"
 else
   case "$SEMANTIC_NAME" in
@@ -91,12 +101,12 @@ minor=$(echo $current_version | cut -d. -f2)
 patch=$(echo $current_version | cut -d. -f3)
 
 increment_version() {
-  if [ "$1" == "patch" ]; then
+  if [ "$1" = "patch" ]; then
     patch=$((patch + 1))
-  elif [ "$1" == "minor" ]; then
+  elif [ "$1" = "minor" ]; then
     minor=$((minor + 1))
     patch=0
-  elif [ "$1" == "major" ]; then
+  elif [ "$1" = "major" ]; then
     major=$((major + 1))
     minor=0
     patch=0
@@ -133,7 +143,6 @@ esac
 new_version="$major.$minor.$patch"
 
 DOT_URANIO_PACKAGE_JSON_PATH=.uranio/package.json
-VERSION=$(node -p "require('./package.json').version")
 
 jq --arg uranio_version "$new_version" \
    '.dependencies |= . + { "uranio": $uranio_version }' \
@@ -148,5 +157,8 @@ git tag -a v$new_version -m "v$new_version"
 
 git push origin
 git push origin v$new_version
-yarn publish --new-version $new_version
+
+# The version in package.json has already been updated by jq above,
+# so npm publish will use the correct version automatically
+npm publish
 
