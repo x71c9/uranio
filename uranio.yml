@@ -1,2 +1,2 @@
-database: mongodb
-naming_convention: snake_case
+database: mysql
+naming_convention: camelCase

@@ -242,7 +242,6 @@ export interface dynamodb_atom extends atom {}
 async function _build_dot_uranio(params) {
     index_1.log.spinner.text(`Transpiling dot uranio files...`);
     const copied_dot_uranio_tsconfig_path = `${params.root}/node_modules/.uranio/tsconfig.json`;
-    // await ray.spawn(`yarn tsc --project ${copied_dot_uranio_tsconfig_path}`);
     await r4y_1.default.spawn(`npx tsc --project ${copied_dot_uranio_tsconfig_path}`);
     index_1.log.debug(`Transpiled dot uranio files`);
 }

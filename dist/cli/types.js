@@ -25,8 +25,8 @@ exports.COMMAND = {
     VERSION: 'version',
 };
 exports.NAMING_CONVENTION = {
-    SNAKE_CASE: 'snake_case',
     CAMEL_CASE: 'camelCase',
+    SNAKE_CASE: 'snake_case',
     PASCAL: 'PascalCase',
 };
 //# sourceMappingURL=types.js.map
