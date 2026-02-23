@@ -18,6 +18,7 @@ exports.FLAG = {
 exports.DATABASE = {
     MONGODB: 'mongodb',
     MYSQL: 'mysql',
+    POSTGRESQL: 'postgresql',
 };
 exports.COMMAND = {
     INIT: 'init',
