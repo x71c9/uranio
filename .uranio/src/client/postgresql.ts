@@ -94,7 +94,6 @@ export class PostgreSQLClient {
 
     // Replace each :paramName with $1, $2, etc.
     for (const key of sortedKeys) {
-      const namedParam = `:${key}`;
       // Replace ALL occurrences of this named parameter with the SAME positional parameter
       const regex = new RegExp(`:${key}\\b`, 'g');
       convertedQuery = convertedQuery.replace(regex, `$${paramIndex}`);
