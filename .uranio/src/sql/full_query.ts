@@ -26,7 +26,7 @@ export function compose_select<S extends atom_types.atom>({
   let query_string = 'SELECT';
   query_string += _resolve_projection(projection);
   query_string += ` FROM \`${table}\``;
-  if(where && typeof where === 'object' && Object.entries(where).length > 0){
+  if (where && typeof where === 'object' && Object.entries(where).length > 0) {
     query_string += ` WHERE ` + _resolve_where<S>(where);
   }
   query_string += _resolve_order(order);
@@ -80,7 +80,9 @@ export function compose_insert<S extends atom_types.atom>({
   return query_string;
 }
 
-function _resolve_where<S extends atom_types.atom>(where?: where_types.Where<S>): string {
+function _resolve_where<S extends atom_types.atom>(
+  where?: where_types.Where<S>,
+): string {
   if (
     !where ||
     typeof where !== 'object' ||
@@ -96,7 +98,7 @@ function _resolve_where<S extends atom_types.atom>(where?: where_types.Where<S>)
       // console.log(`Key is in root operators`);
       if (!Array.isArray(value)) {
         throw new Error(
-          `Invalid Where. Root operator '${key}' must have an Array as value`
+          `Invalid Where. Root operator '${key}' must have an Array as value`,
         );
       }
       const queries = value.map((el) => _resolve_where(el));
@@ -130,7 +132,7 @@ function _resolve_where<S extends atom_types.atom>(where?: where_types.Where<S>)
     //     `Invalid key. Key cannot be equal to an operator. Using '${key}'`
     //   );
     // }
-    if(value instanceof RegExp){
+    if (value instanceof RegExp) {
       let query_string = `\`${key}\``;
       query_string += ` REGEXP ` + _format_value(value);
       where_parts.push(query_string);
@@ -154,13 +156,15 @@ function _resolve_where<S extends atom_types.atom>(where?: where_types.Where<S>)
   return final_where;
 }
 
-function _resolve_columns<S extends atom_types.atom>(columns: (keyof S)[]): string {
+function _resolve_columns<S extends atom_types.atom>(
+  columns: (keyof S)[],
+): string {
   return ' (' + columns.map((el) => '`' + String(el) + '`').join(', ') + ')';
 }
 
 function _resolve_records<S extends atom_types.atom>(
   columns: (keyof S)[],
-  records: Partial<S>[]
+  records: Partial<S>[],
 ): string {
   const record_strings: string[] = [];
   for (let record of records) {
@@ -175,7 +179,9 @@ function _resolve_records<S extends atom_types.atom>(
   return ` VALUES ${full_records}`;
 }
 
-function _resolve_update<S extends atom_types.atom>(update: Partial<S>): string {
+function _resolve_update<S extends atom_types.atom>(
+  update: Partial<S>,
+): string {
   const update_parts: string[] = [];
   for (const [key, value] of Object.entries(update)) {
     update_parts.push(`${key} = ${_format_value(value)}`);
@@ -191,11 +197,36 @@ function _resolve_order(order?: sql_types.OrderBy): string {
   ) {
     return '';
   }
+
+  // Security: Validate column names and directions to prevent SQL injection
+  const VALID_COLUMN_REGEX = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+  const VALID_DIRECTIONS = ['asc', 'desc'];
+
   let query_string = '';
   let order_strings: string[] = [];
+
   for (const [column, direction] of Object.entries(order)) {
-    order_strings.push(`\`${column}\` ${direction.toUpperCase()}`);
+    // Validate column name (alphanumeric and underscore only)
+    if (!VALID_COLUMN_REGEX.test(column)) {
+      throw new Error(
+        `Invalid column name in ORDER BY: "${column}". ` +
+          `Column names must start with a letter or underscore and contain ` +
+          ` only alphanumeric characters and underscores.`,
+      );
+    }
+
+    // Validate direction
+    const normalizedDirection = direction.toLowerCase();
+    if (!VALID_DIRECTIONS.includes(normalizedDirection)) {
+      throw new Error(
+        `Invalid direction in ORDER BY: "${direction}". ` +
+          `Must be "asc" or "desc".`,
+      );
+    }
+
+    order_strings.push(`\`${column}\` ${normalizedDirection.toUpperCase()}`);
   }
+
   const final_order = order_strings.join(', ');
   query_string += ` ORDER BY ${final_order}`;
   return query_string;
@@ -212,6 +243,19 @@ function _resolve_limit(limit?: string): string {
   if (typeof limit !== 'string' || limit === '') {
     return '';
   }
+
+  // Security: Validate LIMIT to prevent SQL injection
+  // Supports: "10", "10,20" (MySQL offset), "10 OFFSET 20" (PostgreSQL)
+  const limitPattern = /^(\d+)(?:\s*,\s*(\d+)|\s+OFFSET\s+(\d+))?$/i;
+  const match = limit.match(limitPattern);
+
+  if (!match) {
+    throw new Error(
+      `Invalid LIMIT clause: "${limit}". ` +
+        `Must be a positive integer or "limit,offset" or "limit OFFSET offset".`,
+    );
+  }
+
   return ` LIMIT ${limit}`;
 }
 
@@ -254,7 +298,7 @@ function _resolve_filter(column: string, operator: sql_types.Operator) {
       // Recursive
       case '$not': {
         filter_strings.push(
-          `\`${column}\` NOT (${_resolve_filter(column, value)})`
+          `\`${column}\` NOT (${_resolve_filter(column, value)})`,
         );
         break;
       }
@@ -280,10 +324,10 @@ function _format_value(value: unknown): string {
   if (Array.isArray(value)) {
     return `(${value.toString()})`;
   }
-  if(value instanceof RegExp){
+  if (value instanceof RegExp) {
     return value.source;
   }
-  if(value instanceof Date){
+  if (value instanceof Date) {
     // Return a unique placeholder that won't conflict with the date string
     return `__DATE_PLACEHOLDER_${value.getTime()}__`;
   }
