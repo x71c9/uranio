@@ -7,17 +7,23 @@
     "dev:base": "node -r source-map-support/register -r dotenv/config ./dist/run.js",
     "dev:run": "npx tsc-watch --onSuccess \"npm run dev:base\"",
     "dev:test": "node --import tsx --test --test-reporter spec --watch ./tests/*.test.ts",
-    "test": "node --no-warnings --import tsx --test --test-reporter spec tests/**/*test.ts"
+    "test": "node --no-warnings --import tsx --test --test-reporter spec tests/**/*test.ts",
+    "test:jest": "jest",
+    "test:jest:watch": "jest --watch",
+    "test:jest:coverage": "jest --coverage"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",
     "dotenv": "^16.3.1",
     "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-json": "^4.0.1",
+    "jest": "^30.2.0",
     "prettier": "3.8.1",
     "source-map-support": "^0.5.21",
+    "ts-jest": "^29.4.6",
     "tsc-watch": "^7.2.0",
     "tsx": "^4.7.0",
     "typescript": "^5.9.3"
