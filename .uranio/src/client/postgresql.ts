@@ -91,23 +91,16 @@ export class PostgreSQLClient {
     // Sort keys to ensure consistent ordering
     const sortedKeys = Object.keys(namedParams).sort();
     const paramValues: any[] = [];
-    const valueToIndexMap = new Map<any, number>();
+    const keyToIndexMap = new Map<string, number>();
 
-    // First pass: build a map of unique values to their positional index
-    // This handles the case where the SQL composer creates different parameter names
-    // for the same value (e.g., x0002 and x0004 both containing "owner-123")
+    // Map each named parameter to its positional index
     for (const key of sortedKeys) {
       const value = namedParams[key];
 
-      // Check if we've seen this exact value before
-      let paramIndex = valueToIndexMap.get(value);
-
-      if (paramIndex === undefined) {
-        // New unique value - assign it the next index
-        paramIndex = paramValues.length + 1;
-        paramValues.push(value);
-        valueToIndexMap.set(value, paramIndex);
-      }
+      // Each named parameter gets its own positional index
+      const paramIndex = paramValues.length + 1;
+      paramValues.push(value);
+      keyToIndexMap.set(key, paramIndex);
 
       // Replace all occurrences of this named parameter with its positional index
       const regex = new RegExp(`:${key}\\b`, 'g');

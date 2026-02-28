@@ -7,10 +7,9 @@
     "dev:base": "node -r source-map-support/register -r dotenv/config ./dist/run.js",
     "dev:run": "npx tsc-watch --onSuccess \"npm run dev:base\"",
     "dev:test": "node --import tsx --test --test-reporter spec --watch ./tests/*.test.ts",
-    "test": "node --no-warnings --import tsx --test --test-reporter spec tests/**/*test.ts",
-    "test:jest": "jest",
-    "test:jest:watch": "jest --watch",
-    "test:jest:coverage": "jest --coverage"
+    "test": "npx jest",
+    "test:jest:watch": "npx jest --watch",
+    "test:jest:coverage": "npx jest --coverage"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
