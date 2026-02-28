@@ -20,12 +20,12 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
   ) {}
 
   public async getAtom(where: where_types.Where<S>): Promise<S | null> {
-    const {query, map} = sql.param.compose_select({
+    const query = sql.build.select({
       table: this.name,
       where,
       limit: '1',
     });
-    const [rows] = await this.client.exe(query, map);
+    const [rows] = await this.client.exe(query);
     if (Array.isArray(rows) && rows[0]) {
       return rows[0] as S;
     }
@@ -41,13 +41,13 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     order?: sql_types.OrderBy;
     limit?: string;
   }): Promise<S[]> {
-    const {query, map} = sql.param.compose_select({
+    const query = sql.build.select({
       table: this.name,
       where,
       order,
       limit,
     });
-    const [rows] = await this.client.exe(query, map);
+    const [rows] = await this.client.exe(query);
     if (Array.isArray(rows)) {
       return rows as S[];
     }
@@ -59,12 +59,12 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     for(const [key, _] of Object.entries(shape)){
       columns.push(key as keyof S);
     }
-    const {query, query_records} = sql.param.compose_insert({
+    const query = sql.build.insert({
       table: this.name,
       columns,
       records: [shape]
     });
-    const response = await this.client.exe(query, query_records);
+    const response = await this.client.exe(query);
     return response;
   }
 
@@ -76,12 +76,12 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     for(const [key, _] of Object.entries(shapes[0])){
       columns.push(key as keyof S);
     }
-    const {query, query_records} = sql.param.compose_insert({
+    const query = sql.build.insert({
       table: this.name,
       columns,
       records: shapes
     });
-    const response = await this.client.exe(query, query_records);
+    const response = await this.client.exe(query);
     return response;
   }
 
@@ -89,21 +89,21 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     atom: Partial<S>,
     where?: where_types.Where<S>,
   ): Promise<any> {
-    const {query, map} = sql.param.compose_update({
+    const query = sql.build.update({
       table: this.name,
       where,
       update: atom
     });
-    const response = await this.client.exe(query, map);
+    const response = await this.client.exe(query);
     return response;
   }
 
   public async deleteAtoms(where: where_types.Where<S>): Promise<any> {
-    const {query, map} = sql.param.compose_delete({
+    const query = sql.build.del({
       table: this.name,
       where,
     });
-    const response = await this.client.exe(query, map);
+    const response = await this.client.exe(query);
     return response;
   }
 }

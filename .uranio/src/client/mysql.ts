@@ -8,6 +8,7 @@
 
 import mysql from 'mysql2/promise';
 import {log} from '../log/index';
+import {SQLStatement} from '../sql/template';
 
 export type MySQLClientParams = {
   uri: string;
@@ -31,7 +32,13 @@ export class MySQLClient {
       });
     }
   }
-  public async exe(sql: string, values?: any) {
+  public async exe(sql: string | SQLStatement, values?: any): Promise<any[]> {
+    // Handle SQLStatement objects
+    if (sql instanceof SQLStatement) {
+      const {sql: query, values: params} = sql.mysql();
+      return this.exe(query, params);
+    }
+
     const with_values =
       typeof values !== 'undefined'
         ? ` with values [${Object.entries(values)}]`
