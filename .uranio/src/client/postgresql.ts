@@ -8,6 +8,7 @@
 
 import {Pool, PoolClient} from 'pg';
 import {log} from '../log/index';
+import {SQLStatement} from '../sql/template';
 
 export type PostgreSQLClientParams = {
   uri: string;
@@ -26,7 +27,15 @@ export class PostgreSQLClient {
       });
     }
   }
-  public async exe(sql: string, values?: any) {
+  public async exe(sql: string | SQLStatement, values?: any): Promise<any[]> {
+    // Handle SQLStatement objects
+    if (sql instanceof SQLStatement) {
+      const {sql: query, values: params} = sql.postgres();
+      // Convert backticks to double quotes for PostgreSQL
+      const pgQuery = query.replace(/`/g, '"');
+      return this.exe(pgQuery, params);
+    }
+
     // Convert named parameters object to positional parameters array
     const {query, paramValues} = this._convert_named_to_positional(sql, values);
     const with_values =

@@ -6,8 +6,7 @@
  *
  */
 
-import * as full from './full_query';
-export {full};
+import * as build from './builder';
+export {build};
 
-import * as param from  './param_query';
-export {param};
+export {SQL, SQLStatement} from './template';
