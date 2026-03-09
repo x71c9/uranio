@@ -38,16 +38,16 @@ export class MongoDBClient {
     try {
       // Check if the client is already connected by pinging the database
       await this.client.db().command({ping: 1});
-      log.trace('MongoDB is already connected.');
+      log.debug('MongoDB is already connected.');
     } catch (error) {
       log.trace('Connecting to MongoDB...');
       await this.client.connect();
-      log.trace('MongoDB connected.');
+      log.debug('MongoDB connected.');
     }
   }
   public async disconnect() {
-    log.trace('Disconnecting...');
+    log.trace('Disconnecting from MongoDB...');
     await this.client.close();
-    log.trace('Disconnected.');
+    log.debug('MongoDB disconnected.');
   }
 }

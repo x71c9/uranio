@@ -43,7 +43,7 @@ export class MySQLClient {
       typeof values !== 'undefined'
         ? ` with values [${Object.entries(values)}]`
         : '';
-    log.trace(`Excuting query '${sql}'${with_values}`);
+    log.debug(`Excuting query '${sql}'${with_values}`);
     if (this.pool) {
       return await this._execute_from_pool_connection(sql, values);
     }
