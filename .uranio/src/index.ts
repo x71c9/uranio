@@ -8,6 +8,9 @@
 
 export * from './types/index';
 
+import {set} from './config/index';
+export const config = {set};
+
 import {UranioMongoDBClient as MongoDBClient} from './client';
 export {MongoDBClient};
 

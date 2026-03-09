@@ -428,6 +428,9 @@ function _generate_mongodb_uranio_index_module_text() {
   text += `\n`;
   text += `export * from './types/index';\n`;
   text += `\n`;
+  text += `import {set} from './config/index';\n`;
+  text += `export const config = {set};\n`;
+  text += `\n`;
   text += `import {UranioMongoDBClient as MongoDBClient} from './client';\n`;
   text += `export {MongoDBClient};`;
   text += `\n`;
@@ -446,6 +449,9 @@ function _generate_postgresql_uranio_index_module_text() {
   text += `\n`;
   text += `export * from './types/index';\n`;
   text += `\n`;
+  text += `import {set} from './config/index';\n`;
+  text += `export const config = {set};\n`;
+  text += `\n`;
   text += `import {UranioPostgreSQLClient as PostgreSQLClient} from './client';\n`;
   text += `export {PostgreSQLClient};`;
   text += `\n`;
@@ -463,6 +469,9 @@ function _generate_mysql_uranio_index_module_text() {
   text += ` */\n`;
   text += `\n`;
   text += `export * from './types/index';\n`;
+  text += `\n`;
+  text += `import {set} from './config/index';\n`;
+  text += `export const config = {set};\n`;
   text += `\n`;
   text += `import {UranioMySQLClient as MySQLClient} from './client';\n`;
   text += `export {MySQLClient};`;

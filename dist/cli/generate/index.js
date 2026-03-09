@@ -204,22 +204,22 @@ async function _remove_unused_database_files(params) {
     // Remove unused database client and atom files based on selected database
     switch (params.database) {
         case t.DATABASE.MYSQL: {
-            await r4y_1.default.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`);
-            await r4y_1.default.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`);
+            await r4y_1.default.spawn(`rm -f ${client_path}/mongodb.ts ${client_path}/postgresql.ts`);
+            await r4y_1.default.spawn(`rm -f ${atom_path}/mongodb.ts ${atom_path}/postgresql.ts`);
             await _clean_types_atom_file(types_atom_path, 'mysql');
             index_1.log.debug(`Removed unused files`);
             break;
         }
         case t.DATABASE.MONGODB: {
-            await r4y_1.default.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/postgresql.ts`);
-            await r4y_1.default.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/postgresql.ts`);
+            await r4y_1.default.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/postgresql.ts`);
+            await r4y_1.default.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/postgresql.ts`);
             await _clean_types_atom_file(types_atom_path, 'mongodb');
             index_1.log.debug(`Removed unused files`);
             break;
         }
         case t.DATABASE.POSTGRESQL: {
-            await r4y_1.default.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/dynamodb.ts ${client_path}/mongodb.ts`);
-            await r4y_1.default.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/dynamodb.ts ${atom_path}/mongodb.ts`);
+            await r4y_1.default.spawn(`rm -f ${client_path}/mysql.ts ${client_path}/mongodb.ts`);
+            await r4y_1.default.spawn(`rm -f ${atom_path}/mysql.ts ${atom_path}/mongodb.ts`);
             await _clean_types_atom_file(types_atom_path, 'postgresql');
             index_1.log.debug(`Removed unused files`);
             break;
@@ -266,7 +266,6 @@ export interface mongodb_atom extends atom {
             break;
         }
         case t.DATABASE.POSTGRESQL: {
-            // DynamoDB - no special imports needed
             cleaned_content = `/**
  *
  * Atom client interface module
@@ -392,6 +391,9 @@ function _generate_mongodb_uranio_index_module_text() {
     text += `\n`;
     text += `export * from './types/index';\n`;
     text += `\n`;
+    text += `import {set} from './config/index';\n`;
+    text += `export const config = {set};\n`;
+    text += `\n`;
     text += `import {UranioMongoDBClient as MongoDBClient} from './client';\n`;
     text += `export {MongoDBClient};`;
     text += `\n`;
@@ -409,6 +411,9 @@ function _generate_postgresql_uranio_index_module_text() {
     text += `\n`;
     text += `export * from './types/index';\n`;
     text += `\n`;
+    text += `import {set} from './config/index';\n`;
+    text += `export const config = {set};\n`;
+    text += `\n`;
     text += `import {UranioPostgreSQLClient as PostgreSQLClient} from './client';\n`;
     text += `export {PostgreSQLClient};`;
     text += `\n`;
@@ -425,6 +430,9 @@ function _generate_mysql_uranio_index_module_text() {
     text += ` */\n`;
     text += `\n`;
     text += `export * from './types/index';\n`;
+    text += `\n`;
+    text += `import {set} from './config/index';\n`;
+    text += `export const config = {set};\n`;
     text += `\n`;
     text += `import {UranioMySQLClient as MySQLClient} from './client';\n`;
     text += `export {MySQLClient};`;
