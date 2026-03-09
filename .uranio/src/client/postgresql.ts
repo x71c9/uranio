@@ -42,7 +42,7 @@ export class PostgreSQLClient {
       typeof paramValues !== 'undefined' && paramValues.length > 0
         ? ` with values [${paramValues}]`
         : '';
-    log.trace(`Excuting query '${query}'${with_values}`);
+    log.debug(`Excuting query '${query}'${with_values}`);
     if (this.pool) {
       return await this._execute_from_pool_connection(query, paramValues);
     }
