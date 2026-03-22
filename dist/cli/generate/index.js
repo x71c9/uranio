@@ -679,8 +679,9 @@ function _generate_mysql_client_initialization(interfaces, naming_convention) {
     let text = '';
     for (const [name, _inter] of Object.entries(interfaces)) {
         let lc = _process_collection_name(name, naming_convention);
+        let table_name = _pascal_to_snake(name);
         // Different from Mongo since it pass `this` instead of `this.db`
-        text += `    this.${lc} = new MySQLAtomClient<${name}>(this, '${lc}');\n`;
+        text += `    this.${lc} = new MySQLAtomClient<${name}>(this, '${table_name}');\n`;
     }
     return text;
 }
@@ -696,8 +697,9 @@ function _generate_postgresql_client_initialization(interfaces, naming_conventio
     let text = '';
     for (const [name, _inter] of Object.entries(interfaces)) {
         let lc = _process_collection_name(name, naming_convention);
+        let table_name = _pascal_to_snake(name);
         // Different from Mongo since it pass `this` instead of `this.db`
-        text += `    this.${lc} = new PostgreSQLAtomClient<${name}>(this, '${lc}');\n`;
+        text += `    this.${lc} = new PostgreSQLAtomClient<${name}>(this, '${table_name}');\n`;
     }
     return text;
 }

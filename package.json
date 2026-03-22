@@ -8,7 +8,7 @@
     "url": "git+ssh://git@github.com/x71c9/uranio.git"
   },
   "author": "x71c9 <108585118+x71c9@users.noreply.github.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bin": {
     "uranio": "dist/bin.js"
   },
