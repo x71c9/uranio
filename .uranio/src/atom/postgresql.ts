@@ -115,7 +115,8 @@ export class PostgreSQLAtomClient<S extends atom_types.postgresql_atom> {
     });
     const [rows] = await this.client.exe(query);
     if (Array.isArray(rows) && rows[0]) {
-      return (rows[0] as any).count || 0;
+      const count = (rows[0] as any).count;
+      return typeof count === 'string' ? parseInt(count, 10) : (count || 0);
     }
     return 0;
   }
