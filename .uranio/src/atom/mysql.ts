@@ -106,4 +106,17 @@ export class MySQLAtomClient<S extends atom_types.mysql_atom> {
     const response = await this.client.exe(query);
     return response;
   }
+
+  public async countAtoms(where?: where_types.Where<S>): Promise<number> {
+    const query = sql.build.select({
+      projection: ['COUNT(*) as count'],
+      table: this.name,
+      where,
+    });
+    const [rows] = await this.client.exe(query);
+    if (Array.isArray(rows) && rows[0]) {
+      return (rows[0] as any).count || 0;
+    }
+    return 0;
+  }
 }

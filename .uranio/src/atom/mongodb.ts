@@ -157,6 +157,14 @@ export class MongoDBAtomClient<S extends atom_types.mongodb_atom> {
     }
     return (response as S);
   }
+
+  public async countAtoms({where}: {where?: where_types.Where<S>}): Promise<number> {
+    where = _instance_object_id(where);
+    const count = await this.collection.countDocuments(
+      where as mongodb.Filter<S>
+    );
+    return count;
+  }
 }
 
 // type StringId<T extends unknown> = T extends {_id: any}
