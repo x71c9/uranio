@@ -136,5 +136,25 @@ describe('MySQLAtomClient', () => {
 
       expect(count).toBe(1000000);
     });
+
+    it('should convert string count to number', async () => {
+      const mockResult = [[{count: '42'}], []];
+      (mockClient.exe as jest.Mock).mockResolvedValue(mockResult);
+
+      const count = await atomClient.countAtoms();
+
+      expect(count).toBe(42);
+      expect(typeof count).toBe('number');
+    });
+
+    it('should handle string count with large numbers', async () => {
+      const mockResult = [[{count: '1000000'}], []];
+      (mockClient.exe as jest.Mock).mockResolvedValue(mockResult);
+
+      const count = await atomClient.countAtoms();
+
+      expect(count).toBe(1000000);
+      expect(typeof count).toBe('number');
+    });
   });
 });
