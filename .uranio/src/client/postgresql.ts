@@ -28,16 +28,7 @@ export class PostgreSQLClient {
     }
   }
   public async exe(sql: string | SQLStatement, values?: any): Promise<any[]> {
-    // Handle SQLStatement objects
-    if (sql instanceof SQLStatement) {
-      const {sql: query, values: params} = sql.postgres();
-      // Convert backticks to double quotes for PostgreSQL
-      const pgQuery = query.replace(/`/g, '"');
-      return this.exe(pgQuery, params);
-    }
-
-    // Convert named parameters object to positional parameters array
-    const {query, paramValues} = this._convert_named_to_positional(sql, values);
+    const {query, paramValues} = this._prepare(sql, values);
     const with_values =
       typeof paramValues !== 'undefined' && paramValues.length > 0
         ? ` with values [${paramValues}]`
@@ -51,6 +42,31 @@ export class PostgreSQLClient {
     }
     const result = await this.mainConnection!.query(query, paramValues);
     return [result.rows, result.fields];
+  }
+  /**
+   * Turns any accepted input into a PostgreSQL query plus a positional values
+   * array:
+   * - a SQLStatement is already positional ($1…$n) and its values are used as
+   *   they are;
+   * - a string with a values array is used as it is;
+   * - a string with a named-parameters object goes through
+   *   _convert_named_to_positional.
+   * An array must never reach the named conversion: it would take the indexes
+   * as keys and sort them as strings ("0", "1", "10", "11", "2", …), which
+   * reorders the values of every statement with more than ten parameters.
+   */
+  protected _prepare(
+    sql: string | SQLStatement,
+    values?: any,
+  ): {query: string; paramValues: any[]} {
+    if (sql instanceof SQLStatement) {
+      const {sql: query, values: params} = sql.postgres();
+      return {query: query.replace(/`/g, '"'), paramValues: params};
+    }
+    if (Array.isArray(values)) {
+      return {query: sql.replace(/`/g, '"'), paramValues: values};
+    }
+    return this._convert_named_to_positional(sql, values);
   }
   public async connect() {
     log.trace(`Connecting to PostgreSQL database...`);

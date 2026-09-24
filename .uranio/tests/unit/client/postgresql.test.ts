@@ -4,6 +4,7 @@
  */
 
 import {PostgreSQLClient} from '../../../src/client/postgresql';
+import {SQLStatement} from '../../../src/sql/template';
 
 describe('PostgreSQL Client', () => {
   describe('_convert_named_to_positional', () => {
@@ -97,6 +98,28 @@ describe('PostgreSQL Client', () => {
       for (let i = 1; i <= 9; i++) {
         expect(result.query).toContain(`$${i}`);
       }
+    });
+
+    it('keeps the order of a positional values array with more than ten parameters', () => {
+      // A SQLStatement (what the query builder produces) is already positional;
+      // running its values array through the named conversion sorted the
+      // indexes as strings and swapped $3 with $11 on statements with eleven
+      // or more parameters.
+      const columns = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11'];
+      const values = ['v1', 'v2', 'v3', 'v4', 'v5', 'v6', 'v7', 'v8', 'v9', 'v10', 'v11'];
+      const statement = new SQLStatement(
+        ['INSERT INTO `t` (' + columns.join(', ') + ') VALUES (', ...Array(10).fill(', '), ')'],
+        values,
+      );
+
+      const fromStatement = (client as any)._prepare(statement);
+      expect(fromStatement.query).toBe(
+        'INSERT INTO "t" (c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)'
+      );
+      expect(fromStatement.paramValues).toEqual(values);
+
+      const fromArray = (client as any)._prepare('SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11', values);
+      expect(fromArray.paramValues).toEqual(values);
     });
 
     it('should handle duplicate string values', () => {
