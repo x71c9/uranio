@@ -96,11 +96,17 @@ export class PostgreSQLClient {
     log.trace(`Retrieving pool connection...`);
     const pool_connection = await this.pool.connect();
     log.trace(`Retrieved pool connection`);
-    const result = await pool_connection.query(sql, values);
-    log.trace(`Releasing pool connection...`);
-    pool_connection.release();
-    log.trace(`Released pool connection`);
-    return [result.rows, result.fields];
+    // Released in finally: a query that throws must still hand the connection
+    // back, or every failure leaks one and the pool (10 by default) runs dry,
+    // after which every query waits forever.
+    try {
+      const result = await pool_connection.query(sql, values);
+      return [result.rows, result.fields];
+    } finally {
+      log.trace(`Releasing pool connection...`);
+      pool_connection.release();
+      log.trace(`Released pool connection`);
+    }
   }
   private _convert_named_to_positional(
     sql: string,
