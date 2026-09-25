@@ -197,4 +197,3 @@ When installing Uranio, npm may show peer dependency warnings. These are expecte
 ### Credits
 
 Logo credits [https://www.jacopotripodi.com/](https://www.jacopotripodi.com/)
-
