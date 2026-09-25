@@ -1,6 +1,6 @@
 {
   "name": "uranio",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Uranio is an ultra-lightweight, type-driven ORM/ODM for TypeScript, supporting MongoDB, PostgreSQL and MySQL. It automatically generates a fully-typed database client by parsing TypeScript interfaces, with no need for a custom Data Access Layer (DAL).",
   "main": "dist/index.js",
   "repository": {
