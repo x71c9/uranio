@@ -617,11 +617,18 @@ function _resolve_optional(prop: plutonio.TypeAttributes): string {
 }
 
 function _resolve_primitve(prop: plutonio.TypeAttributes): string {
+  // `uranio.mongodb_id` exists only after the generation, so the scanner
+  // cannot resolve it: depending on the TypeScript version its primitive is
+  // `unresolved` or `error` (the intrinsic name of TypeScript's error type)
+  // (arrays are resolved through their item, which carries the same text)
+  if (
+    prop.primitive !== plutonio.PRIMITIVE.ARRAY &&
+    prop.original.indexOf('.mongodb_id') !== -1
+  ) {
+    return 'atom_types.mongodb_id';
+  }
   switch (prop.primitive) {
     case plutonio.PRIMITIVE.UNRESOLVED: {
-      if (prop.original.indexOf('.mongodb_id') !== -1) {
-        return 'atom_types.mongodb_id';
-      }
       return 'unknown';
     }
     case plutonio.PRIMITIVE.ENUM: {

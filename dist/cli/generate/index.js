@@ -545,11 +545,16 @@ function _resolve_optional(prop) {
     return prop.optional === true ? '?' : '';
 }
 function _resolve_primitve(prop) {
+    // `uranio.mongodb_id` exists only after the generation, so the scanner
+    // cannot resolve it: depending on the TypeScript version its primitive is
+    // `unresolved` or `error` (the intrinsic name of TypeScript's error type)
+    // (arrays are resolved through their item, which carries the same text)
+    if (prop.primitive !== plutonio_1.default.PRIMITIVE.ARRAY &&
+        prop.original.indexOf('.mongodb_id') !== -1) {
+        return 'atom_types.mongodb_id';
+    }
     switch (prop.primitive) {
         case plutonio_1.default.PRIMITIVE.UNRESOLVED: {
-            if (prop.original.indexOf('.mongodb_id') !== -1) {
-                return 'atom_types.mongodb_id';
-            }
             return 'unknown';
         }
         case plutonio_1.default.PRIMITIVE.ENUM: {
