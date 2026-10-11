@@ -2,8 +2,8 @@
 pkgs.mkShell {
   packages = [
     pkgs.nodejs_24
-    pkgs.nodePackages_latest.typescript
-    pkgs.nodePackages_latest.typescript-language-server
+    pkgs.typescript
+    pkgs.typescript-language-server
   ];
   shellHook = ''
     export NODE_ENV=development
