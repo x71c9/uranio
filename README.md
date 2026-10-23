@@ -1,6 +1,15 @@
-# Uranio
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)"
+      srcset="https://raw.githubusercontent.com/x71c9/uranio/HEAD/img/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)"
+      srcset="https://raw.githubusercontent.com/x71c9/uranio/HEAD/img/logo-light.svg">
+    <img alt="Uranio logo" width="360"
+      src="https://raw.githubusercontent.com/x71c9/uranio/HEAD/img/logo-light.svg">
+  </picture>
+</div>
 
-![uranio logo](./img/uranio_logo_1440x220.png)
+# Uranio
 
 Uranio is the lightest Typescript Object Document Mapper (ODM) for MongoDB,
 and Object Relational Mapping (ORM) for MySQL and PostgreSQL.\
